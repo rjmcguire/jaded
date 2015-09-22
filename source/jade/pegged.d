@@ -19,8 +19,11 @@ TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
 TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
 TagParamValue <-
 	/ Str
+	/ StyleJsonObject
 	/ DExpression
 DExpression <~ (! (',' / ')') .)+
+StyleJsonObject <- :'{' (StyleJsonKeyValue (:',' :Spacing* StyleJsonKeyValue)*)? :'}'
+StyleJsonKeyValue <~ CssClass :Spacing* ':' :Spacing* doublequote ~(Char*) doublequote
 InlineText	<~ (! ('\r\n' / "\n") .)*
 PipedText	<~ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+
