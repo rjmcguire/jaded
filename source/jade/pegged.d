@@ -15,7 +15,7 @@ Tag 	<-
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id ('.' CssClass)* TagArgs? (:Spacing+ InlineText+)?
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
-CssClass <~ [A-Za-z\-]+
+CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
 TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
 TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
 TagParamKey <~ [A-Za-z\-]+
