@@ -23,10 +23,11 @@ TagParamValue <-
 	/ Str
 	/ StyleJsonObject
 	/ CssClassArray
-	/ DExpression
-DExpression <~ (! (',' / ')') .)+
+	/ ParamDExpression
+ParamDExpression <~ (! (',' / ')') .)+
 StyleJsonObject <- :'{' (StyleJsonKeyValue (:',' :Spacing* StyleJsonKeyValue)*)? :'}'
-StyleJsonKeyValue <~ CssClass :Spacing* ':' :Spacing* doublequote ~(Char*) doublequote
+StyleJsonKeyValue <- CssClass :Spacing* ':' :Spacing* JsonObjectDExpression
+JsonObjectDExpression <~ (! (',' / '}') .)+
 InlineText	<~ (! ('\r\n' / "\n") .)*
 PipedText	<~ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+

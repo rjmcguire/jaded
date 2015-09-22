@@ -11,5 +11,6 @@ html
 			img.image(src="logo.gif", style={background: "red", padding: "0px"})/
 	woot asdf
 		woot2(class=["c1", "c2"]) asdfasdf
+		woot3(class={active: currentUrl === "/about"})
 asdf
 
