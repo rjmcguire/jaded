@@ -6,7 +6,7 @@ html
 			| That continues on
 			| multiple lines
 		ul
-			li.one-css.two-css: a(href="#") click me
+			li.one-css.two-css: a(href!="#") click me
 		img.image(src="logo.gif")/
 	woot
 		woot2
