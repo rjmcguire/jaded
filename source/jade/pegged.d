@@ -22,6 +22,7 @@ TagParamKey <~ [A-Za-z\-]+
 TagParamValue <-
 	/ Str
 	/ StyleJsonObject
+	/ CssClassArray
 	/ DExpression
 DExpression <~ (! (',' / ')') .)+
 StyleJsonObject <- :'{' (StyleJsonKeyValue (:',' :Spacing* StyleJsonKeyValue)*)? :'}'
@@ -31,6 +32,7 @@ PipedText	<~ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+
 NewLine <: ('\r\n' / '\n')+ # Used <: to make sure this is not in the ParseTree, also left ^ off the brackets to leave the newline chars out
 Str	<- :doublequote ~(Char*) :doublequote
+CssClassArray <- '[' doublequote CssClass doublequote (',' :Spacing* doublequote CssClass doublequote)* ']'
 Char <- !doublequote . # Anything but a double quote
 Indent  <~ tab+
 `));

@@ -10,6 +10,6 @@ html
 		.img-holder
 			img.image(src="logo.gif", style={background: "red", padding: "0px"})/
 	woot asdf
-		woot2 asdfasdf
+		woot2(class=["c", "d"]) asdfasdf
 asdf
 
