@@ -13,7 +13,10 @@ TagName <- Id ('.' CssClass)*
 Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
 TagArgs <- '(' TagArg (',' :Spacing* TagArg)+ ')'
-TagArg <- Id ('=' Str)?
+TagArg <- Id ('=' TagArgValue)?
+TagArgValue <-
+	/ Str
+	/ ^identifier # The value here has to be a valid d symbol
 Text	<~
 	/ MultiLineText+
 	/ SingleLineText
@@ -21,7 +24,7 @@ SingleLineText	<~ (! ('\r\n' / "\n") .)*
 MultiLineText	<~ :('\r\n' / "\n") :tab+ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+
 NewLine <: ('\r\n' / '\n')+ # Used <: to make sure this is not in the ParseTree, also left ^ off the brackets to leave the newline chars out
-Str	<- doublequote ~(Char*) doublequote
+Str	<- :doublequote ~(Char*) :doublequote
 Char <- !doublequote . # Anything but a double quote
 Indent  <; ^tab+
 `));

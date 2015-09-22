@@ -2,7 +2,7 @@ html
 	head
 		title Page Title Here
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
-		p(id="", p-form-hook) This is a paragraph
+		p(id="", p-form-hook=some_d_var) This is a paragraph
 			| That continues on
 			| multiple lines
 	woot
