@@ -6,6 +6,6 @@ html
 			| That continues on
 			| multiple lines
 		ul
-			li.first: a(href="#") click me
+			li.one-css.two-css: a(href="#") click me
 	woot
 		woot2

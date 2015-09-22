@@ -6,17 +6,16 @@ mixin(grammar(`
 # This Jade grammar puts all tags under RootTag as Jade.Line, but the first parseNode under the Line is a Indent with the amount of indents matched in its matches.length attribute
 Jade:
 RootTag	<-
-	/ ^TagName Line+
+	/ ^Id ('.' CssClass)* Line+
 Line	<- NewLine Indent Tag
-Tag 	<- TagName TagArgs? (InlineTag / :Spacing+ Text+)? # TODO: inline Block Expansion for nested tags using ':'
-InlineTag <- ':' :Spacing* TagName TagArgs? (:Spacing+ Text+)?
-TagName <- Id ('.' CssClass)*
+Tag 	<- Id ('.' CssClass)* TagArgs? (InlineTag / :Spacing+ Text+)? # TODO: inline Block Expansion for nested tags using ':'
+InlineTag <- ':' :Spacing* Id ('.' CssClass)* TagArgs? (:Spacing+ Text+)?
 Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
-TagParam <~ [A-Za-z\-]+
+TagParamKey <~ [A-Za-z\-]+
 TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
-TagArg <- TagParam ('=' TagArgValue)?
-TagArgValue <-
+TagArg <- TagParamKey ('=' TagParamValue)?
+TagParamValue <-
 	/ Str
 	/ ^identifier # The value here has to be a valid d symbol
 Text	<~
