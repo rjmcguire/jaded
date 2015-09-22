@@ -8,17 +8,17 @@ mixin(grammar(`
 Jade:
 RootTag	<-
 	/ ^Id ('.' CssClass)* Line+
-Line	<- NewLine Indent (Tag / PipedText)
+Line	<- NewLine Indent* (Tag / PipedText)
 Tag 	<-
 	/ Id ('.' CssClass)* TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
 	/ ('.' CssClass)+ TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id ('.' CssClass)* TagArgs? (:Spacing+ InlineText+)?
-Id <~ [A-Za-z\-]+
+Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-]+
-TagParamKey <~ [A-Za-z\-]+
 TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
 TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
+TagParamKey <~ [A-Za-z\-]+
 TagParamValue <-
 	/ Str
 	/ StyleJsonObject
@@ -32,5 +32,5 @@ Spacing	<- (' ' / tab)+
 NewLine <: ('\r\n' / '\n')+ # Used <: to make sure this is not in the ParseTree, also left ^ off the brackets to leave the newline chars out
 Str	<- :doublequote ~(Char*) :doublequote
 Char <- !doublequote . # Anything but a double quote
-Indent  <; ^tab+
+Indent  <~ tab+
 `));
