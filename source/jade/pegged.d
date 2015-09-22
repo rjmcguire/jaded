@@ -8,7 +8,8 @@ Jade:
 RootTag	<-
 	/ ^Id ('.' CssClass)* Line+
 Line	<- NewLine Indent Tag
-Tag 	<- Id ('.' CssClass)* TagArgs? (InlineTag / :Spacing+ Text+)?
+Tag 	<- Id ('.' CssClass)* TagArgs? SelfCloser? (InlineTag / :Spacing+ Text+)?
+SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id ('.' CssClass)* TagArgs? (:Spacing+ Text+)?
 Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
