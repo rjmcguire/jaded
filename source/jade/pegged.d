@@ -8,7 +8,7 @@ Jade:
 RootTag	<-
 	/ ^Id ('.' CssClass)* Line+
 Line	<- NewLine Indent Tag
-Tag 	<- Id ('.' CssClass)* TagArgs? (InlineTag / :Spacing+ Text+)? # TODO: inline Block Expansion for nested tags using ':'
+Tag 	<- Id ('.' CssClass)* TagArgs? (InlineTag / :Spacing+ Text+)?
 InlineTag <- ':' :Spacing* Id ('.' CssClass)* TagArgs? (:Spacing+ Text+)?
 Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
