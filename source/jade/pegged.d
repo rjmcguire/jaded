@@ -8,12 +8,14 @@ Jade:
 RootTag	<-
 	/ ^TagName Line+
 Line	<- NewLine Indent Tag
-Tag 	<- TagName TagArgs? (:Spacing+ Text+)?
+Tag 	<- TagName TagArgs? (InlineTag / :Spacing+ Text+)? # TODO: inline Block Expansion for nested tags using ':'
+InlineTag <- ':' :Spacing* TagName TagArgs? (:Spacing+ Text+)?
 TagName <- Id ('.' CssClass)*
 Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
-TagArgs <- '(' TagArg (',' :Spacing* TagArg)+ ')'
-TagArg <- Id ('=' TagArgValue)?
+TagParam <~ [A-Za-z\-]+
+TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
+TagArg <- TagParam ('=' TagArgValue)?
 TagArgValue <-
 	/ Str
 	/ ^identifier # The value here has to be a valid d symbol

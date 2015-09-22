@@ -5,5 +5,7 @@ html
 		p(id="", p-form-hook=some_d_var) This is a paragraph
 			| That continues on
 			| multiple lines
+		ul
+			li.first: a(href="#") click me
 	woot
 		woot2
