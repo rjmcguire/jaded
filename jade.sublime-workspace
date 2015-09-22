@@ -43,15 +43,7 @@
 			"file": "source/jade/base.d",
 			"settings":
 			{
-				"buffer_size": 1471,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "views/base_page",
-			"settings":
-			{
-				"buffer_size": 65,
+				"buffer_size": 1622,
 				"line_ending": "Unix"
 			}
 		},
@@ -59,7 +51,7 @@
 			"file": "source/jade/pegged.d",
 			"settings":
 			{
-				"buffer_size": 319,
+				"buffer_size": 909,
 				"line_ending": "Unix"
 			}
 		}
@@ -72,9 +64,13 @@
 	"command_palette":
 	{
 		"height": 354.0,
-		"last_filter": "",
+		"last_filter": "inst",
 		"selected_items":
 		[
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
 			[
 				"html",
 				"Set Syntax: HTML"
@@ -90,10 +86,6 @@
 			[
 				"jad",
 				"Set Syntax: Jade"
-			],
-			[
-				"inst",
-				"Package Control: Install Package"
 			],
 			[
 				"instal",
@@ -136,8 +128,8 @@
 	],
 	"file_history":
 	[
-		"/home/rmcguire/Projects/jade/source/jade/pegged.d",
 		"/home/rmcguire/Projects/jade/dub.json",
+		"/home/rmcguire/Projects/jade/source/jade/pegged.d",
 		"/home/rmcguire/test.html",
 		"/home/rmcguire/materiald/views/material_base.dt",
 		"/home/rmcguire/materiald/views/material_sidenav.dt",
@@ -187,6 +179,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"TagName",
+			"identifier",
 			"tag",
 			"Tag",
 			"tag",
@@ -232,7 +226,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -260,7 +254,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -288,7 +282,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -297,15 +291,43 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1471,
+						"buffer_size": 1622,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1430,
-								1430
+								451,
+								451
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/D/D.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 51.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "source/jade/pegged.d",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 909,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								484,
+								484
 							]
 						],
 						"settings":
@@ -317,62 +339,6 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "views/base_page",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 65,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								41,
-								41
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "source/jade/pegged.d",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 319,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								245,
-								245
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/D/D.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
 					"type": "text"
 				}
 			]

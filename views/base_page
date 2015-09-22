@@ -1,8 +1,9 @@
 html
 	head
 		title Page Title Here
-	body
-		p This is a paragraph
+	body.base-css(ng-app, ng-controller)
+		p(id="") This is a paragraph
 			| That continues on
 			| multiple lines
-
+	woot
+		woot2

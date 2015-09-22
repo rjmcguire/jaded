@@ -17,7 +17,8 @@ string render(alias filename)() {
 void render(T)(T output_stream, string filename) {
 	auto templ = readText("views/"~filename);
 	auto parse_tree = Jade(templ);
-	auto result = renderParseTree(parse_tree);
+	//auto result = renderParseTree(parse_tree);
+	auto result = "%s".format(parse_tree);
 	output_stream.write(result);
 }
 
@@ -40,8 +41,12 @@ string renderToken(ParseTree p, string tagDepth="") {
 		//	childoutput ~= "-"~child.name~"-";
 		//	childoutput ~= renderParseTree(child);
 		//} else {
-			childoutput ~= "%schild: name:%s firstmatch:%s numChildren:%s numMatches:%s\n".format(tagDepth, child.name, child.matches[0], child.children.length, child.matches.length);
-			childoutput ~= renderToken(child, tagDepth~"\t");
+			if (child.matches.length > 0) {
+				childoutput ~= "%schild: name:%s firstmatch:%s numChildren:%s numMatches:%s\n".format(tagDepth, child.name, child.matches[0], child.children.length, child.matches.length);
+				childoutput ~= renderToken(child, tagDepth~"\t");
+			} else {
+				childoutput ~= "%schild: name:%s numChildren:%s numMatches:%s\n".format(tagDepth, child.name, child.children.length, child.matches.length);
+			}
 		//}
 	}
 	return "%s\n".format(childoutput);
