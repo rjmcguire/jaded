@@ -19,7 +19,8 @@ TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
 TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
 TagParamValue <-
 	/ Str
-	/ ^identifier # The value here has to be a valid d symbol
+	/ DExpression
+DExpression <~ (! (',' / ')') .)+
 InlineText	<~ (! ('\r\n' / "\n") .)*
 PipedText	<~ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+

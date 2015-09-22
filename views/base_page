@@ -2,10 +2,10 @@ html
 	head
 		title Page Title Here
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
-		p(id="", p-form-hook=some_d_var) This is a paragraph
+		p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
 			| That continues on
 			| multiple lines
-		ul
+		ul(isit=some_other_d_var == "woot")
 			li.one-css.two-css: a(href!="#") click me
 		img.image(src="logo.gif")/
 	woot
