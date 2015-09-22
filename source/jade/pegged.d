@@ -12,8 +12,8 @@ Tag 	<- TagName TagArgs? (:Spacing+ Text+)?
 TagName <- Id ('.' CssClass)*
 Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
-TagArgs <- '(' TagArg (',' TagArg)+ ')'
-TagArg <- Id # ('=' Str)?
+TagArgs <- '(' TagArg (',' :Spacing* TagArg)+ ')'
+TagArg <- Id ('=' Str)?
 Text	<~
 	/ MultiLineText+
 	/ SingleLineText
