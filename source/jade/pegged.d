@@ -16,7 +16,7 @@ Id <~ [A-Za-z\-]+
 CssClass <~ [A-Za-z\-]+
 TagParamKey <~ [A-Za-z\-]+
 TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
-TagArg <- TagParamKey ('=' TagParamValue)?
+TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
 TagParamValue <-
 	/ Str
 	/ ^identifier # The value here has to be a valid d symbol
