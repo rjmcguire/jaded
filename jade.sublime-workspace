@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"InlineT",
+				"InlineText"
+			],
+			[
+				"Tag",
+				"TagArgs"
+			],
+			[
+				"TagA",
+				"TagArgs"
+			],
+			[
 				"render",
 				"renderToken	function"
 			],
@@ -51,7 +63,7 @@
 			"file": "source/jade/pegged.d",
 			"settings":
 			{
-				"buffer_size": 909,
+				"buffer_size": 1736,
 				"line_ending": "Unix"
 			}
 		}
@@ -179,6 +191,16 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"DExpression",
+			"StringArray",
+			"JsonKeyValue",
+			"JsonObject",
+			"MultiLineText",
+			"Text",
+			"TagParam",
+			"TagArgValue",
+			"TagCss*",
+			"singlequote",
 			"TagName",
 			"identifier",
 			"tag",
@@ -304,7 +326,8 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/D/D.tmLanguage"
+							"syntax": "Packages/D/D.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": -0.0,
 						"translation.y": 51.0,
@@ -319,15 +342,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 909,
+						"buffer_size": 1736,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								484,
-								484
+								1258,
+								1258
 							]
 						],
 						"settings":

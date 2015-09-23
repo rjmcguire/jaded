@@ -7,15 +7,16 @@ mixin(grammar(`
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
 RootTag	<-
-	/ ^Id ('.' CssClass)* Line+
+	/ Id? (CssId / '.' CssClass)* Line+
 Line	<- NewLine Indent* (Tag / PipedText)
 Tag 	<-
-	/ Id ('.' CssClass)* TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
-	/ ('.' CssClass)+ TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+	/ Id (CssId / '.' CssClass)* TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+	/ (CssId / '.' CssClass)+ TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
 SelfCloser <- '/'
-InlineTag <- ':' :Spacing* Id ('.' CssClass)* TagArgs? (:Spacing+ InlineText+)?
+InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? (:Spacing+ InlineText+)?
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
+CssId <~ :'#' Id
 TagArgs <- '(' TagArg (',' :Spacing* TagArg)* ')'
 TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
 TagParamKey <~ [A-Za-z\-]+
