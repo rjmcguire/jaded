@@ -12,5 +12,5 @@ html
 	woot#content1 asdf
 		#woot2(class=["c1", "c2"]) asdfasdf
 		woot3(class={active: currentUrl === "/about"})
+div#foo(data-bar="foo")&attributes({"data-foo": "bar"})
 asdf
-

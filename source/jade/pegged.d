@@ -7,13 +7,14 @@ mixin(grammar(`
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
 RootTag	<-
-	/ Id? (CssId / '.' CssClass)* Line+
-Line	<- NewLine Indent* (Tag / PipedText)
+	/ Line+
+Line	<- Indent* (Tag / PipedText) (endOfLine / endOfInput)
 Tag 	<-
-	/ Id (CssId / '.' CssClass)* TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
-	/ (CssId / '.' CssClass)+ TagArgs? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
 SelfCloser <- '/'
-InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? (:Spacing+ InlineText+)?
+InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ InlineText+)?
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssId <~ :'#' Id
@@ -22,12 +23,15 @@ TagArg <- TagParamKey (^('=' / '!=') TagParamValue)?
 TagParamKey <~ [A-Za-z\-]+
 TagParamValue <-
 	/ Str
-	/ StyleJsonObject
+	/ AttributeJsonObject
 	/ CssClassArray
 	/ ParamDExpression
 ParamDExpression <~ (! (',' / ')') .)+
-StyleJsonObject <- :'{' (StyleJsonKeyValue (:',' :Spacing* StyleJsonKeyValue)*)? :'}'
-StyleJsonKeyValue <- CssClass :Spacing* ':' :Spacing* JsonObjectDExpression
+AttributeJsonObject <- :'{' (JsonKeyValue (:',' :Spacing* JsonKeyValue)*)? :'}'
+JsonKeyValue <- JsonKey :Spacing* ':' :Spacing* JsonObjectDExpression
+JsonKey <~
+	/ :doublequote [A-Za-z\-][A-Za-z\-0-9]* :doublequote
+	/ [A-Za-z][A-Za-z0-9]*
 JsonObjectDExpression <~ (! (',' / '}') .)+
 InlineText	<~ (! ('\r\n' / "\n") .)*
 PipedText	<~ :'|' (! NewLine .)*
