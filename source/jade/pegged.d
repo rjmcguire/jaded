@@ -11,11 +11,12 @@ RootTag	<-
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent* (Include / Extend / Block / Tag / PipedText / Comment / RawHtmlTag / Filter) (endOfLine / endOfInput)
+	/ Indent* (Include / Extend / Block / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
+AnyContentLine <~ (! endOfLine .)*
 Extend <- 'extends' FileName
 Block <- 'block' DLineExpression
-Filter <- ':' FilterName																			# Requires support for dedent to work correctly
+Filter <- ':' FilterName
 Include <- :'include' (':' FilterName)? :Spacing+ FileName
 FileName <~ (! endOfLine .)*
 FilterName <; Id
@@ -23,7 +24,7 @@ RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
 	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
 	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
-Comment <- '//' (^'-')? InlineText? 																		# Can't handle Block Comments yet because they only dedent to close
+Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ InlineText+)?
