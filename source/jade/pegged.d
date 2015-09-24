@@ -11,9 +11,13 @@ RootTag	<-
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
+	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
+Iteration <-
+	/ ('each' / 'for') :Spacing+ DVariable (',' :Spacing* DVariable)? :Spacing+ ^'in' :Spacing+ DLineExpression
+	/ 'while' DLineExpression
+DVariable <~ [A-Za-z][A-Za-z0-9]* 
 UnbufferedCode <- '-' DLineExpression*
 BufferedCode <- ^('=' / '!=') DLineExpression*
 Conditional <-
@@ -27,8 +31,8 @@ FileName <~ (! endOfLine .)*
 FilterName <; Id
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
-	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+)?
-	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+)?
+	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?
+	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?
 Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
 SelfCloser <- '/'

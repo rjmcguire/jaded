@@ -34,5 +34,10 @@ unless !user.isAnonymous
 :markdown
 	### Markdown Need dedent support to parse this
 	I often like including markdown documents.
+ul
+	each val, index in {1:'one',2:'two',3:'three'}
+		li= index + ': ' + val
+while n < 4
+	li= n++
 //- Following is asdf, its the last tag
 asdf
