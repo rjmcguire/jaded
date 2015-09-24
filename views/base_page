@@ -17,7 +17,7 @@ html(lang="en")
 			| That continues on
 			| multiple lines
 		ul(isit=some_other_d_var == "woot")
-			li.one-css.two-css: a(href!="#"): a(href!="#")= click me
+			li.one-css.two-css: a(href!="#"): a(href!="#")!= click me
 		.img-holder
 			img.image(src="logo.gif", style={background: "red", padding: "0px"})/
 	woot#content1 asdf

@@ -15,7 +15,7 @@ Line	<-
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
 UnbufferedCode <- '-' DLineExpression*
-BufferedCode <- '=' DLineExpression*
+BufferedCode <- ^('=' / '!=') DLineExpression*
 Conditional <-
 	/ ('if' / 'unless') DLineExpression
 	/ 'else'
