@@ -1,4 +1,7 @@
-html
+<!--[if IE 8]>
+html(lang="en", class="lt-ie9")
+<![endif]-->
+html(lang="en")
 	head
 		title Page Title Here
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
