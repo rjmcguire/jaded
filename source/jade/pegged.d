@@ -15,7 +15,8 @@ Line	<-
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
-MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* ')'
+MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
+MixinVarArg <- (',' :Spacing* '...' DVariableName)
 Mixin <- '+' DVariableName ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')? TagArgs?
 Case <-
 	/ ^'case' Spacing+ DLineExpression
