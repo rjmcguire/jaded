@@ -7,7 +7,9 @@ mixin(grammar(`
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
 RootTag	<-
+	/ DocType endOfLine Line+
 	/ Line+
+DocType <~ :'doctype ' (! endOfLine .)*
 Line	<- Indent* (Tag / PipedText / Comment / RawHtmlTag) (endOfLine / endOfInput)
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
