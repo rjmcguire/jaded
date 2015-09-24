@@ -75,5 +75,10 @@ mixin article(title)
 +article('Hello world')
 	p This is my
 	p Amazing article
+mixin link(href, name)
+	//- attributes == {class: "btn"}
+	a(class!=attributes.class, href=href)= name
+
++link('/foo', 'foo')(class="btn")
 //- Following is asdf, its the last tag
 asdf
