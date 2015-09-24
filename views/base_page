@@ -46,5 +46,20 @@ case friends
 	when 1
 		p you have very few friends
 	default: p you have #{friends} friends
+//- Declaration
+mixin list
+	ul
+		li foo
+		li bar
+		li baz
+//- Use
++list
++list
+mixin pet(name)
+	li.pet= name
+ul
+	+pet("cat")
+	+pet("dog")
+	+pet("pig")
 //- Following is asdf, its the last tag
 asdf

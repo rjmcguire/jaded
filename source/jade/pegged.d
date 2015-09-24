@@ -11,17 +11,19 @@ RootTag	<-
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
+	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
+MixinDecl <- 'mixin' DVariableName
+Mixin <- '+' DVariableName ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')?
 Case <-
 	/ ^'case' Spacing+ DLineExpression
 	/ ^'when' ~(! (':' / endOfLine / endOfInput) .)* InlineTag?
 	/ ^'default' InlineTag?
 Iteration <-
-	/ ('each' / 'for') :Spacing+ DVariable (',' :Spacing* DVariable)? :Spacing+ ^'in' :Spacing+ DLineExpression
+	/ ('each' / 'for') :Spacing+ DVariableName (',' :Spacing* DVariableName)? :Spacing+ ^'in' :Spacing+ DLineExpression
 	/ 'while' DLineExpression
-DVariable <~ [A-Za-z][A-Za-z0-9]* 
+DVariableName <~ [A-Za-z][A-Za-z0-9]* 
 UnbufferedCode <- '-' DLineExpression*
 BufferedCode <- ^('=' / '!=') DLineExpression*
 Conditional <-
