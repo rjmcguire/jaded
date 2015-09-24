@@ -23,6 +23,7 @@ html(lang="en")
 	woot#content1 asdf
 		#woot2(class=["c1", "c2"]) asdfasdf
 		woot3(class={active: currentUrl === "/about"})
+- auto localhost = "remotehost"
 if "localhost" == host
 	div#foo(data-bar="foo", goot-one)&attributes({"data-foo": "bar"})
 		include:markdown ./includes/footer.jade
