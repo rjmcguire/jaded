@@ -12,7 +12,7 @@ Line	<- Indent* (Tag / PipedText / Comment) (endOfLine / endOfInput)
 Tag 	<-
 	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
 	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
-Comment <- '//' (^'-')? InlineText?
+Comment <- '//' (^'-')? InlineText? 																		# Can't handle Block Comments yet because they only dedent to close
 AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ InlineText+)?
