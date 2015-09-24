@@ -11,10 +11,11 @@ RootTag	<-
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
+	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
 UnbufferedCode <- '-' DLineExpression*
+BufferedCode <- '=' DLineExpression*
 Conditional <-
 	/ ('if' / 'unless') DLineExpression
 	/ 'else'
@@ -26,8 +27,8 @@ FileName <~ (! endOfLine .)*
 FilterName <; Id
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
-	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
-	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+)?
+	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+)?
 Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
 SelfCloser <- '/'
