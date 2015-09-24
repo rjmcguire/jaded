@@ -2,6 +2,7 @@ html
 	head
 		title Page Title Here
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
+		// this is the displayed content
 		p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
 			| That continues on
 			| multiple lines
@@ -13,4 +14,5 @@ html
 		#woot2(class=["c1", "c2"]) asdfasdf
 		woot3(class={active: currentUrl === "/about"})
 div#foo(data-bar="foo", goot-one)&attributes({"data-foo": "bar"})
+//- Following is asdf, its the last tag
 asdf

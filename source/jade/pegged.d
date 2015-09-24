@@ -8,10 +8,11 @@ mixin(grammar(`
 Jade:
 RootTag	<-
 	/ Line+
-Line	<- Indent* (Tag / PipedText) (endOfLine / endOfInput)
+Line	<- Indent* (Tag / PipedText / Comment) (endOfLine / endOfInput)
 Tag 	<-
 	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
 	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
+Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ InlineText+)?
