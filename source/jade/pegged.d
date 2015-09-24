@@ -11,9 +11,12 @@ RootTag	<-
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent* (Include / Extend / Block / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
+	/ Indent* (Include / Extend / Block / Conditional / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
+Conditional <-
+	/ ('if' / 'unless') DLineExpression
+	/ 'else'
 Extend <- 'extends' FileName
 Block <- 'block' DLineExpression
 Filter <- ':' FilterName
