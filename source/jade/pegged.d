@@ -43,7 +43,7 @@ Tag 	<-
 	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?
 	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?
 Comment <- '//' (^'-')? InlineText?
-AndAttributes <- '&' 'attributes' '(' AttributeJsonObject ')'
+AndAttributes <- '&' 'attributes' '(' (AttributeJsonObject / ParamDExpression) ')'
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ InlineText+)?
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*

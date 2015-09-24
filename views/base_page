@@ -78,6 +78,9 @@ mixin article(title)
 mixin link(href, name)
 	//- attributes == {class: "btn"}
 	a(class!=attributes.class, href=href)= name
++link('/foo', 'foo')(class="btn")
+mixin link(href, name)
+	a(href=href)&attributes(attributes)= name
 
 +link('/foo', 'foo')(class="btn")
 //- Following is asdf, its the last tag
