@@ -1,12 +1,16 @@
+//- index.jade
+extends ./base_layout.jade
+
 doctype html
 <!--[if IE 8]>
 html(lang="en", class="lt-ie9")
 <![endif]-->
 html(lang="en")
 	head
-		title Page Title Here
-		style
-			include style.css
+		block title
+			title Page Title Here
+			style
+				include style.css
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
 		// this is the displayed content
 		p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph

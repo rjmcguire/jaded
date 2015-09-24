@@ -10,7 +10,11 @@ RootTag	<-
 	/ DocType endOfLine Line+
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
-Line	<- Indent* (Include / Tag / PipedText / Comment / RawHtmlTag / Filter) (endOfLine / endOfInput)
+Line	<-
+	/ Indent* (Include / Extend / Block / Tag / PipedText / Comment / RawHtmlTag / Filter) (endOfLine / endOfInput)
+	/ endOfLine
+Extend <- 'extends' FileName
+Block <- 'block' DLineExpression
 Filter <- ':' FilterName																			# Requires support for dedent to work correctly
 Include <- :'include' (':' FilterName)? :Spacing+ FileName
 FileName <~ (! endOfLine .)*
@@ -35,6 +39,7 @@ TagParamValue <-
 	/ CssClassArray
 	/ ParamDExpression
 ParamDExpression <~ (! (',' / ')') .)+
+DLineExpression <~ (! endOfLine .)+
 AttributeJsonObject <- :'{' (JsonKeyValue (:',' :Spacing* JsonKeyValue)*)? :'}'
 JsonKeyValue <- JsonKey :Spacing* ':' :Spacing* JsonObjectDExpression
 JsonKey <~
