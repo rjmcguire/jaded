@@ -10,7 +10,8 @@ RootTag	<-
 	/ DocType endOfLine Line+
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
-Line	<- Indent* (Include / Tag / PipedText / Comment / RawHtmlTag) (endOfLine / endOfInput)
+Line	<- Indent* (Include / Tag / PipedText / Comment / RawHtmlTag / Filter) (endOfLine / endOfInput)
+Filter <- ':' FilterName																			# Requires support for dedent to work correctly
 Include <- :'include' (':' FilterName)? :Spacing+ FileName
 FileName <~ (! endOfLine .)*
 FilterName <; Id

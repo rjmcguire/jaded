@@ -21,5 +21,8 @@ html(lang="en")
 		woot3(class={active: currentUrl === "/about"})
 div#foo(data-bar="foo", goot-one)&attributes({"data-foo": "bar"})
 	include:markdown ./includes/footer.jade
+:markdown
+	// ### Markdown Need dedent support to parse this
+	I often like including markdown documents.
 //- Following is asdf, its the last tag
 asdf
