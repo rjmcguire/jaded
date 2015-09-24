@@ -61,5 +61,19 @@ ul
 	+pet("cat")
 	+pet("dog")
 	+pet("pig")
+mixin article(title)
+	.article
+		.article-wrapper
+			h1= title
+			if block
+				block
+			else
+				p No content provided
+
++article('Hello world')
+
++article('Hello world')
+	p This is my
+	p Amazing article
 //- Following is asdf, its the last tag
 asdf

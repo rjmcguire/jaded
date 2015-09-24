@@ -27,10 +27,12 @@ DVariableName <~ [A-Za-z][A-Za-z0-9]*
 UnbufferedCode <- '-' DLineExpression*
 BufferedCode <- ^('=' / '!=') DLineExpression*
 Conditional <-
+	/ IfBlock
 	/ ('if' / 'unless') DLineExpression
 	/ 'else'
+IfBlock <- 'if' :Spacing+ 'block'
 Extend <- 'extends' FileName
-Block <- 'block' DLineExpression
+Block <- 'block' DLineExpression?
 Filter <- ':' FilterName
 Include <- :'include' (':' FilterName)? :Spacing+ FileName
 FileName <~ (! endOfLine .)*
