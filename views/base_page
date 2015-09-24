@@ -5,6 +5,8 @@ html(lang="en", class="lt-ie9")
 html(lang="en")
 	head
 		title Page Title Here
+		style
+			include style.css
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
 		// this is the displayed content
 		p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
@@ -18,5 +20,6 @@ html(lang="en")
 		#woot2(class=["c1", "c2"]) asdfasdf
 		woot3(class={active: currentUrl === "/about"})
 div#foo(data-bar="foo", goot-one)&attributes({"data-foo": "bar"})
+	include:markdown ./includes/footer.jade
 //- Following is asdf, its the last tag
 asdf

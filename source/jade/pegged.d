@@ -10,7 +10,10 @@ RootTag	<-
 	/ DocType endOfLine Line+
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
-Line	<- Indent* (Tag / PipedText / Comment / RawHtmlTag) (endOfLine / endOfInput)
+Line	<- Indent* (Include / Tag / PipedText / Comment / RawHtmlTag) (endOfLine / endOfInput)
+Include <- :'include' (':' FilterName)? :Spacing+ FileName
+FileName <~ (! endOfLine .)*
+FilterName <; Id
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
 	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag / :Spacing+ InlineText+)?
