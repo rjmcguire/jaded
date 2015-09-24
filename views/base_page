@@ -39,5 +39,12 @@ ul
 		li= index + ': ' + val
 while n < 4
 	li= n++
+
+- var friends = 0
+case friends
+	when 0
+	when 1
+		p you have very few friends
+	default: p you have #{friends} friends
 //- Following is asdf, its the last tag
 asdf

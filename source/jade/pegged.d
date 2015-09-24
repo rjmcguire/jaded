@@ -11,9 +11,13 @@ RootTag	<-
 	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
+	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
+Case <-
+	/ ^'case' Spacing+ DLineExpression
+	/ ^'when' ~(! (':' / endOfLine / endOfInput) .)* InlineTag?
+	/ ^'default' InlineTag?
 Iteration <-
 	/ ('each' / 'for') :Spacing+ DVariable (',' :Spacing* DVariable)? :Spacing+ ^'in' :Spacing+ DLineExpression
 	/ 'while' DLineExpression
