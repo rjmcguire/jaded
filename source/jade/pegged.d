@@ -14,6 +14,7 @@ Line	<-
 	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
+BlockInATag <- '.'
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
 MixinVarArg <- (',' :Spacing* '...' DVariableName)
@@ -41,12 +42,12 @@ FileName <~ (! endOfLine .)*
 FilterName <; Id
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
-	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?
-	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?
+	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?)
+	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?)
 Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' (AttributeJsonObject / ParamDExpression) ')'
 SelfCloser <- '/'
-InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ InlineText+)?
+InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText+)?)
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssId <~ :'#' Id
