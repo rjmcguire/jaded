@@ -14,7 +14,7 @@ Line	<-
 	/ Indent* (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
-BlockInATag <- '.'
+BlockInATag <- '.'																			# Without making indent and dedent handling block in a tag can't have "valid" or even partially valid tags in the raw text
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
 MixinVarArg <- (',' :Spacing* '...' DVariableName)
