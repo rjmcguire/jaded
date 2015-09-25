@@ -95,6 +95,7 @@ p.
   you'll see several places where the tag interpolation operator is
   used, like so.
 
+p This is #{msg.toUpperCase()} <- upper case characters
 
 //- Following is asdf, its the last tag
 asdf

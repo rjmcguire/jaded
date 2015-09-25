@@ -15,6 +15,7 @@ Line	<-
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
 BlockInATag <- '.'																			# Without making indent and dedent handling block in a tag can't have "valid" or even partially valid tags in the raw text
+StringInterpolation <- ~('#' '{' (! '}' .)* '}')? InlineText*
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
 MixinVarArg <- (',' :Spacing* '...' DVariableName)
@@ -42,12 +43,12 @@ FileName <~ (! endOfLine .)*
 FilterName <; Id
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
-	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?)
-	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText+ / BufferedCode)?)
+	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText StringInterpolation+ / BufferedCode)?)
+	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText StringInterpolation+ / BufferedCode)?)
 Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' (AttributeJsonObject / ParamDExpression) ')'
 SelfCloser <- '/'
-InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText+)?)
+InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText StringInterpolation+)?)
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssId <~ :'#' Id
@@ -67,7 +68,7 @@ JsonKey <~
 	/ :doublequote [A-Za-z\-][A-Za-z\-0-9]* :doublequote
 	/ [A-Za-z][A-Za-z0-9]*
 JsonObjectDExpression <~ (! (',' / '}') .)+
-InlineText	<~ (! ('\r\n' / "\n") .)*
+InlineText	<~ (! ('\r\n' / "\n" / '#') .)*
 PipedText	<~ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+
 NewLine <: ('\r\n' / '\n')+ # Used <: to make sure this is not in the ParseTree, also left ^ off the brackets to leave the newline chars out
