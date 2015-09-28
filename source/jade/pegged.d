@@ -17,9 +17,10 @@ AnyContentLine <~ (! endOfLine .)*
 BlockInATag <- '.'																			# Without making indent and dedent handling block in a tag can't have "valid" or even partially valid tags in the raw text
 StringInterpolation <-
 	/ ~('!{' (! '}' .)* '}') InlineText
-	/ ~('#[' TagInterpolate ']') InlineText
+	/ ('#[' TagInterpolate ']') InlineText
 	/ ~('#{' (! '}' .)* '}')? InlineText
-TagInterpolate <- Id? (CssId / '.' CssClass)* TagArgs? AndAttributes? (SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText / BufferedCode)?)
+TagInterpolate <- Id? (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? (:Spacing+ TextStop(']'))?
+TextStop(StopElem) <~ (! StopElem .)*
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
 MixinVarArg <- (',' :Spacing* '...' DVariableName)

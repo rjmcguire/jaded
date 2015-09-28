@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"endOf",
+				"endOfInput"
+			],
+			[
+				"endO",
+				"endOfLine"
+			],
+			[
+				"endIO",
+				"endOfLine"
+			],
+			[
+				"In",
+				"Indent"
+			],
+			[
 				"InlineT",
 				"InlineText"
 			],
@@ -63,7 +79,7 @@
 			"file": "source/jade/pegged.d",
 			"settings":
 			{
-				"buffer_size": 1736,
+				"buffer_size": 4028,
 				"line_ending": "Unix"
 			}
 		}
@@ -140,8 +156,12 @@
 	],
 	"file_history":
 	[
-		"/home/rmcguire/Projects/jade/dub.json",
+		"/home/rmcguire/Projects/examples/opengl/argb_window.c",
+		"/mnt/home/rmcguire/.profile",
+		"/home/rmcguire/.profile",
+		"/home/rmcguire/Documents/Programming/go/src/google.golang.org/api/admin/reports/v1/admin-gen.go",
 		"/home/rmcguire/Projects/jade/source/jade/pegged.d",
+		"/home/rmcguire/Projects/jade/dub.json",
 		"/home/rmcguire/test.html",
 		"/home/rmcguire/materiald/views/material_base.dt",
 		"/home/rmcguire/materiald/views/material_sidenav.dt",
@@ -171,13 +191,12 @@
 		"/home/rmcguire/.config/sublime-text-3/Installed Packages/Material-Theme.sublime-theme",
 		"/home/rmcguire/.config/sublime-text-3/Packages/User/DKit.sublime-settings",
 		"/home/rmcguire/.config/sublime-text-3/Packages/DKit/DKit.sublime-settings",
-		"/home/rmcguire/.profile",
 		"/home/rmcguire/.config/sublime-text-3/Packages/GoSublime/CHANGELOG.md",
 		"/home/rmcguire/.config/sublime-text-3/Packages/GoSublime/USAGE.md"
 	],
 	"find":
 	{
-		"height": 26.0
+		"height": 70.0
 	},
 	"find_in_files":
 	{
@@ -191,6 +210,32 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Str",
+			"InlineText",
+			"StringInterpolation",
+			"InlineText",
+			"BlockInATag",
+			"(SelfCloser?",
+			" / BlockInATag)",
+			"SelfCloser?",
+			".",
+			"'.'",
+			"GO",
+			"'+",
+			"DVariableName",
+			"DVariable",
+			"(InlineTag /",
+			"DLineExpression",
+			"Block",
+			"IncludeFileName",
+			"Tag / PipedText",
+			"StyleJsonKeyValue",
+			"'\"'",
+			"TagArgs",
+			"TagArgs?",
+			"StyleJsonObject",
+			"('.' CssClass)+",
+			"Id ('.' CssClass)*",
 			"DExpression",
 			"StringArray",
 			"JsonKeyValue",
@@ -270,6 +315,7 @@
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
 							"syntax": "Packages/D/D.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -298,6 +344,7 @@
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
 							"syntax": "Packages/D/D.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -326,11 +373,12 @@
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
 							"syntax": "Packages/D/D.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": -0.0,
-						"translation.y": 51.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -342,20 +390,21 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1736,
+						"buffer_size": 4028,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1258,
-								1258
+								456,
+								456
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/D/D.tmLanguage"
+							"syntax": "Packages/D/D.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
