@@ -15,7 +15,11 @@ Line	<-
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
 BlockInATag <- '.'																			# Without making indent and dedent handling block in a tag can't have "valid" or even partially valid tags in the raw text
-StringInterpolation <- ~('#' '{' (! '}' .)* '}')? InlineText*
+StringInterpolation <-
+	/ ~('!{' (! '}' .)* '}') InlineText
+	/ ~('#[' TagInterpolate ']') InlineText
+	/ ~('#{' (! '}' .)* '}')? InlineText
+TagInterpolate <- Id? (CssId / '.' CssClass)* TagArgs? AndAttributes? (SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText / BufferedCode)?)
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
 MixinVarArg <- (',' :Spacing* '...' DVariableName)
@@ -27,7 +31,7 @@ Case <-
 Iteration <-
 	/ ('each' / 'for') :Spacing+ DVariableName (',' :Spacing* DVariableName)? :Spacing+ ^'in' :Spacing+ DLineExpression
 	/ 'while' DLineExpression
-DVariableName <~ [A-Za-z][A-Za-z0-9]* 
+DVariableName <~ [A-Za-z][A-Za-z0-9]*
 UnbufferedCode <- '-' DLineExpression*
 BufferedCode <- ^('=' / '!=') DLineExpression*
 Conditional <-
@@ -68,7 +72,7 @@ JsonKey <~
 	/ :doublequote [A-Za-z\-][A-Za-z\-0-9]* :doublequote
 	/ [A-Za-z][A-Za-z0-9]*
 JsonObjectDExpression <~ (! (',' / '}') .)+
-InlineText	<~ (! ('\r\n' / "\n" / '#') .)*
+InlineText	<~ (! ('\r\n' / "\n" / '#[' / '#{' / '!{') .)*
 PipedText	<~ :'|' (! NewLine .)*
 Spacing	<- (' ' / tab)+
 NewLine <: ('\r\n' / '\n')+ # Used <: to make sure this is not in the ParseTree, also left ^ off the brackets to leave the newline chars out
