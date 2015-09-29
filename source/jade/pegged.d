@@ -7,11 +7,11 @@ mixin(grammar(`
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
 RootTag	<-
-	/ DocType endOfLine (Line{line})+
-	/ (Line{line})+
+	/ DocType endOfLine Line+
+	/ Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
-	/ Indent{indent} Line
+	/ Indent Line
 	/  (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
@@ -85,35 +85,35 @@ Indent  <~ tab+
 `));
 
 
-ParseTree[] stack;
-ulong last_indent;
-ulong lineNumber;
+//ParseTree[] stack;
+//ulong last_indent;
+//ulong lineNumber;
 
-PT indent(PT)(PT p) {
-	import std.stdio : writeln;
-	if (p.matches.length > 0 && p.children.length > 0) {
-		auto child = p.children[$-1];
-		writeln("p.child ", child.name);
-		writeln("indent: ", p.matches[0]);
-	}
-	return p;
-}
+//PT indent(PT)(PT p) {
+//	import std.stdio : writeln;
+//	if (p.matches.length > 0 && p.children.length > 0) {
+//		auto child = p.children[$-1];
+//		writeln("p.child ", child.name);
+//		writeln("indent: ", p.matches[0]);
+//	}
+//	return p;
+//}
 
-// PT fields: name, successful, matches, input, begin, end, children, toString, failMsg, dup
-PT line(PT)(PT p) {
-	import std.stdio : writeln;
-	import std.string : format;
-	lineNumber++;
-	if (p.matches.length > 0 && p.children.length > 0 && p.matches[0][0]=='\t') {
-		foreach (t; p.matches[0]) { assert(t == '\t', "All indents must be tabs at line: %d\n".format(lineNumber, p)); }
-		auto indent = p.matches[0].length; // number of tabs at start of line
-		assert(indent <= last_indent+1, "Excessive indent at line: %d (%d vs %d)\n%s".format(lineNumber, indent, last_indent, p));
-		//writeln("line: ", p.name, p.children[0].name, cast(ubyte[])p.matches[0]);
-		last_indent = indent;
-	} else {
-		last_indent = 0;
-	}
-	return p;
-}
+//// PT fields: name, successful, matches, input, begin, end, children, toString, failMsg, dup
+//PT line(PT)(PT p) {
+//	import std.stdio : writeln;
+//	import std.string : format;
+//	lineNumber++;
+//	if (p.matches.length > 0 && p.children.length > 0 && p.matches[0][0]=='\t') {
+//		foreach (t; p.matches[0]) { assert(t == '\t', "All indents must be tabs at line: %d\n".format(lineNumber, p)); }
+//		auto indent = p.matches[0].length; // number of tabs at start of line
+//		assert(indent <= last_indent+1, "Excessive indent at line: %d (%d vs %d)\n%s".format(lineNumber, indent, last_indent, p));
+//		//writeln("line: ", p.name, p.children[0].name, cast(ubyte[])p.matches[0]);
+//		last_indent = indent;
+//	} else {
+//		last_indent = 0;
+//	}
+//	return p;
+//}
 
 

@@ -7,7 +7,7 @@ void main(string[] args) {
 	if (args.length > 1) {
 		filename = args[1];
 	}
-	//pragma(msg, render!"base_page.jade");
+	pragma(msg, render!"base_page.jade");
 	writeln("runtime:");
 	render(stdout, filename);
 }
