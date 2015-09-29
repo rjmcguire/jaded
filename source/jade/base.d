@@ -5,6 +5,7 @@ import std.file;
 
 import jade.pegged;
 
+
 string render(alias filename)() {
 	pragma(msg, "compile time:");
 	enum templ = import(filename);
