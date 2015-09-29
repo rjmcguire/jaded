@@ -55,7 +55,7 @@
 			"file": "source/app.d",
 			"settings":
 			{
-				"buffer_size": 135,
+				"buffer_size": 145,
 				"line_ending": "Unix"
 			}
 		},
@@ -79,7 +79,7 @@
 			"file": "source/jade/pegged.d",
 			"settings":
 			{
-				"buffer_size": 4028,
+				"buffer_size": 4061,
 				"line_ending": "Unix"
 			}
 		}
@@ -210,6 +210,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"BufferedCode",
+			"'[",
+			"base_page",
 			"Str",
 			"InlineText",
 			"StringInterpolation",
@@ -302,15 +305,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 135,
+						"buffer_size": 145,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								31,
-								31
+								82,
+								82
 							]
 						],
 						"settings":
@@ -322,7 +325,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -381,7 +384,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -390,15 +393,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4028,
+						"buffer_size": 4061,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								456,
-								456
+								1556,
+								1556
 							]
 						],
 						"settings":
@@ -406,7 +409,7 @@
 							"syntax": "Packages/D/D.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
+						"translation.x": 42.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -418,7 +421,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 26.0
+		"height": 24.0
 	},
 	"input":
 	{
@@ -459,7 +462,7 @@
 	"project": "jade.sublime-project",
 	"replace":
 	{
-		"height": 48.0
+		"height": 44.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -496,7 +499,7 @@
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 220.0,
 	"status_bar_visible": true,
 	"template_settings":
