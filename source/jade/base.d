@@ -22,8 +22,8 @@ void render(T)(T output_stream, string filename) {
 	auto templ = readText("views/"~filename);
 	auto tmp = blockWrapJadeFile(templ);
 	auto parse_tree = Jade(tmp);
-	//auto result = renderParseTree(parse_tree);
-	auto result = "%s".format(parse_tree);
+	auto result = renderParseTree(parse_tree);
+	//auto result = "%s".format(parse_tree);
 	output_stream.write(result);
 }
 
@@ -106,7 +106,7 @@ struct JadeParser {
 			// move to the actual content of the line;
 			p = p.children[1];
 		}
-		if (!p.children) return "%s: %s// empty line%s".format(line_number, "\t".replicate(last_indent), p.matches[0]);
+		if (!p.children.length) return "%s: %s// empty line%s".format(line_number, "\t".replicate(last_indent), p.matches[0]);
 
 		switch(p.children[0].name) {
 			case "Jade.Include":
@@ -166,7 +166,7 @@ struct JadeParser {
 		return "%s %s // UnbufferedCode %s".format("\t".replicate(indent), p.matches[0], p.matches);
 	}
 	string renderBufferedCode(ParseTree p, ulong indent) {
-		return "%s %s // BufferedCode %s".format("\t".replicate(indent), p.matches[0], p.matches);
+		return "%s%s".format(p.matches[0], p.matches[1]);
 	}
 	string renderIteration(ParseTree p, ulong indent) {
 		return "%s %s // Iteration %s".format("\t".replicate(indent), p.matches[0], p.matches);
@@ -199,21 +199,93 @@ struct JadeParser {
 		return "%s %s // AnyContentLine %s".format("\t".replicate(indent), p.matches[0], p.matches);
 	}
 	string renderTag(ref ParseTree line, ulong indent) {
-		import std.conv;
-		import std.string : join;
-		string content;
-		string[] block;
-		if (findParseTree(line, "Jade.BlockInATag")) {
-			in_block = true;
-			block_indent = indent+1;
-			while (in_block) {
-				// eat Jade.Lines in parent
-				auto tmp = nextLine();
-				if (!tmp) break;
-				block ~= tmp.matches.join("");
+		auto hasBlock = findParseTree(line, "Jade.BlockInATag") !is null;
+		ParseTree* id;// = findParseTree(line, "Jade.Id", 2);
+		ParseTree* blockInATag;
+		ParseTree* args;
+		ParseTree*[] cssClasses;
+		string[] s;
+		auto childHolder = line.children[0];
+		if (line.name == "Jade.InlineTag") {
+			childHolder = line;
+		}
+		foreach (item; childHolder.children) {
+			switch (item.name) {
+				case "Jade.Id":
+					id = &item;
+					s ~= "id:"~ item.matches[0];
+					break;
+				case "Jade.BlockInATag":
+					blockInATag = &item;
+					s ~= "block:"~blockInATag.name;
+					break;
+				case "Jade.CssClass":
+					cssClasses ~= &item;
+					s ~= "cssClass:"~cssClasses[$-1].matches[0];
+					break;
+				case "Jade.TagArgs":
+					s ~= "tagArgs:%s".format(TagArgs.parse(item));
+					break;
+				case "Jade.BufferedCode":
+					s ~= "bufferedCode:%s".format(renderBufferedCode(item, indent));
+					break;
+				case "Jade.InlineText":
+					s ~= "inlineText:%s".format(item.matches[0]);
+					assert(item.matches.length == 1, "Surely inlineText should only have one match?");
+					break;
+				case "Jade.InlineTag":
+					s ~= "inlineTag:%s".format(renderTag(item, indent));
+					break;
+				default:
+					//id = &item;
+					s ~= "default:"~item.name;
 			}
 		}
-		return "%s:%s %s %s".format(in_block?"in_block":"", indent, line, block.length);
+		//return "%s:%s %s %s".format(hasBlock?"hasBlock":"", indent, id is null ? "(null)" : "id:[%s]".format(*id), line.matches.length);
+		return "%s indent:%s %s %s".format(hasBlock?"hasBlock":"", indent, "tag:[%s]".format(s), line.matches.length);
+	}
+	struct TagArgs {
+		TagArg[] args;
+		static TagArgs parse(ref ParseTree p) {
+			TagArgs ret;
+			foreach (argtree; p.children) {
+				ret.args ~= TagArg.parse(argtree);
+			}
+			return ret;
+		}
+		string toString() {
+			import std.array : appender;
+			auto ret = appender!string;
+			ret.reserve = 4096;
+			if (args.length > 0) {
+				ret ~= args[0].toString;
+				foreach (arg; args[1..$]) {
+					ret ~= ", ";
+					ret ~= arg.toString;
+				}
+			}
+			return ret.data;
+		}
+	}
+	struct TagArg {
+		ParseTree* key;
+		string assignType;
+		ParseTree* value;
+		static TagArg parse(ref ParseTree p) {
+			TagArg ret;
+			ret.key = &p.children[0];
+			if (p.children.length > 1) {
+				ret.assignType = p.children[1].matches[0];
+			}
+			if (p.children.length > 2) {
+				ret.value = &p.children[2];
+			}
+			return ret;
+		}
+
+		string toString() {
+			return "%s%s%s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
+		}
 	}
 }
 
@@ -227,12 +299,13 @@ bool isIndentedLine(ParseTree p) {
 	return false;
 }
 
-ParseTree* findParseTree(ref ParseTree p, string name) {
+ParseTree* findParseTree(ref ParseTree p, string name, int maxDepth=int.min) {
+	if (maxDepth != int.min && maxDepth < 0) return null;
 	if (p.name == name) {
 		return &p;
 	}
 	foreach (child; p.children) {
-		auto tmp = findParseTree(child, name);
+		auto tmp = findParseTree(child, name, maxDepth-1);
 		if (tmp !is null) {
 			return tmp;
 		}
@@ -244,7 +317,9 @@ ParseTree* findParseTree(ref ParseTree p, string name) {
 
 
 
-
+/**
+ * Pre-process jade file, making pegged parser capable of understanding indented BlockInATag blocks
+ */
 string blockWrapJadeFile(string templ) {
 	import std.conv;
 	import std.algorithm : countUntil;
