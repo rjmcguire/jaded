@@ -16,7 +16,7 @@ Line	<-
 	/  (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
-BlockInATag <- :'.{' ~(! StopBlockInATag .)+
+BlockInATag <- :'.{' ~(! StopBlockInATag .)+ endOfLine '}'
 StopBlockInATag <- endOfLine '}' endOfLine
 StringInterpolation <-
 	/ ~('!{' (! '}' .)* '}') InlineText
