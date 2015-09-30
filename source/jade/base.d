@@ -217,6 +217,7 @@ struct JadeParser {
 		TagArgs tagArgs;
 		ParseTree* cssId;
 		ParseTree*[] cssClasses;
+		AndAttributes andAttributes;
 		string[] s;
 		auto childHolder = line.children[0];
 		if (line.name == "Jade.InlineTag" || line.name == "Jade.TagInterpolate") {
@@ -258,7 +259,8 @@ struct JadeParser {
 					s ~= "selfcloser:true"; // we could put the automatica selfcloser for img, br, etc... by the Jade.Id detection above
 					break;
 				case "Jade.AndAttributes":
-					s ~= "andAttributes:%s".format("Not implemented");
+					andAttributes = AndAttributes.parse(item);
+					s ~= "andAttributes:%s".format(andAttributes);
 					break;
 				case "Jade.StringInterpolation":
 					s ~= "stringInterpolation:%s".format(renderStringInterpolation(item, indent));
@@ -270,6 +272,51 @@ struct JadeParser {
 		}
 		//return "%s:%s %s %s".format(hasBlock?"hasBlock":"", indent, id is null ? "(null)" : "id:[%s]".format(*id), line.matches.length);
 		return "%s indent:%s %s %s".format(hasBlock?"hasBlock":"", indent, "tag:[%s]".format(s), line.matches.length);
+	}
+	struct AndAttributes {
+		string dexpression;
+		AndAttribute[] attribs;
+		static AndAttributes parse(ref ParseTree p) {
+			AndAttributes ret;
+			if (p.children[0].name == "Jade.ParamDExpression") {
+				ret.dexpression = p.children[0].matches[0];
+			} else {
+				assert(p.children[0].name == "Jade.AttributeJsonObject", "Expected Jade.AttributeJsonObject got:%s".format(p.children[0].name));
+				foreach (argtree; p.children[0].children) {
+					ret.attribs ~= AndAttribute.parse(argtree);
+				}
+			}
+			return ret;
+		}
+		string toString() {
+			import std.array : appender;
+			auto ret = appender!string;
+			if (attribs.length > 0) {
+				ret.reserve = 4096;
+				ret ~= attribs[0].toString;
+				foreach (attrib; attribs[1..$]) {
+					ret ~= ", ";
+					ret ~= attrib.toString;
+				}
+			} else {
+				return dexpression;
+			}
+
+			return ret.data;
+		}
+	}
+	struct AndAttribute {
+		ParseTree* key;
+		ParseTree* value;
+		static AndAttribute parse(ref ParseTree p) {
+			AndAttribute ret;
+			ret.key = &p.children[0];
+			ret.value = &p.children[1];
+			return ret;
+		}
+		string toString() {
+			return "%s:%s".format(key.matches[0], value.matches[0]);
+		}
 	}
 	struct TagArgs {
 		TagArg[] args;
@@ -283,8 +330,8 @@ struct JadeParser {
 		string toString() {
 			import std.array : appender;
 			auto ret = appender!string;
-			ret.reserve = 4096;
 			if (args.length > 0) {
+				ret.reserve = 4096;
 				ret ~= args[0].toString;
 				foreach (arg; args[1..$]) {
 					ret ~= ", ";
