@@ -10,7 +10,9 @@ import jade.pegged;
 string render(alias filename)() {
 	pragma(msg, "compile time:");
 	enum templ = import(filename);
-	enum parse_tree = Jade(templ);
+	enum tmp = blockWrapJadeFile(templ);
+	//return tmp;
+	enum parse_tree = Jade(tmp);
 	//pragma(msg, parse_tree);
 	enum result = renderParseTree(parse_tree);
 	return result;
@@ -18,7 +20,8 @@ string render(alias filename)() {
 
 void render(T)(T output_stream, string filename) {
 	auto templ = readText("views/"~filename);
-	auto parse_tree = Jade(templ);
+	auto tmp = blockWrapJadeFile(templ);
+	auto parse_tree = Jade(tmp);
 	//auto result = renderParseTree(parse_tree);
 	auto result = "%s".format(parse_tree);
 	output_stream.write(result);
@@ -28,27 +31,37 @@ import pegged.parser;
 import std.string : format;
 string renderParseTree(ParseTree p) {
 	auto parser = new JadeParser(p);
-
 	return parser.render();
 }
 
 struct JadeParser {
 	ParseTree root;
+	ParseTree* parent; // the parent of the current children being processed
 
 	ulong last_indent;
 	size_t line_number;
 	bool in_block;
 	size_t block_indent;
+	size_t skip; // the number of lines to skip in main loop
+	int currentChild; // the current child index into parent.children;
 	string render() {
 		return renderToken(root);
 	}
+
 	string renderToken(ref ParseTree p) {
 		switch(p.name) {
 			case "Jade.Line":
 				return renderLine(p);
 			default:
 				string childoutput = "==========\n";
+				parent = &p;
+				currentChild = -1;
 				foreach (child; p.children) {
+					currentChild++;
+					if (skip) {
+						skip--;
+						continue;
+					}
 					//if (child.children.length > 0) {
 					//	childoutput ~= "-"~child.name~"-";
 					//	childoutput ~= renderParseTree(child);
@@ -63,6 +76,14 @@ struct JadeParser {
 				}
 				return "%s\n".format(childoutput);
 		}
+	}
+	ParseTree* nextLine() {
+		currentChild++;
+		skip++;
+		if (currentChild >= parent.children.length) {
+			return null;
+		}
+		return &parent.children[currentChild];
 	}
 
 
@@ -90,10 +111,36 @@ struct JadeParser {
 		switch(p.children[0].name) {
 			case "Jade.Include":
 				return "%d: %s\n".format(line_number, renderInclude(p, indent));
-			case "Jade.Comment":
-				return "%d: %s\n".format(line_number, renderComment(p, indent));
+			case "Jade.Extend":
+				return "%d: %s\n".format(line_number, renderEntend(p, indent));
+			case "Jade.Block":
+				return "%d: %s\n".format(line_number, renderBlock(p, indent));
+			case "Jade.Conditional":
+				return "%d: %s\n".format(line_number, renderConditional(p, indent));
+			case "Jade.UnbufferedCode":
+				return "%d: %s\n".format(line_number, renderUnbufferedCode(p, indent));
+			case "Jade.BufferedCode":
+				return "%d: %s\n".format(line_number, renderBufferedCode(p, indent));
+			case "Jade.Iteration":
+				return "%d: %s\n".format(line_number, renderIteration(p, indent));
+			case "Jade.MixinDecl":
+				return "%d: %s\n".format(line_number, renderMixinDecl(p, indent));
+			case "Jade.Mixin":
+				return "%d: %s\n".format(line_number, renderMixin(p, indent));
+			case "Jade.Case":
+				return "%d: %s\n".format(line_number, renderCase(p, indent));
 			case "Jade.Tag":
 				return "%d: %s\n".format(line_number, renderTag(p, indent));
+			case "Jade.PipedText":
+				return "%d: %s\n".format(line_number, renderPipedText(p, indent));
+			case "Jade.Comment":
+				return "%d: %s\n".format(line_number, renderComment(p, indent));
+			case "Jade.RawHtmlTag":
+				return "%d: %s\n".format(line_number, renderRawHtmlTag(p, indent));
+			case "Jade.Filter":
+				return "%d: %s\n".format(line_number, renderFilter(p, indent));
+			case "Jade.AnyContentLine":
+				return "%d: %s\n".format(line_number, renderAnyContentLine(p, indent));
 			default:
 				if (indent) {
 					return "%d: %s%s:%s\n".format(line_number, "\t".replicate(indent), p.children[0].name, p.matches[0]);
@@ -106,16 +153,67 @@ struct JadeParser {
 	string renderInclude(ParseTree p, ulong indent) {
 		return "%sinclude %s// include file %s".format("\t".replicate(indent), p.matches[0], p.matches);
 	}
+	string renderEntend(ParseTree p, ulong indent) {
+		return "%s %s // Entend %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderBlock(ParseTree p, ulong indent) {
+		return "%s %s // Block %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderConditional(ParseTree p, ulong indent) {
+		return "%s %s // Conditional %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderUnbufferedCode(ParseTree p, ulong indent) {
+		return "%s %s // UnbufferedCode %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderBufferedCode(ParseTree p, ulong indent) {
+		return "%s %s // BufferedCode %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderIteration(ParseTree p, ulong indent) {
+		return "%s %s // Iteration %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderMixinDecl(ParseTree p, ulong indent) {
+		return "%s %s // MixinDecl %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderMixin(ParseTree p, ulong indent) {
+		return "%s %s // Mixin %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderCase(ParseTree p, ulong indent) {
+		return "%s %s // Case %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderTag(ParseTree p, ulong indent) {
+		return "%s %s // Tag %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderPipedText(ParseTree p, ulong indent) {
+		return "%s %s // PipedText %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
 	string renderComment(ParseTree p, ulong indent) {
-		return "%scomment %s".format("\t".replicate(indent), p.matches[0]);
+		return "%s %s // Comment %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderRawHtmlTag(ParseTree p, ulong indent) {
+		return "%s %s // RawHtmlTag %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderFilter(ParseTree p, ulong indent) {
+		return "%s %s // Filter %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	}
+	string renderAnyContentLine(ParseTree p, ulong indent) {
+		return "%s %s // AnyContentLine %s".format("\t".replicate(indent), p.matches[0], p.matches);
 	}
 	string renderTag(ref ParseTree line, ulong indent) {
 		import std.conv;
+		import std.string : join;
+		string content;
+		string[] block;
 		if (findParseTree(line, "Jade.BlockInATag")) {
 			in_block = true;
 			block_indent = indent+1;
+			while (in_block) {
+				// eat Jade.Lines in parent
+				auto tmp = nextLine();
+				if (!tmp) break;
+				block ~= tmp.matches.join("");
+			}
 		}
-		return "%s:%s %s".format(in_block?"in_block":"", indent, line);
+		return "%s:%s %s %s".format(in_block?"in_block":"", indent, line, block.length);
 	}
 }
 
@@ -140,4 +238,48 @@ ParseTree* findParseTree(ref ParseTree p, string name) {
 		}
 	}
 	return null;
+}
+
+
+
+
+
+
+string blockWrapJadeFile(string templ) {
+	import std.conv;
+	import std.algorithm : countUntil;
+	import std.array;
+	import std.string : split, strip, lineSplitter;
+	auto buf = appender!string;
+	buf.reserve(templ.length*2);
+
+	long last_indent;
+	long raw_indent;
+	bool isRawBlock;
+	foreach (line; templ.lineSplitter) {
+		if (line == "}") throw new Exception("Unexpected } on line by itself"); // protect against accidental use of our special marker
+		auto indent = line.countUntil!"a != 0x09";
+		auto strippedLine = line.strip;
+		indent = indent < 0 ? 0 : indent;
+
+		//buf ~= to!string(indent);
+		if (line.length>0 && strippedLine[$-1]=='.' && indent <= raw_indent) {
+			if (isRawBlock) buf ~= "}\n"; // if a raw block tag follows a raw block tag
+
+			buf ~= line;
+			buf ~= '{';
+			isRawBlock = true;
+			raw_indent = indent;
+		} else if (isRawBlock && indent <= raw_indent) {
+			buf ~= "}\n";
+			isRawBlock = false;
+			buf ~= line;
+		} else {
+			buf ~= line;
+		}
+		buf ~= '\n';
+		last_indent = indent;
+	}
+
+	return buf.data;
 }

@@ -6,6 +6,7 @@ mixin(grammar(`
 # This Jade grammar puts all tags under RootTag as Jade.Line, but the first parseNode under the Line is a Indent with the amount of indents matched in its matches.length attribute
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
+#RootTagHolder <- RootTag{processRootTag}
 RootTag	<-
 	/ DocType endOfLine Line+
 	/ Line+
@@ -15,7 +16,8 @@ Line	<-
 	/  (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
-BlockInATag <- '.'																			# Without making indent and dedent handling block in a tag can't have "valid" or even partially valid tags in the raw text
+BlockInATag <- :'.{' ~(! StopBlockInATag .)+
+StopBlockInATag <- endOfLine '}' endOfLine
 StringInterpolation <-
 	/ ~('!{' (! '}' .)* '}') InlineText
 	/ ('#[' TagInterpolate ']') InlineText
@@ -117,3 +119,32 @@ Indent  <~ tab+
 //}
 
 
+// PT fields: name, successful, matches, input, begin, end, children, toString, failMsg, dup
+//PT processRootTag(PT)(PT p) {
+//	import std.string : format;
+//	int last_indent;
+//	auto tmp = findParseTree(p, "oneOrMore!(Jade.Line)");
+//	if (!tmp) throw new Exception("need at least one line");
+//	auto lines = tmp.children;
+//	foreach (line; lines) {
+//		if (p.matches.length > 0 && p.children.length > 0 && p.matches[0][0]=='\t') {
+
+//		}
+//		assert(line.name == "Jade.Line", "Expected Jade.Line but got %s".format(line.name));
+//	}
+//	return p;
+//}
+
+
+//ParseTree* findParseTree(ref ParseTree p, string name) {
+//	if (p.name == name) {
+//		return &p;
+//	}
+//	foreach (child; p.children) {
+//		auto tmp = findParseTree(child, name);
+//		if (tmp !is null) {
+//			return tmp;
+//		}
+//	}
+//	return null;
+//}
