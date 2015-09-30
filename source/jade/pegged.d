@@ -19,9 +19,9 @@ AnyContentLine <~ (! endOfLine .)*
 BlockInATag <- :'.{' ~(! StopBlockInATag .)+ endOfLine '}'
 StopBlockInATag <- endOfLine '}' endOfLine
 StringInterpolation <-
-	/ ~('!{' (! '}' .)* '}')
+	/ ('!{' ~(! '}' .)* :'}')
 	/ ('#[' TagInterpolate ']')
-	/ ~('#{' (! '}' .)* '}')?
+	/ ('#{' ~(! '}' .)* :'}')?
 TagInterpolate <- Id? (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? BufferedCode? (:Spacing+ TextStop(']'))?
 TextStop(StopElem) <~ (! StopElem .)*
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?

@@ -198,15 +198,28 @@ struct JadeParser {
 	string renderAnyContentLine(ParseTree p, ulong indent) {
 		return "%s %s // AnyContentLine %s".format("\t".replicate(indent), p.matches[0], p.matches);
 	}
+	string renderStringInterpolation(ParseTree p, ulong indent) {
+		switch (p.matches[0]) {
+			case "#{":
+				return "escape:%s // EscapedStringInterpolation".format(p.matches[1..$]);
+			case "#[":
+				return "tag:%s // TagInterpolation".format(renderTag(p.children[0], indent));
+			case "!{":
+				return "no-escape:%s // UnescapedStringInterpolation".format(p.matches[1..$]);
+			default:
+				assert(0, "Unrecognized StringInterpolation");
+		}
+	}
 	string renderTag(ref ParseTree line, ulong indent) {
 		auto hasBlock = findParseTree(line, "Jade.BlockInATag") !is null;
 		ParseTree* id;// = findParseTree(line, "Jade.Id", 2);
 		ParseTree* blockInATag;
-		ParseTree* args;
+		TagArgs tagArgs;
+		ParseTree* cssId;
 		ParseTree*[] cssClasses;
 		string[] s;
 		auto childHolder = line.children[0];
-		if (line.name == "Jade.InlineTag") {
+		if (line.name == "Jade.InlineTag" || line.name == "Jade.TagInterpolate") {
 			childHolder = line;
 		}
 		foreach (item; childHolder.children) {
@@ -223,8 +236,13 @@ struct JadeParser {
 					cssClasses ~= &item;
 					s ~= "cssClass:"~cssClasses[$-1].matches[0];
 					break;
+				case "Jade.CssId":
+					cssId = &item;
+					s ~= "cssId:"~cssId.matches[0];
+					break;
 				case "Jade.TagArgs":
-					s ~= "tagArgs:%s".format(TagArgs.parse(item));
+					tagArgs = TagArgs.parse(item);
+					s ~= "tagArgs:%s".format(tagArgs);
 					break;
 				case "Jade.BufferedCode":
 					s ~= "bufferedCode:%s".format(renderBufferedCode(item, indent));
@@ -235,6 +253,15 @@ struct JadeParser {
 					break;
 				case "Jade.InlineTag":
 					s ~= "inlineTag:%s".format(renderTag(item, indent));
+					break;
+				case "Jade.SelfCloser":
+					s ~= "selfcloser:true"; // we could put the automatica selfcloser for img, br, etc... by the Jade.Id detection above
+					break;
+				case "Jade.AndAttributes":
+					s ~= "andAttributes:%s".format("Not implemented");
+					break;
+				case "Jade.StringInterpolation":
+					s ~= "stringInterpolation:%s".format(renderStringInterpolation(item, indent));
 					break;
 				default:
 					//id = &item;
