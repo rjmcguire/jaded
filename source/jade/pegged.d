@@ -19,9 +19,9 @@ AnyContentLine <~ (! endOfLine .)*
 BlockInATag <- :'.{' ~(! StopBlockInATag .)+ endOfLine '}'
 StopBlockInATag <- endOfLine '}' endOfLine
 StringInterpolation <-
-	/ ~('!{' (! '}' .)* '}') InlineText
-	/ ('#[' TagInterpolate ']') InlineText
-	/ ~('#{' (! '}' .)* '}')? InlineText
+	/ ~('!{' (! '}' .)* '}')
+	/ ('#[' TagInterpolate ']')
+	/ ~('#{' (! '}' .)* '}')?
 TagInterpolate <- Id? (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? BufferedCode? (:Spacing+ TextStop(']'))?
 TextStop(StopElem) <~ (! StopElem .)*
 MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
@@ -51,12 +51,12 @@ FileName <~ (! endOfLine .)*
 FilterName <; Id
 RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
-	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText StringInterpolation+ / BufferedCode)?)
-	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText StringInterpolation+ / BufferedCode)?)
+	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText (StringInterpolation+ InlineText)* / BufferedCode)?)
+	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText (StringInterpolation+ InlineText)* / BufferedCode)?)
 Comment <- '//' (^'-')? InlineText?
 AndAttributes <- '&' 'attributes' '(' (AttributeJsonObject / ParamDExpression) ')'
 SelfCloser <- '/'
-InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText StringInterpolation+)?)
+InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText (StringInterpolation+ InlineText)*)?)
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssId <~ :'#' Id
