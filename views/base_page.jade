@@ -23,17 +23,18 @@ html(lang="en")
 	woot#content1 asdf
 		#woot2(class=["c1", "c2"]) asdfasdf
 		woot3(class={active: currentUrl === "/about"})
-- auto localhost = "remotehost"
+- var localhost = "remotehost"
+- var user = {}
 if "localhost" == host
 	div#foo(data-bar="foo", goot-one)&attributes({"data-foo": "bar"})
-		include:markdown ./includes/footer.jade
+		//- include:markdown ./includes/footer.jade
 else
 	merrrt
 unless !user.isAnonymous
 	You are logged in
-:markdown
-	### Markdown Need dedent support to parse this
-	I often like including markdown documents.
+//- :markdown
+//- 	### Markdown Need dedent support to parse this
+//- 	I often like including markdown documents.
 ul
 	each val, index in {1:'one',2:'two',3:'three'}
 		li= index + ': ' + val
@@ -98,7 +99,7 @@ p.
 		p Joel: !{riskyBusiness}
 p.
 	This is supposed to just be text inside a p tag.
-
+- var msg = {toUpperCase: function () {}}
 p This is #{msg.toUpperCase()} <- upper case characters
 
 //- Following is asdf, its the last tag
