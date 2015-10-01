@@ -10,103 +10,103 @@ runtime:
 1:  // // Comment ["//", "-", " index.jade", "\n"]
 2:  // // Comment ["//", "-", " extends ./base_layout.jade", "\n"]
 3: // empty line
-4:  indent:0 tag:[["id:doctype", "inlineText:html"]] 3
+4: <doctype></doctype>
 5:  <!--[if IE 8]> // RawHtmlTag ["<!--[if IE 8]>", "\n"]
-6:  indent:0 tag:[["id:html", "tagArgs:lang=en, class=lt-ie9"]] 11
+6: <html lang="en" class="lt-ie9"></html>
 7:  <![endif]--> // RawHtmlTag ["<![endif]-->", "\n"]
-8:  indent:0 tag:[["id:html", "tagArgs:lang=en"]] 7
-9:  indent:1 tag:[["id:head"]] 2
+8: <html lang="en"></html>
+9: <head></head>
 10: 		 block // Block ["block", " title", "\n"]
-11:  indent:3 tag:[["id:title", "inlineText:Page Title Here"]] 3
-12:  indent:3 tag:[["id:style"]] 2
+11: <title></title>
+12: <style></style>
 13: 				include style.css// include file ["style.css", "\n"]
-14:  indent:1 tag:[["id:body", "cssClass:base-css", "tagArgs:ng-app=MyApp, ng-controller=CtrlII"]] 13
+14: <body ng-app="MyApp" ng-controller="CtrlII"></body>
 15: 		 // // Comment ["//", " this is the displayed content", "\n"]
-16:  indent:2 tag:[["id:p", "tagArgs:id=, p-form-hook=some_d_var ? \"yes\" :\"no\", marked", "inlineText:This is a paragraph"]] 13
+16: <p id="" p-form-hook=some_d_var ? "yes" :"no" marked""></p>
 17: 			  That continues on // PipedText [" That continues on", "\n"]
 18: 			  multiple lines // PipedText [" multiple lines", "\n"]
-19:  indent:2 tag:[["id:ul", "tagArgs:isit=some_other_d_var == \"woot\""]] 7
-20:  indent:3 tag:[["id:li", "cssClass:one-css", "cssClass:two-css", "inlineTag: indent:3 tag:[[\"id:a\", \"tagArgs:href!=#\"]] 7", "inlineTag: indent:3 tag:[[\"id:a\", \"tagArgs:href!=#\"]] 7", "bufferedCode:!= clickme"]] 22
-21:  indent:2 tag:[["cssClass:img-holder"]] 3
-22:  indent:3 tag:[["id:img", "cssClass:image", "tagArgs:src=logo.gif, style=background", "selfcloser:true"]] 19
-23:  indent:1 tag:[["id:woot", "cssId:content1", "inlineText:asdf"]] 4
-24:  indent:2 tag:[["cssId:woot2", "tagArgs:class=[", "inlineText:asdfasdf"]] 16
-25:  indent:2 tag:[["id:woot3", "tagArgs:class=active"]] 9
+19: <ul isit=some_other_d_var == "woot"></ul>
+20: <li></li>
+21: <div></div>
+22: <img src="logo.gif" style=background=background,padding=padding></img>
+23: <woot></woot>
+24: <div class=c1,c2></div>
+25: <woot3 class=active=active></woot3>
 26:  - // UnbufferedCode ["-", " var localhost = \"remotehost\"", "\n"]
 27:  - // UnbufferedCode ["-", " var user = {}", "\n"]
 28:  if // Conditional ["if", " \"localhost\" == host", "\n"]
-29:  indent:1 tag:[["id:div", "cssId:foo", "tagArgs:data-bar=foo, goot-one", "andAttributes:data-cew:\"baer\", ng-show:1234"]] 20
+29: <div data-bar="foo" goot-one""></div>
 30: 		 // // Comment ["//", "-", " include:markdown ./includes/footer.jade", "\n"]
 31:  else // Conditional ["else", "\n"]
-32:  indent:1 tag:[["id:merrrt"]] 2
+32: <merrrt></merrrt>
 33:  unless // Conditional ["unless", " !user.isAnonymous", "\n"]
-34:  indent:1 tag:[["id:You", "inlineText:are logged in"]] 3
+34: <You></You>
 35:  // // Comment ["//", "-", " :markdown", "\n"]
 36:  // // Comment ["//", "-", " \t### Markdown Need dedent support to parse this", "\n"]
 37:  // // Comment ["//", "-", " \tI often like including markdown documents.{", "\n"]
 38:  } // AnyContentLine ["}", "\n"]
-39:  indent:0 tag:[["id:ul"]] 2
+39: <ul></ul>
 40: 	 each // Iteration ["each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n"]
-41:  indent:2 tag:[["id:li", "bufferedCode:= index + ': ' + val"]] 4
+41: <li></li>
 42:  while // Iteration ["while", " n < 4", "\n"]
-43:  indent:1 tag:[["id:li", "bufferedCode:= n++"]] 4
+43: <li></li>
 44: 	// empty line
 45:  - // UnbufferedCode ["-", " var friends = 0", "\n"]
 46:  case // Case ["case", " ", "friends", "\n"]
 47: 	 when // Case ["when", " 0", "\n"]
 48: 	 when // Case ["when", " 1", "\n"]
-49:  indent:2 tag:[["id:p", "inlineText:you have very few friends"]] 3
+49: <p></p>
 50: 	 default // Case ["default", ":", "p", "you have ", "#{", "friends", " friends", "\n"]
 51:  // // Comment ["//", "-", " Declaration", "\n"]
 52:  mixin // MixinDecl ["mixin", "list", "\n"]
-53:  indent:1 tag:[["id:ul"]] 2
-54:  indent:2 tag:[["id:li", "inlineText:foo"]] 3
-55:  indent:2 tag:[["id:li", "inlineText:bar"]] 3
-56:  indent:2 tag:[["id:li", "inlineText:baz"]] 3
+53: <ul></ul>
+54: <li></li>
+55: <li></li>
+56: <li></li>
 57:  // // Comment ["//", "-", " Use", "\n"]
 58:  + // Mixin ["+", "list", "\n"]
 59:  + // Mixin ["+", "list", "\n"]
 60:  mixin // MixinDecl ["mixin", "pet", "(", "name", ")", "\n"]
-61:  indent:1 tag:[["id:li", "cssClass:pet", "bufferedCode:= name"]] 6
-62:  indent:0 tag:[["id:ul"]] 2
+61: <li></li>
+62: <ul></ul>
 63: 	 + // Mixin ["+", "pet", "(", "cat", ")", "\n"]
 64: 	 + // Mixin ["+", "pet", "(", "dog", ")", "\n"]
 65: 	 + // Mixin ["+", "pet", "(", "pig", ")", "\n"]
 66:  mixin // MixinDecl ["mixin", "article", "(", "title", ")", "\n"]
-67:  indent:1 tag:[["cssClass:article"]] 3
-68:  indent:2 tag:[["cssClass:article-wrapper"]] 3
-69:  indent:3 tag:[["id:h1", "bufferedCode:= title"]] 4
+67: <div></div>
+68: <div></div>
+69: <h1></h1>
 70: 			 if // Conditional ["if", "block", "\n"]
 71: 				 block // Block ["block", "\n"]
 72: 			 else // Conditional ["else", "\n"]
-73:  indent:4 tag:[["id:p", "inlineText:No content provided"]] 3
+73: <p></p>
 74: 				// empty line
 75:  + // Mixin ["+", "article", "(", "'Hello world'", ")", "\n"]
 76: 				// empty line
 77:  + // Mixin ["+", "article", "(", "'Hello world'", ")", "\n"]
-78:  indent:1 tag:[["id:p", "inlineText:This is my"]] 3
-79:  indent:1 tag:[["id:p", "inlineText:Amazing article"]] 3
+78: <p></p>
+79: <p></p>
 80:  mixin // MixinDecl ["mixin", "link", "(", "href", ",", "name", ")", "\n"]
 81: 	 // // Comment ["//", "-", " attributes == {class: \"btn\"}", "\n"]
-82:  indent:1 tag:[["id:a", "tagArgs:class!=attributes.class, href=href", "bufferedCode:= name"]] 13
+82: <a class!=attributes.class href=href></a>
 83:  + // Mixin ["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n"]
 84:  mixin // MixinDecl ["mixin", "link", "(", "href", ",", "name", ")", "\n"]
-85:  indent:1 tag:[["id:a", "tagArgs:href=href", "andAttributes:attributes", "bufferedCode:= name"]] 14
+85: <a href=href></a>
 86: 	// empty line
 87:  + // Mixin ["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n"]
 88:  mixin // MixinDecl ["mixin", "list", "(", "id", ",", "...", "items", ")", "\n"]
-89:  indent:1 tag:[["id:ul", "tagArgs:id=id"]] 7
+89: <ul id=id></ul>
 90: 		 each // Iteration ["each", "item", "in", "items", "\n"]
-91:  indent:3 tag:[["id:li", "bufferedCode:= item"]] 4
+91: <li></li>
 92: 			// empty line
 93:  + // Mixin ["+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")", "\n"]
 94: 			// empty line
-95: hasBlock indent:0 tag:[["id:p", "block:Jade.BlockInATag"]] 5
-96: hasBlock indent:0 tag:[["id:p", "block:Jade.BlockInATag"]] 5
+95: <p></p>
+96: <p></p>
 97:  - // UnbufferedCode ["-", " var msg = {toUpperCase: function () {}}", "\n"]
-98:  indent:0 tag:[["id:p", "inlineText:This is ", "stringInterpolation:escape:[\"msg.toUpperCase()\"] // EscapedStringInterpolation", "inlineText: <- ", "stringInterpolation:tag: indent:0 tag:[[\"id:a\", \"tagArgs:href=#\", \"default:Jade.TextStop!(literal!(\\\"]\\\"))\"]] 7 // TagInterpolation", "inlineText: characters"]] 16
+98: <p></p>
 99: 			// empty line
 100:  // // Comment ["//", "-", " Following is asdf, its the last tag", "\n"]
-101:  indent:0 tag:[["id:asdf"]] 2
+101: <asdf></asdf>
 
 

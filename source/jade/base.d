@@ -130,7 +130,12 @@ struct JadeParser {
 			case "Jade.Case":
 				return "%d: %s\n".format(line_number, renderCase(p, indent));
 			case "Jade.Tag":
-				return "%d: %s\n".format(line_number, renderTag(p, indent));
+				import std.array : appender;
+				auto tag = renderTag(p, indent);
+				auto html = appender!string;
+				html ~= "<%s%s>".format(tag.id, tag.tagArgs.toHtml);
+				html ~= "</%s>".format(tag.id);
+				return "%d: %s\n".format(line_number, html.data);
 			case "Jade.PipedText":
 				return "%d: %s\n".format(line_number, renderPipedText(p, indent));
 			case "Jade.Comment":
@@ -210,14 +215,22 @@ struct JadeParser {
 				assert(0, "Unrecognized StringInterpolation");
 		}
 	}
-	string renderTag(ref ParseTree line, ulong indent) {
-		auto hasBlock = findParseTree(line, "Jade.BlockInATag") !is null;
-		ParseTree* id;// = findParseTree(line, "Jade.Id", 2);
-		ParseTree* blockInATag;
+	struct Tag {
+		ulong indent;
+		bool hasBlock;
+		string _id;// = findParseTree(line, "Jade.Id", 2);
+		void id(string id) { _id = id; }
+		string id() { if (_id) return _id; return "div"; }
+		ParseTree blockInATag;
 		TagArgs tagArgs;
-		ParseTree* cssId;
-		ParseTree*[] cssClasses;
+		ParseTree cssId;
+		ParseTree[] cssClasses;
 		AndAttributes andAttributes;
+	}
+	Tag renderTag(ref ParseTree line, ulong indent) {
+		Tag tag;
+		tag.indent = indent;
+		tag.hasBlock = findParseTree(line, "Jade.BlockInATag") !is null;
 		string[] s;
 		auto childHolder = line.children[0];
 		if (line.name == "Jade.InlineTag" || line.name == "Jade.TagInterpolate") {
@@ -226,24 +239,24 @@ struct JadeParser {
 		foreach (item; childHolder.children) {
 			switch (item.name) {
 				case "Jade.Id":
-					id = &item;
-					s ~= "id:"~ item.matches[0];
+					tag.id = item.matches[0];
+					s ~= "id:"~ tag.id;
 					break;
 				case "Jade.BlockInATag":
-					blockInATag = &item;
-					s ~= "block:"~blockInATag.name;
+					tag.blockInATag = item;
+					s ~= "block:"~ tag.blockInATag.name;
 					break;
 				case "Jade.CssClass":
-					cssClasses ~= &item;
-					s ~= "cssClass:"~cssClasses[$-1].matches[0];
+					tag.cssClasses ~= item;
+					s ~= "cssClass:"~ tag.cssClasses[$-1].matches[0];
 					break;
 				case "Jade.CssId":
-					cssId = &item;
-					s ~= "cssId:"~cssId.matches[0];
+					tag.cssId = item;
+					s ~= "cssId:"~ tag.cssId.matches[0];
 					break;
 				case "Jade.TagArgs":
-					tagArgs = TagArgs.parse(item);
-					s ~= "tagArgs:%s".format(tagArgs);
+					tag.tagArgs = TagArgs.parse(item);
+					s ~= "tagArgs:%s".format(tag.tagArgs);
 					break;
 				case "Jade.BufferedCode":
 					s ~= "bufferedCode:%s".format(renderBufferedCode(item, indent));
@@ -259,8 +272,8 @@ struct JadeParser {
 					s ~= "selfcloser:true"; // we could put the automatica selfcloser for img, br, etc... by the Jade.Id detection above
 					break;
 				case "Jade.AndAttributes":
-					andAttributes = AndAttributes.parse(item);
-					s ~= "andAttributes:%s".format(andAttributes);
+					tag.andAttributes = AndAttributes.parse(item);
+					s ~= "andAttributes:%s".format(tag.andAttributes);
 					break;
 				case "Jade.StringInterpolation":
 					s ~= "stringInterpolation:%s".format(renderStringInterpolation(item, indent));
@@ -271,7 +284,7 @@ struct JadeParser {
 			}
 		}
 		//return "%s:%s %s %s".format(hasBlock?"hasBlock":"", indent, id is null ? "(null)" : "id:[%s]".format(*id), line.matches.length);
-		return "%s indent:%s %s %s".format(hasBlock?"hasBlock":"", indent, "tag:[%s]".format(s), line.matches.length);
+		return tag;
 	}
 	struct AndAttributes {
 		string dexpression;
@@ -340,6 +353,18 @@ struct JadeParser {
 			}
 			return ret.data;
 		}
+		string toHtml() {
+			import std.array : appender;
+			auto ret = appender!string;
+			if (args.length > 0) {
+				ret.reserve = 1024;
+				foreach (arg; args) {
+					ret ~= " ";
+					ret ~= arg.toHtml;
+				}
+			}
+			return ret.data;
+		}
 	}
 	struct TagArg {
 		ParseTree* key;
@@ -356,9 +381,54 @@ struct JadeParser {
 			}
 			return ret;
 		}
+		string getValue() {
+			import std.array : appender;
+			auto ret = appender!string;
+			auto type = value is null ? "<null>" : value.children[0].name;
+			ret.reserve = 1024;
+			switch (type) {
+			case "Jade.Str":
+				ret ~= '"';
+				ret ~= value.matches[0];
+				ret ~= '"';
+				return ret.data;
+			case "Jade.ParamDExpression":
+				return value.matches[0];
+			case "Jade.AttributeJsonObject":
+				assert(key.matches[0] == "style" || key.matches[0] == "class", "AttributeJsonObject as parameter only supported for style tag parameter, not: "~ key.matches[0]);
+				if (value.children[0].children.length > 0) {
+					ret ~= value.children[0].children[0].children[0].matches[0];
+					ret ~= '=';
+					ret ~= value.children[0].children[0].children[0].matches[0];
+					foreach (keyvalue; value.children[0].children[1..$]) {
+						ret ~= ",";
+						ret ~= keyvalue.children[0].matches[0];
+						ret ~= '=';
+						ret ~= keyvalue.children[0].matches[0];
+					}
+				}
+				return ret.data;
+			case "Jade.CssClassArray":
+				if (value.children[0].children.length > 0) {
+					ret ~= value.children[0].children[0].matches[0];
+					foreach (clazz; value.children[0].children[1..$]) {
+						ret ~= ",";
+						ret ~= clazz.matches[0];
+					}
+				}
+				return ret.data;
+			case "<null>":
+				return `""`;
+			default:
+				assert(0, "Unsupported value type: "~ type ~" for TagArg key:"~ key.matches[0]);
+			}
+		}
 
 		string toString() {
 			return "%s%s%s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
+		}
+		string toHtml() {
+			return "%s%s%s".format(key.matches[0], assignType, getValue());
 		}
 	}
 }
