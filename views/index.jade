@@ -1,0 +1,14 @@
+extends base_layout.jade
+
+block title
+	title Index of Demo
+
+block content
+	// this is the actual displayed content
+	p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is the index paragraph
+		| That continues on
+		| multiple lines of index.jade
+	ul(isit=some_other_d_var == "woot")
+		li.one-css.two-css: a(href!="#"): a(href!="#")!= clickme2
+	.img-holder
+		img.image(src="logo2.gif", style={background: "red", padding: "0px"})/

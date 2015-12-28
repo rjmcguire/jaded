@@ -1,6 +1,3 @@
-//- index.jade
-//- extends ./base_layout.jade
-
 doctype html
 <!--[if IE 8]>
 html(lang="en", class="lt-ie9")
@@ -9,17 +6,18 @@ html(lang="en")
 	head
 		block title
 			title Page Title Here
-			style
-				include style.css
+		style
+			include style.css
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
-		// this is the displayed content
-		p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
-			| That continues on
-			| multiple lines
-		ul(isit=some_other_d_var == "woot")
-			li.one-css.two-css: a(href!="#"): a(href!="#")!= clickme
-		.img-holder
-			img.image(src="logo.gif", style={background: "red", padding: "0px"})/
+		block content
+			// this is the displayed content
+			p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
+				| That continues on
+				| multiple lines
+			ul(isit=some_other_d_var == "woot")
+				li.one-css.two-css: a(href!="#"): a(href!="#")!= clickme
+			.img-holder
+				img.image(src="logo.gif", style={background: "red", padding: "0px"})/
 	woot#content1 asdf
 		#woot2(class=["c1", "c2"]) asdfasdf
 		woot3(class={active: currentUrl === "/about"})

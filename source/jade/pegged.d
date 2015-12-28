@@ -7,9 +7,7 @@ mixin(grammar(`
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
 #RootTagHolder <- RootTag{processRootTag}
-RootTag	<-
-	/ DocType endOfLine Line+
-	/ Line+
+RootTag	<- (Comment? endOfLine)* (DocType endOfLine)? Line+
 DocType <~ :'doctype ' (! endOfLine .)*
 Line	<-
 	/ Indent Line
@@ -43,8 +41,8 @@ Conditional <-
 	/ ('if' / 'unless') DLineExpression
 	/ 'else'
 IfBlock <- 'if' :Spacing+ 'block'
-Extend <- 'extends' FileName
-Block <- 'block' DLineExpression?
+Extend <- 'extends' :Spacing+ FileName
+Block <- 'block' :Spacing+ DLineExpression?
 Filter <- ':' FilterName
 Include <- :'include' (':' FilterName)? :Spacing+ FileName
 FileName <~ (! endOfLine .)*

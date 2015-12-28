@@ -6,6 +6,7 @@ import std.array : replicate;
 
 import jade.pegged;
 
+import std.conv : to;
 
 string render(alias filename)() {
 	pragma(msg, "compile time:");
@@ -14,7 +15,7 @@ string render(alias filename)() {
 	//return tmp;
 	enum parse_tree = Jade(tmp);
 	//pragma(msg, parse_tree);
-	enum result = renderParseTree(parse_tree);
+	enum result = renderParseTree(filename, parse_tree); // Should we use a different readParseTree function here? This is the last place I currently use enum...
 	return result;
 }
 
@@ -22,38 +23,70 @@ void render(T)(T output_stream, string filename) {
 	auto templ = readText("views/"~filename);
 	auto tmp = blockWrapJadeFile(templ);
 	auto parse_tree = Jade(tmp);
-	auto result = renderParseTree(parse_tree);
+	auto result = renderParseTree(filename, parse_tree);
 	//auto result = "%s".format(parse_tree);
 	output_stream.write(result);
 }
 
 import pegged.parser;
 import std.string : format;
-string renderParseTree(ParseTree p) {
-	auto parser = new JadeParser(p);
-	return parser.render();
+string renderParseTree(string filename, ParseTree p) {
+	auto parser = new JadeParser(filename, p);
+	return parser.render().data;
 }
 
 struct JadeParser {
+	import std.array : Appender, appender;
+	string filename;
 	ParseTree root;
 	ParseTree* parent; // the parent of the current children being processed
 
-	ulong last_indent;
+	int last_indent, indent;
 	size_t line_number;
 	bool in_block;
 	size_t block_indent;
 	size_t skip; // the number of lines to skip in main loop
 	int currentChild; // the current child index into parent.children;
-	string render() {
-		return renderToken(root);
+	string[] parents;
+	auto render() {
+		auto output = appender!string;
+		output ~= "sink(`";
+		renderToken(output, root);
+		printClosingTags(output);
+		output ~= "`, %s);".format(line_number);
+		return output;
 	}
 
-	string renderToken(ref ParseTree p) {
+	auto printClosingTags(ref Appender!string html, int diff=-1, string file=__FILE__, int line=__LINE__) {
+		if (parents.length <=0) return html;
+
+		if (diff<0) {
+			diff = cast(int)(last_indent - indent); // an equal indent is a un-indent of 1
+		}
+		if (diff == 0) {
+			diff = 1;
+		}
+		assert(diff <= parents.length, "Too many indents: %s vs %s @%s:%d processing %s:%d\n%s".format(diff, parents.length, file, line, filename, line_number, parents));
+		for (auto i=diff; i > 0; i--) {
+			html ~= "`); sink(`</%s>`,%d, %d); sink(`".format(parents[$-1], line_number, indent-1);
+			parents = parents[0..$-1];
+		}
+		return html;
+	}
+	void renderToken(ref Appender!string output, ref ParseTree p) {
 		switch(p.name) {
+			case "Jade.DocType":
+				line_number++;
+				output ~= "<!DOCTYPE %s>".format(p.matches[0]);
+				break;
+			case "Jade.Comment":
+				line_number++;
+				break;
 			case "Jade.Line":
-				return renderLine(p);
+				renderLine(output, p);
+				break;
 			default:
-				string childoutput = "==========\n";
+				output ~= "==========\n";
 				parent = &p;
 				currentChild = -1;
 				foreach (child; p.children) {
@@ -63,18 +96,48 @@ struct JadeParser {
 						continue;
 					}
 					//if (child.children.length > 0) {
-					//	childoutput ~= "-"~child.name~"-";
-					//	childoutput ~= renderParseTree(child);
+					//	output ~= "-"~child.name~"-";
+					//	output ~= renderParseTree(child);
 					//} else {
 						if (child.matches.length > 0) {
-							//childoutput ~= "child: name:%s firstmatch:%s numChildren:%s numMatches:%s\n".format(child.name, child.matches[0], child.children.length, child.matches.length);
-							childoutput ~= renderToken(child);
+
+
+								indent = 0;
+										bool decreased_indent, mustRecordIndent;
+										//writefln("indents: %s and %s\t%s", p.matches.length > 0, p.matches[0][0]=='\t', p);
+										if (child.matches.length > 0 && child.matches[0][0]=='\t') {
+											foreach (t; child.matches[0]) { assert(t == '\t', "All indents must be tabs at line: %d\n".format(line_number, child)); }
+											indent = to!int(child.matches[0].length);
+											assert(indent <= last_indent+1, "Excessive indent at line: %d (%d vs %d)\n%s".format(line_number, indent, last_indent, child));
+											decreased_indent = last_indent >= indent;
+											//last_indent = indent;
+											mustRecordIndent = true;
+										} else {
+											mustRecordIndent = false;
+										}
+										scope(exit) {
+											if (mustRecordIndent) {
+												last_indent = indent;
+											}
+											output ~= "\n";
+											//writefln("Indents now: %s prev:%s", indent, last_indent);
+										}
+
+										if (decreased_indent) {
+											//printClosingTags(output, cast(int)(indent - last_indent));
+										}
+
+
+
+
+							//output ~= "child: name:%s firstmatch:%s numChildren:%s numMatches:%s\n".format(child.name, child.matches[0], child.children.length, child.matches.length);
+							renderToken(output, child);
 						} else {
-							childoutput ~= "child: name:%s numChildren:%s numMatches:%s\n".format(child.name, child.children.length, child.matches.length);
+							output ~= "child: name:%s numChildren:%s numMatches:%s\n".format(child.name, child.children.length, child.matches.length);
 						}
 					//}
 				}
-				return "%s\n".format(childoutput);
+				output ~= "\n";
 		}
 	}
 	ParseTree* nextLine() {
@@ -87,17 +150,10 @@ struct JadeParser {
 	}
 
 
-	string renderLine(ref ParseTree p) {
+	void renderLine(ref Appender!string output, ref ParseTree p) {
+		import std.array : appender;
 		line_number++;
 
-		ulong indent = 0;
-		bool indent_changed, decreased_indent;
-		if (p.matches.length > 0 && p.children.length > 0 && p.matches[0][0]=='\t') {
-			foreach (t; p.matches[0]) { assert(t == '\t', "All indents must be tabs at line: %d\n".format(line_number, p)); }
-			indent = p.matches[0].length;
-			assert(indent <= last_indent+1, "Excessive indent at line: %d (%d vs %d)\n%s".format(line_number, indent, last_indent, p));
-			last_indent = indent;
-		}
 		if (in_block && indent < block_indent) {
 			in_block = false;
 			block_indent = 0;
@@ -106,63 +162,93 @@ struct JadeParser {
 			// move to the actual content of the line;
 			p = p.children[1];
 		}
-		if (!p.children.length) return "%s: %s// empty line%s".format(line_number, "\t".replicate(last_indent), p.matches[0]);
-
-		switch(p.children[0].name) {
-			case "Jade.Include":
-				return "%d: %s\n".format(line_number, renderInclude(p, indent));
-			case "Jade.Extend":
-				return "%d: %s\n".format(line_number, renderEntend(p, indent));
-			case "Jade.Block":
-				return "%d: %s\n".format(line_number, renderBlock(p, indent));
-			case "Jade.Conditional":
-				return "%d: %s\n".format(line_number, renderConditional(p, indent));
-			case "Jade.UnbufferedCode":
-				return "%d: %s\n".format(line_number, renderUnbufferedCode(p, indent));
-			case "Jade.BufferedCode":
-				return "%d: %s\n".format(line_number, renderBufferedCode(p, indent));
-			case "Jade.Iteration":
-				return "%d: %s\n".format(line_number, renderIteration(p, indent));
-			case "Jade.MixinDecl":
-				return "%d: %s\n".format(line_number, renderMixinDecl(p, indent));
-			case "Jade.Mixin":
-				return "%d: %s\n".format(line_number, renderMixin(p, indent));
-			case "Jade.Case":
-				return "%d: %s\n".format(line_number, renderCase(p, indent));
-			case "Jade.Tag":
-				import std.array : appender;
-				auto tag = renderTag(p, indent);
-				auto html = appender!string;
-				html ~= "<%s%s>".format(tag.id, tag.tagArgs.toHtml);
-				html ~= "</%s>".format(tag.id);
-				return "%d: %s\n".format(line_number, html.data);
-			case "Jade.PipedText":
-				return "%d: %s\n".format(line_number, renderPipedText(p, indent));
-			case "Jade.Comment":
-				return "%d: %s\n".format(line_number, renderComment(p, indent));
-			case "Jade.RawHtmlTag":
-				return "%d: %s\n".format(line_number, renderRawHtmlTag(p, indent));
-			case "Jade.Filter":
-				return "%d: %s\n".format(line_number, renderFilter(p, indent));
-			case "Jade.AnyContentLine":
-				return "%d: %s\n".format(line_number, renderAnyContentLine(p, indent));
-			default:
-				if (indent) {
-					return "%d: %s%s:%s\n".format(line_number, "\t".replicate(indent), p.children[0].name, p.matches[0]);
-				} else {
-					return "%d: %s\n".format(line_number, p.matches[0]);
-				}
+		if (!p.children.length) {
+			output ~= "%s: %s// empty line%s".format(line_number, "\t".replicate(last_indent), p.matches[0]);
+		} else {
+			switch(p.children[0].name) {
+				case "Jade.Include":
+					output ~= "%d: %s".format(line_number, renderInclude(p, line_number, indent));
+					break;
+				case "Jade.Extend":
+					output ~= "%d: %s".format(line_number, renderExtend(p, indent));
+					break;
+				case "Jade.Block":
+					output ~= "%d: %s".format(line_number, renderBlock(p, indent));
+					break;
+				case "Jade.Conditional":
+					output ~= "%d: %s".format(line_number, renderConditional(p, indent));
+					break;
+				case "Jade.UnbufferedCode":
+					output ~= "%d: %s".format(line_number, renderUnbufferedCode(p, indent));
+					break;
+				case "Jade.BufferedCode":
+					output ~= "%d: %s".format(line_number, renderBufferedCode(p, indent));
+					break;
+				case "Jade.Iteration":
+					output ~= "%d: %s".format(line_number, renderIteration(p, indent));
+					break;
+				case "Jade.MixinDecl":
+					output ~= "%d: %s".format(line_number, renderMixinDecl(p, indent));
+					break;
+				case "Jade.Mixin":
+					output ~= "%d: %s".format(line_number, renderMixin(p, indent));
+					break;
+				case "Jade.Case":
+					output ~= "%d: %s".format(line_number, renderCase(p, indent));
+					break;
+				case "Jade.Tag":
+					auto tag = renderTag(p, indent);
+					if (tag.id == "doctype") {
+						assert(0, "doctype must be in first non-comment line of template");
+					} else {
+						output ~= "%d: %s%s%s".format(line_number, "\t".replicate(indent), tag.toHtml, tag.inlineText);
+						parents ~= tag.id;
+					}
+					//output ~= "</%s>".format(tag.id);
+					break;
+				case "Jade.PipedText":
+					output ~= "%d: %s".format(line_number, renderPipedText(p, indent));
+					break;
+				case "Jade.Comment":
+					if (p.matches[1] == "-") {
+						output ~= "%d: // code comment".format(line_number);
+					} else {
+						output ~= "%d: %s".format(line_number, renderComment(p, indent));
+					}
+					break;
+				case "Jade.RawHtmlTag":
+					output ~= "%d: %s".format(line_number, renderRawHtmlTag(p, indent));
+					break;
+				case "Jade.Filter":
+					output ~= "%d: %s".format(line_number, renderFilter(p, indent));
+					break;
+				case "Jade.AnyContentLine":
+					output ~= "%d: %s".format(line_number, renderAnyContentLine(p, indent));
+					break;
+				default:
+					if (indent) {
+						output ~= "%d: %s%s:%s".format(line_number, "\t".replicate(indent), p.children[0].name, p.matches[0]);
+					} else {
+						output ~= "%d: %s".format(line_number, p.matches[0]);
+					}
+			}
 		}
 	}
 
-	string renderInclude(ParseTree p, ulong indent) {
-		return "%sinclude %s// include file %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	string renderInclude(ParseTree p, ulong line_number, ulong indent) {
+		//return "%sinclude %s// include file %s".format("\t".replicate(indent), p.matches[0], p.matches);
+		auto s = q{`, %d, %d); sink(import("%s"), %d, %d); sink(`}.format(0, indent, p.matches[0], line_number, indent);
+		//return import(p.matches[0]);
+		//mixin(s);
+		return s;
 	}
-	string renderEntend(ParseTree p, ulong indent) {
-		return "%s %s // Entend %s".format("\t".replicate(indent), p.matches[0], p.matches);
+	string renderExtend(ParseTree p, ulong indent) {
+		//return "%s %s // Extend %s".format("\t".replicate(indent), p.matches[0], p.matches);
+		return q{`, %d, %d); mixin(render!"%s"); sink(`}.format(0, indent, p.matches[1]);
 	}
 	string renderBlock(ParseTree p, ulong indent) {
-		return "%s %s // Block %s".format("\t".replicate(indent), p.matches[0], p.matches);
+		//return "%s %s // Block %s".format("\t".replicate(indent), p.matches[0], p.matches);
+		return q{`); setBlock("%s", `}.format(p.matches[1]);
 	}
 	string renderConditional(ParseTree p, ulong indent) {
 		return "%s %s // Conditional %s".format("\t".replicate(indent), p.matches[0], p.matches);
@@ -224,8 +310,23 @@ struct JadeParser {
 		ParseTree blockInATag;
 		TagArgs tagArgs;
 		ParseTree cssId;
-		ParseTree[] cssClasses;
+		string[] cssClasses;
 		AndAttributes andAttributes;
+		string inlineText;
+		string toHtml() {
+			import std.string : join;
+			string[] attribs = [""];
+			if (cssId.matches.length > 0) {
+				attribs ~= `id="%s"`.format(cssId.matches[0]);
+			}
+			foreach (tagarg; tagArgs) {
+				if (tagarg.key.matches[0] == "class") {
+					return "CLASS %s".format(tagarg.value.matches);
+				}
+			}
+
+			return "<%s%s>".format(id(), attribs.length <=1 ? "" : attribs.join(" "));
+		}
 	}
 	Tag renderTag(ref ParseTree line, ulong indent) {
 		Tag tag;
@@ -247,8 +348,8 @@ struct JadeParser {
 					s ~= "block:"~ tag.blockInATag.name;
 					break;
 				case "Jade.CssClass":
-					tag.cssClasses ~= item;
-					s ~= "cssClass:"~ tag.cssClasses[$-1].matches[0];
+					tag.cssClasses ~= item.matches[0];
+					//s ~= "cssClass:"~ tag.cssClasses[$-1].matches[0];
 					break;
 				case "Jade.CssId":
 					tag.cssId = item;
@@ -262,6 +363,7 @@ struct JadeParser {
 					s ~= "bufferedCode:%s".format(renderBufferedCode(item, indent));
 					break;
 				case "Jade.InlineText":
+					tag.inlineText = item.matches[0];
 					s ~= "inlineText:%s".format(item.matches[0]);
 					assert(item.matches.length == 1, "Surely inlineText should only have one match?");
 					break;
@@ -333,6 +435,7 @@ struct JadeParser {
 	}
 	struct TagArgs {
 		TagArg[] args;
+		alias args this;
 		static TagArgs parse(ref ParseTree p) {
 			TagArgs ret;
 			foreach (argtree; p.children) {
