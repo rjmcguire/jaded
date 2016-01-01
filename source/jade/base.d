@@ -124,18 +124,36 @@ struct JadeParser {
 				range.popFront();
 				break;
 			case "Jade.Extend":
-				ret ~= "writeln(`extended file is:%s`);".format(token.matches[1]);
+				ret ~= "mixin(render!`%s`);".format(token.matches[1]);
 				range.popFront();
 				break;
 			case "Jade.Block":
+				ret ~= "writeln(`<block>`);";
 				ret ~= "writeln(`<!-- %s %s depth:%s -->` \"\n\" `block`);".format(ranges.length, token.name, token.depth);
 				range.popFront();
+				ret ~= render(token.depth);
+				ret ~= "writeln(`</block>`);";
 				break;
 			case "Jade.Tag":
-				ret ~= "writeln(`----`);";
-				ret ~= "writeln(`<!-- %s %s depth:%s -->` `tag`);".format(ranges.length, token.name, token.depth);
 				range.popFront();
-				ret ~= render(token.depth)~"writeln(`======`);";
+				auto hasChildren = !range.empty && range.front.depth > token.depth;
+				auto name = token.matches[0];
+				if (name==".") {
+					name = "div";
+				}
+				if (!hasChildren) {
+					if (name=="img") {
+						ret ~= "writeln(`<%s />`);".format(name);
+					} else {
+						ret ~= "writeln(`<%s></%s>`);".format(name, name);
+					}
+				} else {
+					assert(name != "img", "<img /> tag cannot have children");
+					ret ~= "writeln(`<%s>`);".format(name);
+					ret ~= "writeln(`<!-- %s %s depth:%s -->` `tag`);".format(ranges.length, token.name, token.depth);
+					ret ~= render(token.depth);
+					ret ~= "writeln(`</%s>`);".format(name);
+				}
 				break;
 			case "Jade.PipedText":
 				ret ~= "writeln(`<!-- %s %s depth:%s -->` `PipedText`);".format(ranges.length, token.name, token.depth);
