@@ -143,16 +143,16 @@ struct JadeParser {
 				}
 				if (!hasChildren) {
 					if (name=="img") {
-						ret ~= "writeln(`<%s />`);".format(name);
+						ret ~= "writeln(`%s<%s />`);".format("\t".replicate(token.depth), name);
 					} else {
-						ret ~= "writeln(`<%s></%s>`);".format(name, name);
+						ret ~= "writeln(`%s<%s></%s>`);".format("\t".replicate(token.depth), name, name);
 					}
 				} else {
 					assert(name != "img", "<img /> tag cannot have children");
-					ret ~= "writeln(`<%s>`);".format(name);
+					ret ~= "writeln(`%s<%s>`);".format("\t".replicate(token.depth), name);
 					ret ~= "writeln(`<!-- %s %s depth:%s -->` `tag`);".format(ranges.length, token.name, token.depth);
 					ret ~= render(token.depth);
-					ret ~= "writeln(`</%s>`);".format(name);
+					ret ~= "writeln(`%s</%s>`);".format("\t".replicate(token.depth), name);
 				}
 				break;
 			case "Jade.PipedText":
