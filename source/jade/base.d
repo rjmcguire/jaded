@@ -261,6 +261,14 @@ struct JadeParser {
 				token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
 				range.popFront();
 				break;
+			case "Jade.UnbufferedCode":
+				import std.string : endsWith;
+				if (!token.matches[1].endsWith(";")) {
+					throw new Exception("UnbufferedCode must end with a ';' at: %s".format(token.matches[1]));
+				}
+				token.prolog ~= "%s".format(token.matches[1]);
+				range.popFront();
+				break;
 			case "Jade.Line":
 			default:
 				token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->`);".format(ranges.length, token.name, token.depth);
