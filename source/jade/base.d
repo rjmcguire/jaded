@@ -53,10 +53,33 @@ struct JadeParser {
 	LineRange range() {
 		return ranges[$-1];
 	}
-	struct Line {
+	class Item {
 		int depth;
 		ParseTree p;
+		string prolog, epilog;
+		Item[] items;
 		alias p this;
+		this(int depth, ParseTree p) {
+			this.depth = depth;
+			this.p = p;
+		}
+		override
+		string toString() {
+			auto ret = appender!string;
+			//ret ~= "writeln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 0 ? p.matches[0] : "");
+			ret ~= "writeln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+			//return "%s".format(p.name);
+			ret ~= prolog;
+			foreach (item; items) {
+				if (item.name == "Jade.PipedText") {
+					ret ~= "writeln(`%s`);".format(item.matches[0]);
+				} else {
+					ret ~= item.toString();
+				}
+			}
+			ret ~= epilog;
+			return ret.data;
+		}
 	}
 	struct LineRange {
 		@disable this();
@@ -69,16 +92,16 @@ struct JadeParser {
 		ParseTree[] lines;
 		int min_depth;
 		size_t index = 0;
-		Line front() {
+		Item front() {
 			ulong depth;
 			if (lines[index].name == "Jade.Line" && lines[index].children.length > 0 && lines[index].children[0].name == "Jade.Indent") {
 				depth = lines[index].children[0].matches[0].length;
-				return Line(cast(int)depth, lines[index].children[1].children[0]);
+				return new Item(cast(int)depth, lines[index].children[1].children[0]);
 			} else if (lines[index].name == "Jade.Line") {
-				return Line(cast(int)depth, lines[index].children.length > 0 ? lines[index].children[0] : lines[index]);
+				return new Item(cast(int)depth, lines[index].children.length > 0 ? lines[index].children[0] : lines[index]);
 			} else {
 				depth = 0;
-				return Line(cast(int)depth, lines[index]);
+				return new Item(cast(int)depth, lines[index]);
 			}
 			//return Line(cast(int)depth, lines[index]);
 		}
@@ -100,11 +123,24 @@ struct JadeParser {
 			}
 		}
 	}
-	string render(int stop_depth=-1) {
+	/** Entry point for render*/
+	string render() {
 		string ret;
-		ret ~= "writeln(`render:%s%s`);".format("\t".replicate(stop_depth+1), range.lines.length);
-		if (!range.empty)
-			ret ~= "writeln(`range empty? %s - %s vs %s vs %s - %s || %s -- %s`);".format(range.empty, range.front.depth, range.min_depth ? range.min_depth : stop_depth, range.index, range.index >= range.lines.length, range.front.depth < range.min_depth, range.lines.length > range.index ? range.front.name : "empty for real");
+		//ret ~= "writeln(`render:%s%s`);".format("\t".replicate(stop_depth+1), range.lines.length);
+		//if (!range.empty)
+		//	ret ~= "writeln(`range empty? %s - %s vs %s vs %s - %s || %s -- %s`);".format(range.empty, range.front.depth, range.min_depth ? range.min_depth : stop_depth, range.index, range.index >= range.lines.length, range.front.depth < range.min_depth, range.lines.length > range.index ? range.front.name : "empty for real");
+		while (!range.empty) {
+			auto item = renderTag(range.front);
+			ret ~= "%s".format(item);
+		}
+		return ret;
+	}
+	/** Used by renderTag for rendering recursively */
+	private Item[] render(int stop_depth) {
+		Item[] ret;
+		//ret ~= "writeln(`render:%s%s`);".format("\t".replicate(stop_depth+1), range.lines.length);
+		//if (!range.empty)
+		//	ret ~= "writeln(`range empty? %s - %s vs %s vs %s - %s || %s -- %s`);".format(range.empty, range.front.depth, range.min_depth ? range.min_depth : stop_depth, range.index, range.index >= range.lines.length, range.front.depth < range.min_depth, range.lines.length > range.index ? range.front.name : "empty for real");
 		while (!range.empty) {
 		//ret ~= "writeln(`\t empty? %s - %s vs %s vs %s - %s || %s -- %s`);".format(range.empty, range.front.depth, range.min_depth ? range.min_depth : stop_depth, range.index, range.index >= range.lines.length, range.front.depth < range.min_depth, range.lines.length > range.index ? range.front.name : "empty for real");
 			if (stop_depth >= 0 && range.front.depth <= stop_depth) break;
@@ -113,26 +149,29 @@ struct JadeParser {
 		}
 		return ret;
 	}
-	string renderTag(Line token) {
-		string ret;
+	private Item renderTag(Item token) {
 		switch (token.name) {
 			case "Jade.RootTag":
-				ret ~= "writeln(`<!-- jade template: %s.jade %s-->`);".format(name, token.children.length);
+				token.prolog ~= "writeln(`<!-- jade template: %s.jade %s-->`);".format(name, token.children.length);
 				ranges ~= LineRange(token.children, token.depth);
-				ret ~= render();
+				token.prolog ~= render();
 				ranges.popBack();
 				range.popFront();
 				break;
 			case "Jade.Extend":
-				ret ~= "mixin(render!`%s`);".format(token.matches[1]);
+				token.prolog ~= "pragma(msg, render!`%s`); mixin(render!`%s`);".format(token.matches[1], token.matches[1]);
+				range.popFront();
+				break;
+			case "Jade.Include":
+				token.prolog ~= "writeln(import(`%s`));".format(token.matches[0]);
 				range.popFront();
 				break;
 			case "Jade.Block":
-				ret ~= "writeln(`<block>`);";
-				ret ~= "writeln(`<!-- %s %s depth:%s -->` \"\n\" `block`);".format(ranges.length, token.name, token.depth);
+				token.prolog ~= "writeln(`<block>`);";
+				//token.prolog ~= "writeln(`<!-- %s %s depth:%s -->` \"\n\" `block`);".format(ranges.length, token.name, token.depth);
 				range.popFront();
-				ret ~= render(token.depth);
-				ret ~= "writeln(`</block>`);";
+				token.items = render(token.depth);
+				token.epilog ~= "writeln(`</block>`);";
 				break;
 			case "Jade.Tag":
 				range.popFront();
@@ -143,28 +182,28 @@ struct JadeParser {
 				}
 				if (!hasChildren) {
 					if (name=="img") {
-						ret ~= "writeln(`%s<%s />`);".format("\t".replicate(token.depth), name);
+						token.prolog ~= "writeln(`%s<%s />`);".format("\t".replicate(token.depth), name);
 					} else {
-						ret ~= "writeln(`%s<%s></%s>`);".format("\t".replicate(token.depth), name, name);
+						token.prolog ~= "writeln(`%s<%s></%s>`);".format("\t".replicate(token.depth), name, name);
 					}
 				} else {
 					assert(name != "img", "<img /> tag cannot have children");
-					ret ~= "writeln(`%s<%s>`);".format("\t".replicate(token.depth), name);
-					ret ~= "writeln(`<!-- %s %s depth:%s -->` `tag`);".format(ranges.length, token.name, token.depth);
-					ret ~= render(token.depth);
-					ret ~= "writeln(`%s</%s>`);".format("\t".replicate(token.depth), name);
+					token.prolog ~= "writeln(`%s<%s>`);".format("\t".replicate(token.depth), name);
+					//token.prolog ~= "writeln(`<!-- %s %s depth:%s -->` `tag:%s`);".format(ranges.length, token.name, token.depth, token.matches[0]);
+					token.items = render(token.depth);
+					token.epilog ~= "writeln(`%s</%s>`);".format("\t".replicate(token.depth), name);
 				}
 				break;
 			case "Jade.PipedText":
-				ret ~= "writeln(`<!-- %s %s depth:%s -->` `PipedText`);".format(ranges.length, token.name, token.depth);
+				token.prolog ~= "writeln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
 				range.popFront();
 				break;
 			case "Jade.Line":
 			default:
-				ret ~= "writeln(`<!-- %s %s depth:%s -->`);".format(ranges.length, token.name, token.depth);
+				token.prolog ~= "writeln(`<!-- %s %s depth:%s -->`);".format(ranges.length, token.name, token.depth);
 				range.popFront();
 		}
-		return ret;
+		return token;
 	}
 }
 
