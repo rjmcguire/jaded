@@ -42,7 +42,7 @@ Conditional <-
 	/ 'else'
 IfBlock <- 'if' :Spacing+ 'block'
 Extend <- :'extends' :Spacing+ FileName
-Block <- 'block' :Spacing+ DLineExpression?
+Block <- :'block' :Spacing+ DLineExpression?
 Filter <- ':' FilterName
 Include <- :'include' (':' FilterName)? :Spacing+ FileName
 FileName <~ (! endOfLine .)*

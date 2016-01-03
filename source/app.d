@@ -23,7 +23,16 @@ void main(string[] args) {
 	//}
 	//mixin(compileTime);
 	//writeln("compileTime: %s", compileTime);
-	writeln(compileTime);
+	writeln("templates count: ", compileTime.length);
+	static if (compileTime.length > 1) {
+		foreach (subtemplate; compileTime[1..$]) {
+			enum blocks = compileTime[1].findAll("Jade.Block"); // changing this to use the subtemplate causes "subtemplate cannot be read at compile time".
+			foreach (block; blocks) {
+				writeln(block.matches[0]);
+			}
+		}
+		writeln(compileTime[1].items[1].name);
+	}
 	//foreach (item; compileTime) {
 	//	writeln(item.toString);
 	//}

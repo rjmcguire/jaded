@@ -95,6 +95,9 @@ struct JadeParser {
 			ret ~= epilog;
 			return ret.data;
 		}
+		string getOutput(Item[] blockTemplates) {
+			return toString();
+		}
 
 		Item find(string name) {
 			foreach (item; items) {
@@ -102,11 +105,21 @@ struct JadeParser {
 					return item;
 				}
 				auto innerItem = item.find(name);
-				if (!innerItem) {
+				if (innerItem !is null) {
 					return innerItem;
 				}
 			}
 			return null;
+		}
+		Item[] findAll(string name) {
+			Item[] ret;
+			foreach (item; items) {
+				if (item.name == name) {
+					ret ~= item;
+				}
+				ret ~= item.findAll(name);
+			}
+			return ret;
 		}
 	}
 	struct LineRange {
@@ -182,7 +195,7 @@ struct JadeParser {
 	private Item renderTag(Item token) {
 		switch (token.name) {
 			case "Jade.RootTag":
-				token.prolog ~= "\n/** jade template: %s.jade %s */`".format(name, token.children.length);
+				token.prolog ~= "\n/** jade template: %s.jade %s */".format(name, token.children.length);
 				ranges ~= LineRange(token.children, token.depth);
 				//token.prolog ~= render();
 				token.items ~= render();
