@@ -96,7 +96,23 @@ struct JadeParser {
 			return ret.data;
 		}
 		string getOutput(Item[] blockTemplates) {
-			return toString();
+			auto ret = appender!string;
+			ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+			ret ~= prolog;
+			if (p.name == "Jade.Block") {
+				foreach (item; blockTemplates) {
+					foreach (b; item.findAll("Jade.Block")) {
+						if (b.matches[0] == p.matches[0]) { // Do the block names match?
+							return b.getOutput(blockTemplates[1..$]);
+						}
+					}
+				}
+			}
+			foreach(item; items) {
+				ret ~= item.getOutput(blockTemplates);
+			}
+			ret ~= epilog;
+			return ret.data;
 		}
 
 		Item find(string name) {
