@@ -23,13 +23,7 @@ void main(string[] args) {
 	//}
 	//mixin(compileTime);
 	//writeln("compileTime: %s", compileTime);
-	writeln("find: ", compileTime[0].find("Jade.Extend"));
-	static const extend = compileTime[0].find("Jade.Extend");
-	static if (extend !is null) {
-		mixin(`enum base = render!(extend.matches[0]);`);
-		writeln("base: ", base[0].toString);
-	}
-	writeln(compileTime[0].toString);
+	writeln(compileTime);
 	//foreach (item; compileTime) {
 	//	writeln(item.toString);
 	//}

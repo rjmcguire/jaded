@@ -8,6 +8,9 @@ import jade.pegged;
 
 import std.conv : to;
 
+string renderToString(alias filename)() {
+	return render!filename.toString;
+}
 auto render(alias filename)() {
 	enum templ = import(filename);
 	enum tmp = blockWrapJadeFile(templ);
@@ -16,7 +19,20 @@ auto render(alias filename)() {
 	enum parse_tree = Jade(tmp);
 	//enum tmp2 = jadeToTree(parse_tree);
 	//printParseTree(tmp2);
-	enum ret = renderParseTree(filename, parse_tree); // Should we use a different readParseTree function here? This is the last place I currently use enum...
+	enum tree = renderParseTree(filename, parse_tree); // Should we use a different readParseTree function here? This is the last place I currently use enum...
+	//writeln("find: ", tree[0].find("Jade.Extend"));
+	static const extend = tree[0].find("Jade.Extend");
+	JadeParser.Item[] ret;
+	static if (extend !is null) {
+		pragma(msg, "extended");
+		mixin(`enum base = render!(extend.matches[0]);`);
+		ret ~= base;
+		//ret ~= base[0].toString;
+	} else {
+		pragma(msg, "not extended");
+	}
+	//ret ~= tree[0].toString;
+	ret ~= tree[0];
 	return ret;
 }
 
