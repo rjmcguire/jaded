@@ -76,7 +76,7 @@ JsonKey <~
 JsonObjectDExpression <~ (! (',' / '}') .)+
 InlineText	<~ (! ('\r\n' / "\n" / '#[' / '#{' / '!{') .)*
 PipedText	<-
-	/ '|' :Spacing+ InlineText? (StringInterpolation+ InlineText)*
+	/ '|' :Spacing* InlineText? (StringInterpolation+ InlineText)*
 	#/ '|' (! NewLine .)+
 	#/ '|' endOfLine
 Spacing	<- (' ' / tab)+
