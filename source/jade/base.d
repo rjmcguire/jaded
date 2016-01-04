@@ -263,10 +263,9 @@ struct JadeParser {
 			case "Jade.PipedText":
 				//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
 				//token.prolog ~= "\n%s".format(token.matches[0]);
-				token.prolog ~= "\n%s\n===============PipedText====================".format(token.p);
 				auto tag = Tag.parse(token, false);
-				token.prolog = tag.prolog;
-				token.epilog = tag.epilog;
+				token.prolog ~= tag.prolog;
+				token.epilog ~= tag.epilog;
 				//foreach (child; token.children) {
 				//	if (child.name == "Jade.InlineText") {
 				//		token.prolog ~= child.matches[0];
@@ -276,7 +275,6 @@ struct JadeParser {
 				//		token.prolog ~= tag.epilog;
 				//	}
 				//}
-				token.prolog ~= "\n================END PipedText===================";
 				range.popFront();
 				break;
 			case "Jade.UnbufferedCode":
@@ -285,6 +283,10 @@ struct JadeParser {
 					throw new Exception("UnbufferedCode must end with a ';' at: %s".format(token.matches[1]));
 				}
 				token.prolog ~= "%s".format(token.matches[1]);
+				range.popFront();
+				break;
+			case "Jade.RawHtmlTag":
+				token.prolog = "%s%s".format("\t".replicate(token.depth), token.matches[0]);
 				range.popFront();
 				break;
 			case "Jade.Line":
@@ -409,6 +411,9 @@ struct JadeParser {
 	struct Tag {
 		string str;
 		string prolog() {
+			if (name == "|") {
+				return "%s|%s".format(str, inlineText);
+			}
 			string attribs;
 			if (cssId.matches) {
 				attribs ~= " id=\"%s\"".format(cssId.matches[0]);
@@ -420,6 +425,9 @@ struct JadeParser {
 			return "%s<%s%s>|%s|%s".format("\t".replicate(indent), name, attribs, str, inlineText);
 		}
 		string epilog() {
+			if (name == "|") {
+				return "";
+			}
 			return "\n%s</%s>".format("\t".replicate(indent), name);
 		}
 		string name;
