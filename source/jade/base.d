@@ -69,6 +69,9 @@ struct JadeParser {
 	LineRange range() {
 		return ranges[$-1];
 	}
+	/**
+	 * Item is responsible for block substitution and output
+	 */
 	class Item {
 		int depth;
 		ParseTree p;
@@ -100,6 +103,9 @@ struct JadeParser {
 			auto ret = appender!string;
 			if (p.name == "Jade.MixinDecl") {
 				ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
+			}
+			if (p.name == "Jade.Mixin") {
+				ret ~= "%s MixinCHILDCOUNT:%s".format(p, items.length);
 			}
 			ret ~= "\n";
 			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
@@ -349,9 +355,14 @@ struct JadeParser {
 				} else {
 					attributesString ~= "{}";
 				}
-				token.prolog ~= "%s\nJadeMixin_%s(%s, %s);".format(token.p, token.matches[0], attributesString, args.join(", "));
 				range.popFront();
-				token.items ~= render(token.depth);
+				token.items = render(token.depth);
+				token.prolog ~= "string block;";
+				foreach (item; token.items) {
+					token.prolog ~= "\nblock ~= `%s`;".format(item.getOutput([]));
+				}
+				token.items = []; // remove all children, we've processed them.
+				token.prolog ~= "%s\nJadeMixin_%s(%s, %s, block);".format(token.p, token.matches[0], attributesString, args.join(", "));
 				break;
 			case "Jade.Line":
 			default:
