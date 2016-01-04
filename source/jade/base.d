@@ -7,6 +7,7 @@ import std.array : replicate;
 import jade.pegged;
 
 import std.conv : to;
+import std.uni : asCapitalized;
 
 string renderToString(alias filename)() {
 	return render!filename.toString;
@@ -97,9 +98,13 @@ struct JadeParser {
 		}
 		string getOutput(Item[] blockTemplates) {
 			auto ret = appender!string;
-			ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+			if (p.name == "Jade.MixinDecl") {
+				ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
+			}
+			ret ~= "\n";
+			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
 			ret ~= prolog;
-			if (p.name == "Jade.Block") {
+			if (p.name == "Jade.Block") { // This is how we do template inheritance with extends
 				foreach (item; blockTemplates) {
 					foreach (b; item.findAll("Jade.Block")) {
 						if (b.matches[0] == p.matches[0]) { // Do the block names match?
@@ -230,35 +235,39 @@ struct JadeParser {
 				range.popFront();
 				break;
 			case "Jade.Block":
-				token.prolog ~= "\nwriteln(`<block>`);";
+				//token.prolog ~= "\nwriteln(`<block>`);";
 				//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` \"\n\" `block`);".format(ranges.length, token.name, token.depth);
 				range.popFront();
 				token.items = render(token.depth);
-				token.epilog ~= "\nwriteln(`</block>`);";
+				//token.epilog ~= "\nwriteln(`</block>`);";
 				break;
 			case "Jade.Tag":
 				range.popFront();
-				auto tag = Tag.parse(token, !range.empty && range.front.depth > token.depth);
-				token.prolog ~= tag.prolog;
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
-				auto name = token.matches[0];
-				if (name==".") {
-					name = "div";
+				auto tag = Tag.parse(token, hasChildren);
+				token.prolog ~= tag.prolog;
+				if (hasChildren) {
+					token.items ~= render(token.depth);
 				}
-				if (!hasChildren) {
-					if (name=="img") {
-						token.prolog ~= "\nwriteln(`%s<%s />`);".format("\t".replicate(token.depth), name);
-					} else {
-						token.prolog ~= "\nwriteln(`%s<%s></%s>`);".format("\t".replicate(token.depth), name, name);
-					}
-				} else {
-					assert(name != "img", "<img /> tag cannot have children");
-					token.prolog ~= "\nwriteln(`%s<%s>`);".format("\t".replicate(token.depth), name);
-					//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `tag:%s`);".format(ranges.length, token.name, token.depth, token.matches[0]);
-					token.items = render(token.depth);
-					token.epilog ~= "\nwriteln(`%s</%s>`);".format("\t".replicate(token.depth), name);
-					token.epilog ~= tag.epilog;
-				}
+				token.epilog ~= tag.epilog;
+				//auto name = token.matches[0];
+				//if (name==".") {
+				//	name = "div";
+				//}
+				//if (!hasChildren) {
+				//	if (name=="img") {
+				//		token.prolog ~= "\nwriteln(`%s<%s />`);".format("\t".replicate(token.depth), name);
+				//	} else {
+				//		token.prolog ~= "\nwriteln(`%s<%s></%s>`);".format("\t".replicate(token.depth), name, name);
+				//	}
+				//} else {
+				//	assert(name != "img", "<img /> tag cannot have children");
+				//	token.prolog ~= "\nwriteln(`%s<%s>`);".format("\t".replicate(token.depth), name);
+				//	//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `tag:%s`);".format(ranges.length, token.name, token.depth, token.matches[0]);
+				//	token.items = render(token.depth);
+				//	token.epilog ~= "\nwriteln(`%s</%s>`);".format("\t".replicate(token.depth), name);
+				//	token.epilog ~= tag.epilog;
+				//}
 				break;
 			case "Jade.PipedText":
 				//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
@@ -287,6 +296,45 @@ struct JadeParser {
 				break;
 			case "Jade.RawHtmlTag":
 				token.prolog = "%s%s".format("\t".replicate(token.depth), token.matches[0]);
+				range.popFront();
+				break;
+			case "Jade.Comment":
+				if (token.matches[0] == "//") {
+					token.prolog = "%s<!-- %s ".format("\t".replicate(token.depth), token.matches.length > 2 ? token.matches[2] : token.matches[1]);
+					token.epilog = "-->";
+				}
+				range.popFront();
+				break;
+			case "Jade.MixinDecl":
+				auto mixinDeclArgs = token.findParseTree("Jade.MixinDeclArgs");
+				string[] templateArgNames;
+				string[] argNames;
+				if (mixinDeclArgs !is null) {
+					foreach (arg; mixinDeclArgs.children) {
+						if (arg.name != "Jade.DVariableName") continue;
+						auto name = to!string(arg.matches[0].asCapitalized);
+						templateArgNames ~= name;
+						name ~= " ";
+						name ~= arg.matches[0];
+						argNames ~= name;
+					}
+				}
+				auto mixinVarArg = token.findParseTree("Jade.MixinVarArg");
+				if (mixinVarArg) {
+					auto name = to!string(mixinVarArg.matches[0].asCapitalized);
+					templateArgNames ~= name ~ "...";
+					name ~= " ";
+					name ~= mixinVarArg.matches[0];
+					argNames ~= name;
+				}
+				token.prolog ~= "%s\nvoid JadeMixin_%s(%s)(%s) {".format(token.p, token.matches[0], templateArgNames.join(", "), argNames.join(", "));
+				range.popFront();
+				token.items ~= render(token.depth);
+				token.epilog ~= "\n}";
+				break;
+			case "Jade.Mixin":
+				token.prolog ~= "\nJadeMixin_%s();".format(token.matches[0]);
+				token.items ~= render(token.depth);
 				range.popFront();
 				break;
 			case "Jade.Line":
@@ -425,7 +473,7 @@ struct JadeParser {
 			return "%s<%s%s>|%s|%s".format("\t".replicate(indent), name, attribs, str, inlineText);
 		}
 		string epilog() {
-			if (name == "|") {
+			if (!hasChildren || name == "|") {
 				return "";
 			}
 			return "\n%s</%s>".format("\t".replicate(indent), name);
@@ -461,7 +509,7 @@ struct JadeParser {
 				//		childHolder = token;
 				//}
 				foreach (item; childHolder.children) {
-					tag.str ~= item.name;
+					//tag.str ~= item.name;
 						switch (item.name) {
 								case "Jade.Id":
 										assert(item.matches[0] == name);

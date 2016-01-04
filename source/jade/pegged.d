@@ -7,8 +7,8 @@ mixin(grammar(`
 # PipedText is in its own Line because you can't count indents in the line before, NOTE: need to try using Semantic Actions to move nodes to their correct parents
 Jade:
 #RootTagHolder <- RootTag{processRootTag}
-RootTag	<- (Comment? endOfLine)* (DocType endOfLine)? Line+
-DocType <~ :'doctype ' (! endOfLine .)*
+RootTag	<- ((Comment / DocType) endOfLine)* (MixinDecl / Line)+
+DocType <~ :'doctype' :Spacing+ (! endOfLine .)*
 Line	<-
 	/ Indent Line
 	/  (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
@@ -22,10 +22,10 @@ StringInterpolation <-
 	/ ('#{' ~(! '}' .)* :'}')?
 TagInterpolate <- Id? (CssId / '.' CssClass)* TagArgs? AndAttributes? SelfCloser? BufferedCode? (:Spacing+ TextStop(']'))?
 TextStop(StopElem) <~ (! StopElem .)*
-MixinDecl <- 'mixin' :Spacing+ DVariableName MixinDeclArgs?
+MixinDecl <- :'mixin' :Spacing+ DVariableName MixinDeclArgs? endOfLine
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
-MixinVarArg <- (',' :Spacing* '...' DVariableName)
-Mixin <- '+' DVariableName ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')? TagArgs?
+MixinVarArg <- (:',' :Spacing* :'...' DVariableName)
+Mixin <- :'+' DVariableName ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')? TagArgs?
 Case <-
 	/ ^'case' Spacing+ DLineExpression
 	/ ^'when' ~(! (':' / endOfLine / endOfInput) .)* InlineTag?
@@ -51,7 +51,9 @@ RawHtmlTag <~ ^'<' (! endOfLine .)*
 Tag 	<-
 	/ Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText (StringInterpolation+ InlineText)* / BufferedCode)?)
 	/ (CssId / '.' CssClass)+ TagArgs? AndAttributes? (BlockInATag / SelfCloser? (InlineTag+ BufferedCode / :Spacing+ InlineText (StringInterpolation+ InlineText)* / BufferedCode)?)
-Comment <- '//' (^'-')? InlineText?
+Comment <-
+	/ '//-' InlineText?
+	/ '//' InlineText?
 AndAttributes <- '&' 'attributes' '(' (AttributeJsonObject / ParamDExpression) ')'
 SelfCloser <- '/'
 InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText (StringInterpolation+ InlineText)*)?)

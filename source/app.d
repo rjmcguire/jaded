@@ -3,11 +3,11 @@ import std.stdio;
 import jade;
 
 void main(string[] args) {
-	auto filename = "index.jade";
+	auto filename = "mixins.jade";
 	if (args.length > 1) {
 		filename = args[1];
 	}
-	enum compileTime = render!"index.jade";
+	enum compileTime = render!"mixins.jade";
 	//pragma(msg, compileTime);
 	//auto writelnSink(string s, int line_number=0, int indent=0) {
 	//	import std.array : replicate;
