@@ -327,15 +327,29 @@ struct JadeParser {
 					name ~= mixinVarArg.matches[0];
 					argNames ~= name;
 				}
-				token.prolog ~= "%s\nvoid JadeMixin_%s(%s)(%s) {".format(token.p, token.matches[0], templateArgNames.join(", "), argNames.join(", "));
+
+				token.prolog ~= "\nvoid JadeMixin_%s(Attributes, %s)(Attributes attributes, %s) {\n\t".format(token.matches[0], templateArgNames.join(", "), argNames.join(", "));
 				range.popFront();
 				token.items ~= render(token.depth);
 				token.epilog ~= "\n}";
 				break;
 			case "Jade.Mixin":
-				token.prolog ~= "\nJadeMixin_%s();".format(token.matches[0]);
-				token.items ~= render(token.depth);
+				auto mixinArgs = token.findParseTree("Jade.MixinArgs");
+				string[] args;
+				if (mixinArgs !is null) {
+					foreach (arg; mixinArgs.children) {
+						args ~= arg.matches[0];
+					}
+				}
+				auto attributestoken = token.findParseTree("Jade.TagArgs");
+				string attributesString;
+				if (attributestoken !is null) {
+					auto tagargs = TagArgs.parse(*attributestoken);
+					attributesString ~= tagargs.toJson;
+				}
+				token.prolog ~= "%s\nJadeMixin_%s(%s, %s);".format(token.p, token.matches[0], attributesString, args.join(", "));
 				range.popFront();
+				token.items ~= render(token.depth);
 				break;
 			case "Jade.Line":
 			default:
@@ -427,6 +441,9 @@ struct JadeParser {
 		string toHtml() {
 				return "%s%s%s".format(key.matches[0], assignType, getValue());
 		}
+		string toJson() {
+			return toHtml();
+		}
 	}
 
 	struct TagArgs {
@@ -452,7 +469,15 @@ struct JadeParser {
 				}
 			}
 			return ret.data;
-
+		}
+		string toJson() {
+			string[] ret;
+			if (args.length > 0) {
+				foreach (arg; args) {
+					ret ~= arg.toJson;
+				}
+			}
+			return "{"~ ret.join(",") ~"}";
 		}
 	}
 

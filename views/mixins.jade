@@ -21,3 +21,10 @@ mixin list(id, ...items)
 			li= item
 
 +list('my-list', 1, 2, 3, 4)
+
+
+mixin link(href, name)
+	//- attributes == {class: "btn"}
+	a(class!=attributes.class, href=href)= name
+
++link('/foo', 'foo')(class="btn")
