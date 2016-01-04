@@ -25,7 +25,8 @@ TextStop(StopElem) <~ (! StopElem .)*
 MixinDecl <- :'mixin' :Spacing+ DVariableName MixinDeclArgs? endOfLine
 MixinDeclArgs <- '(' DVariableName (',' :Spacing* DVariableName)* MixinVarArg? ')'
 MixinVarArg <- (:',' :Spacing* :'...' DVariableName)
-Mixin <- :'+' DVariableName ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')? TagArgs?
+Mixin <- :'+' DVariableName MixinArgs? TagArgs?
+MixinArgs <- ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')+
 Case <-
 	/ ^'case' Spacing+ DLineExpression
 	/ ^'when' ~(! (':' / endOfLine / endOfInput) .)* InlineTag?
