@@ -4,109 +4,1012 @@ jade ~master: building configuration "application"...
 Linking...
 To force a rebuild of up-to-date targets, run again with --force.
 Running ./jade 
-runtime:
-==========
-==========
-1:  // // Comment ["//", "-", " index.jade", "\n"]
-2:  // // Comment ["//", "-", " extends ./base_layout.jade", "\n"]
-3: // empty line
-4: <doctype></doctype>
-5:  <!--[if IE 8]> // RawHtmlTag ["<!--[if IE 8]>", "\n"]
-6: <html lang="en" class="lt-ie9"></html>
-7:  <![endif]--> // RawHtmlTag ["<![endif]-->", "\n"]
-8: <html lang="en"></html>
-9: <head></head>
-10: 		 block // Block ["block", " title", "\n"]
-11: <title></title>
-12: <style></style>
-13: 				include style.css// include file ["style.css", "\n"]
-14: <body ng-app="MyApp" ng-controller="CtrlII"></body>
-15: 		 // // Comment ["//", " this is the displayed content", "\n"]
-16: <p id="" p-form-hook=some_d_var ? "yes" :"no" marked""></p>
-17: 			  That continues on // PipedText [" That continues on", "\n"]
-18: 			  multiple lines // PipedText [" multiple lines", "\n"]
-19: <ul isit=some_other_d_var == "woot"></ul>
-20: <li></li>
-21: <div></div>
-22: <img src="logo.gif" style=background=background,padding=padding></img>
-23: <woot></woot>
-24: <div class=c1,c2></div>
-25: <woot3 class=active=active></woot3>
-26:  - // UnbufferedCode ["-", " var localhost = \"remotehost\"", "\n"]
-27:  - // UnbufferedCode ["-", " var user = {}", "\n"]
-28:  if // Conditional ["if", " \"localhost\" == host", "\n"]
-29: <div data-bar="foo" goot-one""></div>
-30: 		 // // Comment ["//", "-", " include:markdown ./includes/footer.jade", "\n"]
-31:  else // Conditional ["else", "\n"]
-32: <merrrt></merrrt>
-33:  unless // Conditional ["unless", " !user.isAnonymous", "\n"]
-34: <You></You>
-35:  // // Comment ["//", "-", " :markdown", "\n"]
-36:  // // Comment ["//", "-", " \t### Markdown Need dedent support to parse this", "\n"]
-37:  // // Comment ["//", "-", " \tI often like including markdown documents.{", "\n"]
-38:  } // AnyContentLine ["}", "\n"]
-39: <ul></ul>
-40: 	 each // Iteration ["each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n"]
-41: <li></li>
-42:  while // Iteration ["while", " n < 4", "\n"]
-43: <li></li>
-44: 	// empty line
-45:  - // UnbufferedCode ["-", " var friends = 0", "\n"]
-46:  case // Case ["case", " ", "friends", "\n"]
-47: 	 when // Case ["when", " 0", "\n"]
-48: 	 when // Case ["when", " 1", "\n"]
-49: <p></p>
-50: 	 default // Case ["default", ":", "p", "you have ", "#{", "friends", " friends", "\n"]
-51:  // // Comment ["//", "-", " Declaration", "\n"]
-52:  mixin // MixinDecl ["mixin", "list", "\n"]
-53: <ul></ul>
-54: <li></li>
-55: <li></li>
-56: <li></li>
-57:  // // Comment ["//", "-", " Use", "\n"]
-58:  + // Mixin ["+", "list", "\n"]
-59:  + // Mixin ["+", "list", "\n"]
-60:  mixin // MixinDecl ["mixin", "pet", "(", "name", ")", "\n"]
-61: <li></li>
-62: <ul></ul>
-63: 	 + // Mixin ["+", "pet", "(", "cat", ")", "\n"]
-64: 	 + // Mixin ["+", "pet", "(", "dog", ")", "\n"]
-65: 	 + // Mixin ["+", "pet", "(", "pig", ")", "\n"]
-66:  mixin // MixinDecl ["mixin", "article", "(", "title", ")", "\n"]
-67: <div></div>
-68: <div></div>
-69: <h1></h1>
-70: 			 if // Conditional ["if", "block", "\n"]
-71: 				 block // Block ["block", "\n"]
-72: 			 else // Conditional ["else", "\n"]
-73: <p></p>
-74: 				// empty line
-75:  + // Mixin ["+", "article", "(", "'Hello world'", ")", "\n"]
-76: 				// empty line
-77:  + // Mixin ["+", "article", "(", "'Hello world'", ")", "\n"]
-78: <p></p>
-79: <p></p>
-80:  mixin // MixinDecl ["mixin", "link", "(", "href", ",", "name", ")", "\n"]
-81: 	 // // Comment ["//", "-", " attributes == {class: \"btn\"}", "\n"]
-82: <a class!=attributes.class href=href></a>
-83:  + // Mixin ["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n"]
-84:  mixin // MixinDecl ["mixin", "link", "(", "href", ",", "name", ")", "\n"]
-85: <a href=href></a>
-86: 	// empty line
-87:  + // Mixin ["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n"]
-88:  mixin // MixinDecl ["mixin", "list", "(", "id", ",", "...", "items", ")", "\n"]
-89: <ul id=id></ul>
-90: 		 each // Iteration ["each", "item", "in", "items", "\n"]
-91: <li></li>
-92: 			// empty line
-93:  + // Mixin ["+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")", "\n"]
-94: 			// empty line
-95: <p></p>
-96: <p></p>
-97:  - // UnbufferedCode ["-", " var msg = {toUpperCase: function () {}}", "\n"]
-98: <p></p>
-99: 			// empty line
-100:  // // Comment ["//", "-", " Following is asdf, its the last tag", "\n"]
-101: <asdf></asdf>
+templates count: 3
+Jade.RootTag [0, 2587]["html", "\n", "<!--[if IE 8]>", "\n", "html", "(", "lang", "=", "en", ",", "class", "=", "lt-ie9", ")", "\n", "<![endif]-->", "\n", "html", "(", "lang", "=", "en", ")", "\n", "\t", "head", "\n", "\t\t", "title", "\n", "\t\t\t", "title", "Page Title Here", "\n", "\t\t", "style", "\n", "\t\t\t", "style.css", "\n", "\t", "body", ".", "base-css", "(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")", "\n", "\t\t", "content", "\n", "\t\t\t", "//", " this is the displayed content", "\n", "\t\t\t", "p", "(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")", "This is a paragraph", "\n", "\t\t\t\t", "That continues on", "\n", "\t\t\t\t", "multiple lines", "\n", "\t\t\t", "ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")", "\n", "\t\t\t\t", "li", ".", "one-css", ".", "two-css", ":", "a", "(", "href", "!=", "#", ")", ":", "a", "(", "href", "!=", "#", ")", "!=", " clickme", "\n", "\t\t\t", ".", "img-holder", "\n", "\t\t\t\t", "img", ".", "image", "(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")", "/", "\n", "\t", "woot", "content1", "asdf", "\n", "\t\t", "woot2", "(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")", "asdfasdf", "\n", "\t\t", "woot3", "(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")", "\n", "\t\t", "footer", "\n", "\t\t\t", "p", "Placeholder footer block", "\n", "-", " var localhost = \"remotehost\";", "\n", "-", " var user = {};", "\n", "if", " \"localhost\" == host", "\n", "\t", "div", "foo", "(", "data-bar", "=", "foo", ",", "goot-one", ")", "&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")", "\n", "\t\t", "//", "-", " include:markdown ./includes/footer.jade", "\n", "else", "\n", "\t", "merrrt", "\n", "unless", " !user.isAnonymous", "\n", "\t", "You", "are logged in", "\n", "//", "-", " :markdown", "\n", "//", "-", " \t### Markdown Need dedent support to parse this", "\n", "//", "-", " \tI often like including markdown documents.{", "\n", "}", "\n", "ul", "\n", "\t", "each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n", "\t\t", "li", "=", " index + ': ' + val", "\n", "while", " n < 4", "\n", "\t", "li", "=", " n++", "\n", "\n", "-", " var friends = 0;", "\n", "case", " ", "friends", "\n", "\t", "when", " 0", "\n", "\t", "when", " 1", "\n", "\t\t", "p", "you have very few friends", "\n", "\t", "default", ":", "p", "you have ", "#{", "friends", " friends", "\n", "//", "-", " Declaration", "\n", "mixin", "list", "\n", "\t", "ul", "\n", "\t\t", "li", "foo", "\n", "\t\t", "li", "bar", "\n", "\t\t", "li", "baz", "\n", "//", "-", " Use", "\n", "+", "list", "\n", "+", "list", "\n", "mixin", "pet", "(", "name", ")", "\n", "\t", "li", ".", "pet", "=", " name", "\n", "ul", "\n", "\t", "+", "pet", "(", "cat", ")", "\n", "\t", "+", "pet", "(", "dog", ")", "\n", "\t", "+", "pet", "(", "pig", ")", "\n", "mixin", "article", "(", "title", ")", "\n", "\t", ".", "article", "\n", "\t\t", ".", "article-wrapper", "\n", "\t\t\t", "h1", "=", " title", "\n", "\t\t\t", "if", "block", "\n", "\t\t\t\t", "block", "\n", "\t\t\t", "else", "\n", "\t\t\t\t", "p", "No content provided", "\n", "\n", "+", "article", "(", "'Hello world'", ")", "\n", "\n", "+", "article", "(", "'Hello world'", ")", "\n", "\t", "p", "This is my", "\n", "\t", "p", "Amazing article", "\n", "mixin", "link", "(", "href", ",", "name", ")", "\n", "\t", "//", "-", " attributes == {class: \"btn\"}", "\n", "\t", "a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", " name", "\n", "+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n", "mixin", "link", "(", "href", ",", "name", ")", "\n", "\t", "a", "(", "href", "=", "href", ")", "&", "attributes", "(", "attributes", ")", "=", " name", "\n", "\n", "+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n", "mixin", "list", "(", "id", ",", "...", "items", ")", "\n", "\t", "ul", "(", "id", "=", "id", ")", "\n", "\t\t", "each", "item", "in", "items", "\n", "\t\t\t", "li", "=", " item", "\n", "\n", "+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")", "\n", "\n", "p", "\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n", "}", "\n", "p", "\n\tThis is supposed to just be text inside a p tag.", "\n", "}", "\n", "-", " var msg = {toUpperCase: function () {}};", "\n", "p", "This is ", "#{", "msg.toUpperCase()", " <- ", "#[", "a", "(", "href", "=", "#", ")", "upper case", "]", " characters", "\n", "\n", "//", "-", " Following is asdf, its the last tag", "\n", "asdf", "\n"]
+ +-Jade.DocType [0, 12]["html"]
+ +-Jade.Line [13, 28]["<!--[if IE 8]>", "\n"]
+ |  +-Jade.RawHtmlTag [13, 27]["<!--[if IE 8]>"]
+ +-Jade.Line [28, 60]["html", "(", "lang", "=", "en", ",", "class", "=", "lt-ie9", ")", "\n"]
+ |  +-Jade.Tag [28, 59]["html", "(", "lang", "=", "en", ",", "class", "=", "lt-ie9", ")"]
+ |     +-Jade.Id [28, 32]["html"]
+ |     +-Jade.TagArgs [32, 59]["(", "lang", "=", "en", ",", "class", "=", "lt-ie9", ")"]
+ |        +-Jade.TagArg [33, 42]["lang", "=", "en"]
+ |        |  +-Jade.TagParamKey [33, 37]["lang"]
+ |        |  +-keywords!("=", "!=") [37, 38]["="]
+ |        |  +-Jade.TagParamValue [38, 42]["en"]
+ |        |     +-Jade.Str [38, 42]["en"]
+ |        +-Jade.TagArg [44, 58]["class", "=", "lt-ie9"]
+ |           +-Jade.TagParamKey [44, 49]["class"]
+ |           +-keywords!("=", "!=") [49, 50]["="]
+ |           +-Jade.TagParamValue [50, 58]["lt-ie9"]
+ |              +-Jade.Str [50, 58]["lt-ie9"]
+ +-Jade.Line [60, 73]["<![endif]-->", "\n"]
+ |  +-Jade.RawHtmlTag [60, 72]["<![endif]-->"]
+ +-Jade.Line [73, 89]["html", "(", "lang", "=", "en", ")", "\n"]
+ |  +-Jade.Tag [73, 88]["html", "(", "lang", "=", "en", ")"]
+ |     +-Jade.Id [73, 77]["html"]
+ |     +-Jade.TagArgs [77, 88]["(", "lang", "=", "en", ")"]
+ |        +-Jade.TagArg [78, 87]["lang", "=", "en"]
+ |           +-Jade.TagParamKey [78, 82]["lang"]
+ |           +-keywords!("=", "!=") [82, 83]["="]
+ |           +-Jade.TagParamValue [83, 87]["en"]
+ |              +-Jade.Str [83, 87]["en"]
+ +-Jade.Line [89, 95]["\t", "head", "\n"]
+ |  +-Jade.Indent [89, 90]["\t"]
+ |  +-Jade.Line [90, 95]["head", "\n"]
+ |     +-Jade.Tag [90, 94]["head"]
+ |        +-Jade.Id [90, 94]["head"]
+ +-Jade.Line [95, 109]["\t\t", "title", "\n"]
+ |  +-Jade.Indent [95, 97]["\t\t"]
+ |  +-Jade.Line [97, 109]["title", "\n"]
+ |     +-Jade.Block [97, 108]["title"]
+ |        +-Jade.DLineExpression [103, 108]["title"]
+ +-Jade.Line [109, 134]["\t\t\t", "title", "Page Title Here", "\n"]
+ |  +-Jade.Indent [109, 112]["\t\t\t"]
+ |  +-Jade.Line [112, 134]["title", "Page Title Here", "\n"]
+ |     +-Jade.Tag [112, 133]["title", "Page Title Here"]
+ |        +-Jade.Id [112, 117]["title"]
+ |        +-Jade.InlineText [118, 133]["Page Title Here"]
+ +-Jade.Line [134, 142]["\t\t", "style", "\n"]
+ |  +-Jade.Indent [134, 136]["\t\t"]
+ |  +-Jade.Line [136, 142]["style", "\n"]
+ |     +-Jade.Tag [136, 141]["style"]
+ |        +-Jade.Id [136, 141]["style"]
+ +-Jade.Line [142, 163]["\t\t\t", "style.css", "\n"]
+ |  +-Jade.Indent [142, 145]["\t\t\t"]
+ |  +-Jade.Line [145, 163]["style.css", "\n"]
+ |     +-Jade.Include [145, 162]["style.css"]
+ |        +-Jade.FileName [153, 162]["style.css"]
+ +-Jade.Line [163, 218]["\t", "body", ".", "base-css", "(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")", "\n"]
+ |  +-Jade.Indent [163, 164]["\t"]
+ |  +-Jade.Line [164, 218]["body", ".", "base-css", "(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")", "\n"]
+ |     +-Jade.Tag [164, 217]["body", ".", "base-css", "(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")"]
+ |        +-Jade.Id [164, 168]["body"]
+ |        +-Jade.CssClass [169, 177]["base-css"]
+ |        +-Jade.TagArgs [177, 217]["(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")"]
+ |           +-Jade.TagArg [178, 192]["ng-app", "=", "MyApp"]
+ |           |  +-Jade.TagParamKey [178, 184]["ng-app"]
+ |           |  +-keywords!("=", "!=") [184, 185]["="]
+ |           |  +-Jade.TagParamValue [185, 192]["MyApp"]
+ |           |     +-Jade.Str [185, 192]["MyApp"]
+ |           +-Jade.TagArg [194, 216]["ng-controller", "=", "CtrlII"]
+ |              +-Jade.TagParamKey [194, 207]["ng-controller"]
+ |              +-keywords!("=", "!=") [207, 208]["="]
+ |              +-Jade.TagParamValue [208, 216]["CtrlII"]
+ |                 +-Jade.Str [208, 216]["CtrlII"]
+ +-Jade.Line [218, 234]["\t\t", "content", "\n"]
+ |  +-Jade.Indent [218, 220]["\t\t"]
+ |  +-Jade.Line [220, 234]["content", "\n"]
+ |     +-Jade.Block [220, 233]["content"]
+ |        +-Jade.DLineExpression [226, 233]["content"]
+ +-Jade.Line [234, 270]["\t\t\t", "//", " this is the displayed content", "\n"]
+ |  +-Jade.Indent [234, 237]["\t\t\t"]
+ |  +-Jade.Line [237, 270]["//", " this is the displayed content", "\n"]
+ |     +-Jade.Comment [237, 269]["//", " this is the displayed content"]
+ |        +-Jade.InlineText [239, 269][" this is the displayed content"]
+ +-Jade.Line [270, 348]["\t\t\t", "p", "(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")", "This is a paragraph", "\n"]
+ |  +-Jade.Indent [270, 273]["\t\t\t"]
+ |  +-Jade.Line [273, 348]["p", "(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")", "This is a paragraph", "\n"]
+ |     +-Jade.Tag [273, 347]["p", "(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")", "This is a paragraph"]
+ |        +-Jade.Id [273, 274]["p"]
+ |        +-Jade.TagArgs [274, 327]["(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")"]
+ |        |  +-Jade.TagArg [275, 280]["id", "="]
+ |        |  |  +-Jade.TagParamKey [275, 277]["id"]
+ |        |  |  +-keywords!("=", "!=") [277, 278]["="]
+ |        |  +-Jade.TagArg [282, 318]["p-form-hook", "=", "some_d_var ? \"yes\" :\"no\""]
+ |        |  |  +-Jade.TagParamKey [282, 293]["p-form-hook"]
+ |        |  |  +-keywords!("=", "!=") [293, 294]["="]
+ |        |  |  +-Jade.TagParamValue [294, 318]["some_d_var ? \"yes\" :\"no\""]
+ |        |  |     +-Jade.ParamDExpression [294, 318]["some_d_var ? \"yes\" :\"no\""]
+ |        |  +-Jade.TagArg [320, 326]["marked"]
+ |        |     +-Jade.TagParamKey [320, 326]["marked"]
+ |        +-Jade.InlineText [328, 347]["This is a paragraph"]
+ +-Jade.Line [348, 372]["\t\t\t\t", "That continues on", "\n"]
+ |  +-Jade.Indent [348, 352]["\t\t\t\t"]
+ |  +-Jade.Line [352, 372]["That continues on", "\n"]
+ |     +-Jade.PipedText [352, 371]["That continues on"]
+ |        +-Jade.InlineText [354, 371]["That continues on"]
+ +-Jade.Line [372, 393]["\t\t\t\t", "multiple lines", "\n"]
+ |  +-Jade.Indent [372, 376]["\t\t\t\t"]
+ |  +-Jade.Line [376, 393]["multiple lines", "\n"]
+ |     +-Jade.PipedText [376, 392]["multiple lines"]
+ |        +-Jade.InlineText [378, 392]["multiple lines"]
+ +-Jade.Line [393, 432]["\t\t\t", "ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")", "\n"]
+ |  +-Jade.Indent [393, 396]["\t\t\t"]
+ |  +-Jade.Line [396, 432]["ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")", "\n"]
+ |     +-Jade.Tag [396, 431]["ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")"]
+ |        +-Jade.Id [396, 398]["ul"]
+ |        +-Jade.TagArgs [398, 431]["(", "isit", "=", "some_other_d_var == \"woot\"", ")"]
+ |           +-Jade.TagArg [399, 430]["isit", "=", "some_other_d_var == \"woot\""]
+ |              +-Jade.TagParamKey [399, 403]["isit"]
+ |              +-keywords!("=", "!=") [403, 404]["="]
+ |              +-Jade.TagParamValue [404, 430]["some_other_d_var == \"woot\""]
+ |                 +-Jade.ParamDExpression [404, 430]["some_other_d_var == \"woot\""]
+ +-Jade.Line [432, 493]["\t\t\t\t", "li", ".", "one-css", ".", "two-css", ":", "a", "(", "href", "!=", "#", ")", ":", "a", "(", "href", "!=", "#", ")", "!=", " clickme", "\n"]
+ |  +-Jade.Indent [432, 436]["\t\t\t\t"]
+ |  +-Jade.Line [436, 493]["li", ".", "one-css", ".", "two-css", ":", "a", "(", "href", "!=", "#", ")", ":", "a", "(", "href", "!=", "#", ")", "!=", " clickme", "\n"]
+ |     +-Jade.Tag [436, 492]["li", ".", "one-css", ".", "two-css", ":", "a", "(", "href", "!=", "#", ")", ":", "a", "(", "href", "!=", "#", ")", "!=", " clickme"]
+ |        +-Jade.Id [436, 438]["li"]
+ |        +-Jade.CssClass [439, 446]["one-css"]
+ |        +-Jade.CssClass [447, 454]["two-css"]
+ |        +-Jade.InlineTag [454, 468][":", "a", "(", "href", "!=", "#", ")"]
+ |        |  +-Jade.Id [456, 457]["a"]
+ |        |  +-Jade.TagArgs [457, 468]["(", "href", "!=", "#", ")"]
+ |        |     +-Jade.TagArg [458, 467]["href", "!=", "#"]
+ |        |        +-Jade.TagParamKey [458, 462]["href"]
+ |        |        +-keywords!("=", "!=") [462, 464]["!="]
+ |        |        +-Jade.TagParamValue [464, 467]["#"]
+ |        |           +-Jade.Str [464, 467]["#"]
+ |        +-Jade.InlineTag [468, 482][":", "a", "(", "href", "!=", "#", ")"]
+ |        |  +-Jade.Id [470, 471]["a"]
+ |        |  +-Jade.TagArgs [471, 482]["(", "href", "!=", "#", ")"]
+ |        |     +-Jade.TagArg [472, 481]["href", "!=", "#"]
+ |        |        +-Jade.TagParamKey [472, 476]["href"]
+ |        |        +-keywords!("=", "!=") [476, 478]["!="]
+ |        |        +-Jade.TagParamValue [478, 481]["#"]
+ |        |           +-Jade.Str [478, 481]["#"]
+ |        +-Jade.BufferedCode [482, 492]["!=", " clickme"]
+ |           +-keywords!("=", "!=") [482, 484]["!="]
+ |           +-Jade.DLineExpression [484, 492][" clickme"]
+ +-Jade.Line [493, 508]["\t\t\t", ".", "img-holder", "\n"]
+ |  +-Jade.Indent [493, 496]["\t\t\t"]
+ |  +-Jade.Line [496, 508][".", "img-holder", "\n"]
+ |     +-Jade.Tag [496, 507][".", "img-holder"]
+ |        +-Jade.CssClass [497, 507]["img-holder"]
+ +-Jade.Line [508, 582]["\t\t\t\t", "img", ".", "image", "(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")", "/", "\n"]
+ |  +-Jade.Indent [508, 512]["\t\t\t\t"]
+ |  +-Jade.Line [512, 582]["img", ".", "image", "(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")", "/", "\n"]
+ |     +-Jade.Tag [512, 581]["img", ".", "image", "(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")", "/"]
+ |        +-Jade.Id [512, 515]["img"]
+ |        +-Jade.CssClass [516, 521]["image"]
+ |        +-Jade.TagArgs [521, 580]["(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")"]
+ |        |  +-Jade.TagArg [522, 536]["src", "=", "logo.gif"]
+ |        |  |  +-Jade.TagParamKey [522, 525]["src"]
+ |        |  |  +-keywords!("=", "!=") [525, 526]["="]
+ |        |  |  +-Jade.TagParamValue [526, 536]["logo.gif"]
+ |        |  |     +-Jade.Str [526, 536]["logo.gif"]
+ |        |  +-Jade.TagArg [538, 579]["style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\""]
+ |        |     +-Jade.TagParamKey [538, 543]["style"]
+ |        |     +-keywords!("=", "!=") [543, 544]["="]
+ |        |     +-Jade.TagParamValue [544, 579]["background", ":", "\"red\"", "padding", ":", "\"0px\""]
+ |        |        +-Jade.AttributeJsonObject [544, 579]["background", ":", "\"red\"", "padding", ":", "\"0px\""]
+ |        |           +-Jade.JsonKeyValue [545, 562]["background", ":", "\"red\""]
+ |        |           |  +-Jade.JsonKey [545, 555]["background"]
+ |        |           |  +-Jade.JsonObjectDExpression [557, 562]["\"red\""]
+ |        |           +-Jade.JsonKeyValue [564, 578]["padding", ":", "\"0px\""]
+ |        |              +-Jade.JsonKey [564, 571]["padding"]
+ |        |              +-Jade.JsonObjectDExpression [573, 578]["\"0px\""]
+ |        +-Jade.SelfCloser [580, 581]["/"]
+ +-Jade.Line [582, 602]["\t", "woot", "content1", "asdf", "\n"]
+ |  +-Jade.Indent [582, 583]["\t"]
+ |  +-Jade.Line [583, 602]["woot", "content1", "asdf", "\n"]
+ |     +-Jade.Tag [583, 601]["woot", "content1", "asdf"]
+ |        +-Jade.Id [583, 587]["woot"]
+ |        +-Jade.CssId [587, 596]["content1"]
+ |        +-Jade.InlineText [597, 601]["asdf"]
+ +-Jade.Line [602, 640]["\t\t", "woot2", "(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")", "asdfasdf", "\n"]
+ |  +-Jade.Indent [602, 604]["\t\t"]
+ |  +-Jade.Line [604, 640]["woot2", "(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")", "asdfasdf", "\n"]
+ |     +-Jade.Tag [604, 639]["woot2", "(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")", "asdfasdf"]
+ |        +-Jade.CssId [604, 610]["woot2"]
+ |        +-Jade.TagArgs [610, 630]["(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")"]
+ |        |  +-Jade.TagArg [611, 629]["class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]"]
+ |        |     +-Jade.TagParamKey [611, 616]["class"]
+ |        |     +-keywords!("=", "!=") [616, 617]["="]
+ |        |     +-Jade.TagParamValue [617, 629]["[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]"]
+ |        |        +-Jade.CssClassArray [617, 629]["[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]"]
+ |        |           +-Jade.CssClass [619, 621]["c1"]
+ |        |           +-Jade.CssClass [625, 627]["c2"]
+ |        +-Jade.InlineText [631, 639]["asdfasdf"]
+ +-Jade.Line [640, 689]["\t\t", "woot3", "(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")", "\n"]
+ |  +-Jade.Indent [640, 642]["\t\t"]
+ |  +-Jade.Line [642, 689]["woot3", "(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")", "\n"]
+ |     +-Jade.Tag [642, 688]["woot3", "(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")"]
+ |        +-Jade.Id [642, 647]["woot3"]
+ |        +-Jade.TagArgs [647, 688]["(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")"]
+ |           +-Jade.TagArg [648, 687]["class", "=", "active", ":", "currentUrl === \"/about\""]
+ |              +-Jade.TagParamKey [648, 653]["class"]
+ |              +-keywords!("=", "!=") [653, 654]["="]
+ |              +-Jade.TagParamValue [654, 687]["active", ":", "currentUrl === \"/about\""]
+ |                 +-Jade.AttributeJsonObject [654, 687]["active", ":", "currentUrl === \"/about\""]
+ |                    +-Jade.JsonKeyValue [655, 686]["active", ":", "currentUrl === \"/about\""]
+ |                       +-Jade.JsonKey [655, 661]["active"]
+ |                       +-Jade.JsonObjectDExpression [663, 686]["currentUrl === \"/about\""]
+ +-Jade.Line [689, 704]["\t\t", "footer", "\n"]
+ |  +-Jade.Indent [689, 691]["\t\t"]
+ |  +-Jade.Line [691, 704]["footer", "\n"]
+ |     +-Jade.Block [691, 703]["footer"]
+ |        +-Jade.DLineExpression [697, 703]["footer"]
+ +-Jade.Line [704, 734]["\t\t\t", "p", "Placeholder footer block", "\n"]
+ |  +-Jade.Indent [704, 707]["\t\t\t"]
+ |  +-Jade.Line [707, 734]["p", "Placeholder footer block", "\n"]
+ |     +-Jade.Tag [707, 733]["p", "Placeholder footer block"]
+ |        +-Jade.Id [707, 708]["p"]
+ |        +-Jade.InlineText [709, 733]["Placeholder footer block"]
+ +-Jade.Line [734, 766]["-", " var localhost = \"remotehost\";", "\n"]
+ |  +-Jade.UnbufferedCode [734, 765]["-", " var localhost = \"remotehost\";"]
+ |     +-Jade.DLineExpression [735, 765][" var localhost = \"remotehost\";"]
+ +-Jade.Line [766, 783]["-", " var user = {};", "\n"]
+ |  +-Jade.UnbufferedCode [766, 782]["-", " var user = {};"]
+ |     +-Jade.DLineExpression [767, 782][" var user = {};"]
+ +-Jade.Line [783, 806]["if", " \"localhost\" == host", "\n"]
+ |  +-Jade.Conditional [783, 805]["if", " \"localhost\" == host"]
+ |     +-Jade.DLineExpression [785, 805][" \"localhost\" == host"]
+ +-Jade.Line [806, 891]["\t", "div", "foo", "(", "data-bar", "=", "foo", ",", "goot-one", ")", "&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")", "\n"]
+ |  +-Jade.Indent [806, 807]["\t"]
+ |  +-Jade.Line [807, 891]["div", "foo", "(", "data-bar", "=", "foo", ",", "goot-one", ")", "&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")", "\n"]
+ |     +-Jade.Tag [807, 890]["div", "foo", "(", "data-bar", "=", "foo", ",", "goot-one", ")", "&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")"]
+ |        +-Jade.Id [807, 810]["div"]
+ |        +-Jade.CssId [810, 814]["foo"]
+ |        +-Jade.TagArgs [814, 840]["(", "data-bar", "=", "foo", ",", "goot-one", ")"]
+ |        |  +-Jade.TagArg [815, 829]["data-bar", "=", "foo"]
+ |        |  |  +-Jade.TagParamKey [815, 823]["data-bar"]
+ |        |  |  +-keywords!("=", "!=") [823, 824]["="]
+ |        |  |  +-Jade.TagParamValue [824, 829]["foo"]
+ |        |  |     +-Jade.Str [824, 829]["foo"]
+ |        |  +-Jade.TagArg [831, 839]["goot-one"]
+ |        |     +-Jade.TagParamKey [831, 839]["goot-one"]
+ |        +-Jade.AndAttributes [840, 890]["&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")"]
+ |           +-Jade.AttributeJsonObject [852, 889]["data-cew", ":", "\"baer\"", "ng-show", ":", "1234"]
+ |              +-Jade.JsonKeyValue [853, 871]["data-cew", ":", "\"baer\""]
+ |              |  +-Jade.JsonKey [853, 863]["data-cew"]
+ |              |  +-Jade.JsonObjectDExpression [865, 871]["\"baer\""]
+ |              +-Jade.JsonKeyValue [873, 888]["ng-show", ":", "1234"]
+ |                 +-Jade.JsonKey [873, 882]["ng-show"]
+ |                 +-Jade.JsonObjectDExpression [884, 888]["1234"]
+ +-Jade.Line [891, 937]["\t\t", "//", "-", " include:markdown ./includes/footer.jade", "\n"]
+ |  +-Jade.Indent [891, 893]["\t\t"]
+ |  +-Jade.Line [893, 937]["//", "-", " include:markdown ./includes/footer.jade", "\n"]
+ |     +-Jade.Comment [893, 936]["//", "-", " include:markdown ./includes/footer.jade"]
+ |        +-literal!("-") [895, 896]["-"]
+ |        +-Jade.InlineText [896, 936][" include:markdown ./includes/footer.jade"]
+ +-Jade.Line [937, 942]["else", "\n"]
+ |  +-Jade.Conditional [937, 941]["else"]
+ +-Jade.Line [942, 950]["\t", "merrrt", "\n"]
+ |  +-Jade.Indent [942, 943]["\t"]
+ |  +-Jade.Line [943, 950]["merrrt", "\n"]
+ |     +-Jade.Tag [943, 949]["merrrt"]
+ |        +-Jade.Id [943, 949]["merrrt"]
+ +-Jade.Line [950, 975]["unless", " !user.isAnonymous", "\n"]
+ |  +-Jade.Conditional [950, 974]["unless", " !user.isAnonymous"]
+ |     +-Jade.DLineExpression [956, 974][" !user.isAnonymous"]
+ +-Jade.Line [975, 994]["\t", "You", "are logged in", "\n"]
+ |  +-Jade.Indent [975, 976]["\t"]
+ |  +-Jade.Line [976, 994]["You", "are logged in", "\n"]
+ |     +-Jade.Tag [976, 993]["You", "are logged in"]
+ |        +-Jade.Id [976, 979]["You"]
+ |        +-Jade.InlineText [980, 993]["are logged in"]
+ +-Jade.Line [994, 1008]["//", "-", " :markdown", "\n"]
+ |  +-Jade.Comment [994, 1007]["//", "-", " :markdown"]
+ |     +-literal!("-") [996, 997]["-"]
+ |     +-Jade.InlineText [997, 1007][" :markdown"]
+ +-Jade.Line [1008, 1060]["//", "-", " \t### Markdown Need dedent support to parse this", "\n"]
+ |  +-Jade.Comment [1008, 1059]["//", "-", " \t### Markdown Need dedent support to parse this"]
+ |     +-literal!("-") [1010, 1011]["-"]
+ |     +-Jade.InlineText [1011, 1059][" \t### Markdown Need dedent support to parse this"]
+ +-Jade.Line [1060, 1109]["//", "-", " \tI often like including markdown documents.{", "\n"]
+ |  +-Jade.Comment [1060, 1108]["//", "-", " \tI often like including markdown documents.{"]
+ |     +-literal!("-") [1062, 1063]["-"]
+ |     +-Jade.InlineText [1063, 1108][" \tI often like including markdown documents.{"]
+ +-Jade.Line [1109, 1111]["}", "\n"]
+ |  +-Jade.AnyContentLine [1109, 1110]["}"]
+ +-Jade.Line [1111, 1114]["ul", "\n"]
+ |  +-Jade.Tag [1111, 1113]["ul"]
+ |     +-Jade.Id [1111, 1113]["ul"]
+ +-Jade.Line [1114, 1162]["\t", "each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n"]
+ |  +-Jade.Indent [1114, 1115]["\t"]
+ |  +-Jade.Line [1115, 1162]["each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n"]
+ |     +-Jade.Iteration [1115, 1161]["each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}"]
+ |        +-Jade.DVariableName [1120, 1123]["val"]
+ |        +-Jade.DVariableName [1125, 1130]["index"]
+ |        +-literal!("in") [1131, 1133]["in"]
+ |        +-Jade.DLineExpression [1134, 1161]["{1:'one',2:'two',3:'three'}"]
+ +-Jade.Line [1162, 1187]["\t\t", "li", "=", " index + ': ' + val", "\n"]
+ |  +-Jade.Indent [1162, 1164]["\t\t"]
+ |  +-Jade.Line [1164, 1187]["li", "=", " index + ': ' + val", "\n"]
+ |     +-Jade.Tag [1164, 1186]["li", "=", " index + ': ' + val"]
+ |        +-Jade.Id [1164, 1166]["li"]
+ |        +-Jade.BufferedCode [1166, 1186]["=", " index + ': ' + val"]
+ |           +-keywords!("=", "!=") [1166, 1167]["="]
+ |           +-Jade.DLineExpression [1167, 1186][" index + ': ' + val"]
+ +-Jade.Line [1187, 1199]["while", " n < 4", "\n"]
+ |  +-Jade.Iteration [1187, 1198]["while", " n < 4"]
+ |     +-Jade.DLineExpression [1192, 1198][" n < 4"]
+ +-Jade.Line [1199, 1208]["\t", "li", "=", " n++", "\n"]
+ |  +-Jade.Indent [1199, 1200]["\t"]
+ |  +-Jade.Line [1200, 1208]["li", "=", " n++", "\n"]
+ |     +-Jade.Tag [1200, 1207]["li", "=", " n++"]
+ |        +-Jade.Id [1200, 1202]["li"]
+ |        +-Jade.BufferedCode [1202, 1207]["=", " n++"]
+ |           +-keywords!("=", "!=") [1202, 1203]["="]
+ |           +-Jade.DLineExpression [1203, 1207][" n++"]
+ +-Jade.Line [1208, 1209]["\n"]
+ +-Jade.Line [1209, 1228]["-", " var friends = 0;", "\n"]
+ |  +-Jade.UnbufferedCode [1209, 1227]["-", " var friends = 0;"]
+ |     +-Jade.DLineExpression [1210, 1227][" var friends = 0;"]
+ +-Jade.Line [1228, 1241]["case", " ", "friends", "\n"]
+ |  +-Jade.Case [1228, 1240]["case", " ", "friends"]
+ |     +-literal!("case") [1228, 1232]["case"]
+ |     +-Jade.Spacing [1232, 1233][" "]
+ |     +-Jade.DLineExpression [1233, 1240]["friends"]
+ +-Jade.Line [1241, 1249]["\t", "when", " 0", "\n"]
+ |  +-Jade.Indent [1241, 1242]["\t"]
+ |  +-Jade.Line [1242, 1249]["when", " 0", "\n"]
+ |     +-Jade.Case [1242, 1248]["when", " 0"]
+ |        +-literal!("when") [1242, 1246]["when"]
+ +-Jade.Line [1249, 1257]["\t", "when", " 1", "\n"]
+ |  +-Jade.Indent [1249, 1250]["\t"]
+ |  +-Jade.Line [1250, 1257]["when", " 1", "\n"]
+ |     +-Jade.Case [1250, 1256]["when", " 1"]
+ |        +-literal!("when") [1250, 1254]["when"]
+ +-Jade.Line [1257, 1287]["\t\t", "p", "you have very few friends", "\n"]
+ |  +-Jade.Indent [1257, 1259]["\t\t"]
+ |  +-Jade.Line [1259, 1287]["p", "you have very few friends", "\n"]
+ |     +-Jade.Tag [1259, 1286]["p", "you have very few friends"]
+ |        +-Jade.Id [1259, 1260]["p"]
+ |        +-Jade.InlineText [1261, 1286]["you have very few friends"]
+ +-Jade.Line [1287, 1327]["\t", "default", ":", "p", "you have ", "#{", "friends", " friends", "\n"]
+ |  +-Jade.Indent [1287, 1288]["\t"]
+ |  +-Jade.Line [1288, 1327]["default", ":", "p", "you have ", "#{", "friends", " friends", "\n"]
+ |     +-Jade.Case [1288, 1326]["default", ":", "p", "you have ", "#{", "friends", " friends"]
+ |        +-literal!("default") [1288, 1295]["default"]
+ |        +-Jade.InlineTag [1295, 1326][":", "p", "you have ", "#{", "friends", " friends"]
+ |           +-Jade.Id [1297, 1298]["p"]
+ |           +-Jade.InlineText [1299, 1308]["you have "]
+ |           +-Jade.StringInterpolation [1308, 1318]["#{", "friends"]
+ |           +-Jade.InlineText [1318, 1326][" friends"]
+ +-Jade.Line [1327, 1343]["//", "-", " Declaration", "\n"]
+ |  +-Jade.Comment [1327, 1342]["//", "-", " Declaration"]
+ |     +-literal!("-") [1329, 1330]["-"]
+ |     +-Jade.InlineText [1330, 1342][" Declaration"]
+ +-Jade.Line [1343, 1354]["mixin", "list", "\n"]
+ |  +-Jade.MixinDecl [1343, 1353]["mixin", "list"]
+ |     +-Jade.DVariableName [1349, 1353]["list"]
+ +-Jade.Line [1354, 1358]["\t", "ul", "\n"]
+ |  +-Jade.Indent [1354, 1355]["\t"]
+ |  +-Jade.Line [1355, 1358]["ul", "\n"]
+ |     +-Jade.Tag [1355, 1357]["ul"]
+ |        +-Jade.Id [1355, 1357]["ul"]
+ +-Jade.Line [1358, 1367]["\t\t", "li", "foo", "\n"]
+ |  +-Jade.Indent [1358, 1360]["\t\t"]
+ |  +-Jade.Line [1360, 1367]["li", "foo", "\n"]
+ |     +-Jade.Tag [1360, 1366]["li", "foo"]
+ |        +-Jade.Id [1360, 1362]["li"]
+ |        +-Jade.InlineText [1363, 1366]["foo"]
+ +-Jade.Line [1367, 1376]["\t\t", "li", "bar", "\n"]
+ |  +-Jade.Indent [1367, 1369]["\t\t"]
+ |  +-Jade.Line [1369, 1376]["li", "bar", "\n"]
+ |     +-Jade.Tag [1369, 1375]["li", "bar"]
+ |        +-Jade.Id [1369, 1371]["li"]
+ |        +-Jade.InlineText [1372, 1375]["bar"]
+ +-Jade.Line [1376, 1385]["\t\t", "li", "baz", "\n"]
+ |  +-Jade.Indent [1376, 1378]["\t\t"]
+ |  +-Jade.Line [1378, 1385]["li", "baz", "\n"]
+ |     +-Jade.Tag [1378, 1384]["li", "baz"]
+ |        +-Jade.Id [1378, 1380]["li"]
+ |        +-Jade.InlineText [1381, 1384]["baz"]
+ +-Jade.Line [1385, 1393]["//", "-", " Use", "\n"]
+ |  +-Jade.Comment [1385, 1392]["//", "-", " Use"]
+ |     +-literal!("-") [1387, 1388]["-"]
+ |     +-Jade.InlineText [1388, 1392][" Use"]
+ +-Jade.Line [1393, 1399]["+", "list", "\n"]
+ |  +-Jade.Mixin [1393, 1398]["+", "list"]
+ |     +-Jade.DVariableName [1394, 1398]["list"]
+ +-Jade.Line [1399, 1405]["+", "list", "\n"]
+ |  +-Jade.Mixin [1399, 1404]["+", "list"]
+ |     +-Jade.DVariableName [1400, 1404]["list"]
+ +-Jade.Line [1405, 1421]["mixin", "pet", "(", "name", ")", "\n"]
+ |  +-Jade.MixinDecl [1405, 1420]["mixin", "pet", "(", "name", ")"]
+ |     +-Jade.DVariableName [1411, 1414]["pet"]
+ |     +-Jade.MixinDeclArgs [1414, 1420]["(", "name", ")"]
+ |        +-Jade.DVariableName [1415, 1419]["name"]
+ +-Jade.Line [1421, 1435]["\t", "li", ".", "pet", "=", " name", "\n"]
+ |  +-Jade.Indent [1421, 1422]["\t"]
+ |  +-Jade.Line [1422, 1435]["li", ".", "pet", "=", " name", "\n"]
+ |     +-Jade.Tag [1422, 1434]["li", ".", "pet", "=", " name"]
+ |        +-Jade.Id [1422, 1424]["li"]
+ |        +-Jade.CssClass [1425, 1428]["pet"]
+ |        +-Jade.BufferedCode [1428, 1434]["=", " name"]
+ |           +-keywords!("=", "!=") [1428, 1429]["="]
+ |           +-Jade.DLineExpression [1429, 1434][" name"]
+ +-Jade.Line [1435, 1438]["ul", "\n"]
+ |  +-Jade.Tag [1435, 1437]["ul"]
+ |     +-Jade.Id [1435, 1437]["ul"]
+ +-Jade.Line [1438, 1451]["\t", "+", "pet", "(", "cat", ")", "\n"]
+ |  +-Jade.Indent [1438, 1439]["\t"]
+ |  +-Jade.Line [1439, 1451]["+", "pet", "(", "cat", ")", "\n"]
+ |     +-Jade.Mixin [1439, 1450]["+", "pet", "(", "cat", ")"]
+ |        +-Jade.DVariableName [1440, 1443]["pet"]
+ |        +-Jade.TagParamValue [1444, 1449]["cat"]
+ |           +-Jade.Str [1444, 1449]["cat"]
+ +-Jade.Line [1451, 1464]["\t", "+", "pet", "(", "dog", ")", "\n"]
+ |  +-Jade.Indent [1451, 1452]["\t"]
+ |  +-Jade.Line [1452, 1464]["+", "pet", "(", "dog", ")", "\n"]
+ |     +-Jade.Mixin [1452, 1463]["+", "pet", "(", "dog", ")"]
+ |        +-Jade.DVariableName [1453, 1456]["pet"]
+ |        +-Jade.TagParamValue [1457, 1462]["dog"]
+ |           +-Jade.Str [1457, 1462]["dog"]
+ +-Jade.Line [1464, 1477]["\t", "+", "pet", "(", "pig", ")", "\n"]
+ |  +-Jade.Indent [1464, 1465]["\t"]
+ |  +-Jade.Line [1465, 1477]["+", "pet", "(", "pig", ")", "\n"]
+ |     +-Jade.Mixin [1465, 1476]["+", "pet", "(", "pig", ")"]
+ |        +-Jade.DVariableName [1466, 1469]["pet"]
+ |        +-Jade.TagParamValue [1470, 1475]["pig"]
+ |           +-Jade.Str [1470, 1475]["pig"]
+ +-Jade.Line [1477, 1498]["mixin", "article", "(", "title", ")", "\n"]
+ |  +-Jade.MixinDecl [1477, 1497]["mixin", "article", "(", "title", ")"]
+ |     +-Jade.DVariableName [1483, 1490]["article"]
+ |     +-Jade.MixinDeclArgs [1490, 1497]["(", "title", ")"]
+ |        +-Jade.DVariableName [1491, 1496]["title"]
+ +-Jade.Line [1498, 1508]["\t", ".", "article", "\n"]
+ |  +-Jade.Indent [1498, 1499]["\t"]
+ |  +-Jade.Line [1499, 1508][".", "article", "\n"]
+ |     +-Jade.Tag [1499, 1507][".", "article"]
+ |        +-Jade.CssClass [1500, 1507]["article"]
+ +-Jade.Line [1508, 1527]["\t\t", ".", "article-wrapper", "\n"]
+ |  +-Jade.Indent [1508, 1510]["\t\t"]
+ |  +-Jade.Line [1510, 1527][".", "article-wrapper", "\n"]
+ |     +-Jade.Tag [1510, 1526][".", "article-wrapper"]
+ |        +-Jade.CssClass [1511, 1526]["article-wrapper"]
+ +-Jade.Line [1527, 1540]["\t\t\t", "h1", "=", " title", "\n"]
+ |  +-Jade.Indent [1527, 1530]["\t\t\t"]
+ |  +-Jade.Line [1530, 1540]["h1", "=", " title", "\n"]
+ |     +-Jade.Tag [1530, 1539]["h1", "=", " title"]
+ |        +-Jade.Id [1530, 1532]["h1"]
+ |        +-Jade.BufferedCode [1532, 1539]["=", " title"]
+ |           +-keywords!("=", "!=") [1532, 1533]["="]
+ |           +-Jade.DLineExpression [1533, 1539][" title"]
+ +-Jade.Line [1540, 1552]["\t\t\t", "if", "block", "\n"]
+ |  +-Jade.Indent [1540, 1543]["\t\t\t"]
+ |  +-Jade.Line [1543, 1552]["if", "block", "\n"]
+ |     +-Jade.Conditional [1543, 1551]["if", "block"]
+ |        +-Jade.IfBlock [1543, 1551]["if", "block"]
+ +-Jade.Line [1552, 1562]["\t\t\t\t", "block", "\n"]
+ |  +-Jade.Indent [1552, 1556]["\t\t\t\t"]
+ |  +-Jade.Line [1556, 1562]["block", "\n"]
+ |     +-Jade.Tag [1556, 1561]["block"]
+ |        +-Jade.Id [1556, 1561]["block"]
+ +-Jade.Line [1562, 1570]["\t\t\t", "else", "\n"]
+ |  +-Jade.Indent [1562, 1565]["\t\t\t"]
+ |  +-Jade.Line [1565, 1570]["else", "\n"]
+ |     +-Jade.Conditional [1565, 1569]["else"]
+ +-Jade.Line [1570, 1596]["\t\t\t\t", "p", "No content provided", "\n"]
+ |  +-Jade.Indent [1570, 1574]["\t\t\t\t"]
+ |  +-Jade.Line [1574, 1596]["p", "No content provided", "\n"]
+ |     +-Jade.Tag [1574, 1595]["p", "No content provided"]
+ |        +-Jade.Id [1574, 1575]["p"]
+ |        +-Jade.InlineText [1576, 1595]["No content provided"]
+ +-Jade.Line [1596, 1597]["\n"]
+ +-Jade.Line [1597, 1621]["+", "article", "(", "'Hello world'", ")", "\n"]
+ |  +-Jade.Mixin [1597, 1620]["+", "article", "(", "'Hello world'", ")"]
+ |     +-Jade.DVariableName [1598, 1605]["article"]
+ |     +-Jade.TagParamValue [1606, 1619]["'Hello world'"]
+ |        +-Jade.ParamDExpression [1606, 1619]["'Hello world'"]
+ +-Jade.Line [1621, 1622]["\n"]
+ +-Jade.Line [1622, 1646]["+", "article", "(", "'Hello world'", ")", "\n"]
+ |  +-Jade.Mixin [1622, 1645]["+", "article", "(", "'Hello world'", ")"]
+ |     +-Jade.DVariableName [1623, 1630]["article"]
+ |     +-Jade.TagParamValue [1631, 1644]["'Hello world'"]
+ |        +-Jade.ParamDExpression [1631, 1644]["'Hello world'"]
+ +-Jade.Line [1646, 1660]["\t", "p", "This is my", "\n"]
+ |  +-Jade.Indent [1646, 1647]["\t"]
+ |  +-Jade.Line [1647, 1660]["p", "This is my", "\n"]
+ |     +-Jade.Tag [1647, 1659]["p", "This is my"]
+ |        +-Jade.Id [1647, 1648]["p"]
+ |        +-Jade.InlineText [1649, 1659]["This is my"]
+ +-Jade.Line [1660, 1679]["\t", "p", "Amazing article", "\n"]
+ |  +-Jade.Indent [1660, 1661]["\t"]
+ |  +-Jade.Line [1661, 1679]["p", "Amazing article", "\n"]
+ |     +-Jade.Tag [1661, 1678]["p", "Amazing article"]
+ |        +-Jade.Id [1661, 1662]["p"]
+ |        +-Jade.InlineText [1663, 1678]["Amazing article"]
+ +-Jade.Line [1679, 1702]["mixin", "link", "(", "href", ",", "name", ")", "\n"]
+ |  +-Jade.MixinDecl [1679, 1701]["mixin", "link", "(", "href", ",", "name", ")"]
+ |     +-Jade.DVariableName [1685, 1689]["link"]
+ |     +-Jade.MixinDeclArgs [1689, 1701]["(", "href", ",", "name", ")"]
+ |        +-Jade.DVariableName [1690, 1694]["href"]
+ |        +-Jade.DVariableName [1696, 1700]["name"]
+ +-Jade.Line [1702, 1736]["\t", "//", "-", " attributes == {class: \"btn\"}", "\n"]
+ |  +-Jade.Indent [1702, 1703]["\t"]
+ |  +-Jade.Line [1703, 1736]["//", "-", " attributes == {class: \"btn\"}", "\n"]
+ |     +-Jade.Comment [1703, 1735]["//", "-", " attributes == {class: \"btn\"}"]
+ |        +-literal!("-") [1705, 1706]["-"]
+ |        +-Jade.InlineText [1706, 1735][" attributes == {class: \"btn\"}"]
+ +-Jade.Line [1736, 1781]["\t", "a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", " name", "\n"]
+ |  +-Jade.Indent [1736, 1737]["\t"]
+ |  +-Jade.Line [1737, 1781]["a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", " name", "\n"]
+ |     +-Jade.Tag [1737, 1780]["a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", " name"]
+ |        +-Jade.Id [1737, 1738]["a"]
+ |        +-Jade.TagArgs [1738, 1774]["(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")"]
+ |        |  +-Jade.TagArg [1739, 1762]["class", "!=", "attributes.class"]
+ |        |  |  +-Jade.TagParamKey [1739, 1744]["class"]
+ |        |  |  +-keywords!("=", "!=") [1744, 1746]["!="]
+ |        |  |  +-Jade.TagParamValue [1746, 1762]["attributes.class"]
+ |        |  |     +-Jade.ParamDExpression [1746, 1762]["attributes.class"]
+ |        |  +-Jade.TagArg [1764, 1773]["href", "=", "href"]
+ |        |     +-Jade.TagParamKey [1764, 1768]["href"]
+ |        |     +-keywords!("=", "!=") [1768, 1769]["="]
+ |        |     +-Jade.TagParamValue [1769, 1773]["href"]
+ |        |        +-Jade.ParamDExpression [1769, 1773]["href"]
+ |        +-Jade.BufferedCode [1774, 1780]["=", " name"]
+ |           +-keywords!("=", "!=") [1774, 1775]["="]
+ |           +-Jade.DLineExpression [1775, 1780][" name"]
+ +-Jade.Line [1781, 1815]["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n"]
+ |  +-Jade.Mixin [1781, 1814]["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")"]
+ |     +-Jade.DVariableName [1782, 1786]["link"]
+ |     +-Jade.TagParamValue [1787, 1793]["'/foo'"]
+ |     |  +-Jade.ParamDExpression [1787, 1793]["'/foo'"]
+ |     +-Jade.TagParamValue [1795, 1800]["'foo'"]
+ |     |  +-Jade.ParamDExpression [1795, 1800]["'foo'"]
+ |     +-Jade.TagArgs [1801, 1814]["(", "class", "=", "btn", ")"]
+ |        +-Jade.TagArg [1802, 1813]["class", "=", "btn"]
+ |           +-Jade.TagParamKey [1802, 1807]["class"]
+ |           +-keywords!("=", "!=") [1807, 1808]["="]
+ |           +-Jade.TagParamValue [1808, 1813]["btn"]
+ |              +-Jade.Str [1808, 1813]["btn"]
+ +-Jade.Line [1815, 1838]["mixin", "link", "(", "href", ",", "name", ")", "\n"]
+ |  +-Jade.MixinDecl [1815, 1837]["mixin", "link", "(", "href", ",", "name", ")"]
+ |     +-Jade.DVariableName [1821, 1825]["link"]
+ |     +-Jade.MixinDeclArgs [1825, 1837]["(", "href", ",", "name", ")"]
+ |        +-Jade.DVariableName [1826, 1830]["href"]
+ |        +-Jade.DVariableName [1832, 1836]["name"]
+ +-Jade.Line [1838, 1881]["\t", "a", "(", "href", "=", "href", ")", "&", "attributes", "(", "attributes", ")", "=", " name", "\n"]
+ |  +-Jade.Indent [1838, 1839]["\t"]
+ |  +-Jade.Line [1839, 1881]["a", "(", "href", "=", "href", ")", "&", "attributes", "(", "attributes", ")", "=", " name", "\n"]
+ |     +-Jade.Tag [1839, 1880]["a", "(", "href", "=", "href", ")", "&", "attributes", "(", "attributes", ")", "=", " name"]
+ |        +-Jade.Id [1839, 1840]["a"]
+ |        +-Jade.TagArgs [1840, 1851]["(", "href", "=", "href", ")"]
+ |        |  +-Jade.TagArg [1841, 1850]["href", "=", "href"]
+ |        |     +-Jade.TagParamKey [1841, 1845]["href"]
+ |        |     +-keywords!("=", "!=") [1845, 1846]["="]
+ |        |     +-Jade.TagParamValue [1846, 1850]["href"]
+ |        |        +-Jade.ParamDExpression [1846, 1850]["href"]
+ |        +-Jade.AndAttributes [1851, 1874]["&", "attributes", "(", "attributes", ")"]
+ |        |  +-Jade.ParamDExpression [1863, 1873]["attributes"]
+ |        +-Jade.BufferedCode [1874, 1880]["=", " name"]
+ |           +-keywords!("=", "!=") [1874, 1875]["="]
+ |           +-Jade.DLineExpression [1875, 1880][" name"]
+ +-Jade.Line [1881, 1882]["\n"]
+ +-Jade.Line [1882, 1916]["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n"]
+ |  +-Jade.Mixin [1882, 1915]["+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")"]
+ |     +-Jade.DVariableName [1883, 1887]["link"]
+ |     +-Jade.TagParamValue [1888, 1894]["'/foo'"]
+ |     |  +-Jade.ParamDExpression [1888, 1894]["'/foo'"]
+ |     +-Jade.TagParamValue [1896, 1901]["'foo'"]
+ |     |  +-Jade.ParamDExpression [1896, 1901]["'foo'"]
+ |     +-Jade.TagArgs [1902, 1915]["(", "class", "=", "btn", ")"]
+ |        +-Jade.TagArg [1903, 1914]["class", "=", "btn"]
+ |           +-Jade.TagParamKey [1903, 1908]["class"]
+ |           +-keywords!("=", "!=") [1908, 1909]["="]
+ |           +-Jade.TagParamValue [1909, 1914]["btn"]
+ |              +-Jade.Str [1909, 1914]["btn"]
+ +-Jade.Line [1916, 1941]["mixin", "list", "(", "id", ",", "...", "items", ")", "\n"]
+ |  +-Jade.MixinDecl [1916, 1940]["mixin", "list", "(", "id", ",", "...", "items", ")"]
+ |     +-Jade.DVariableName [1922, 1926]["list"]
+ |     +-Jade.MixinDeclArgs [1926, 1940]["(", "id", ",", "...", "items", ")"]
+ |        +-Jade.DVariableName [1927, 1929]["id"]
+ |        +-Jade.MixinVarArg [1929, 1939][",", "...", "items"]
+ |           +-Jade.DVariableName [1934, 1939]["items"]
+ +-Jade.Line [1941, 1952]["\t", "ul", "(", "id", "=", "id", ")", "\n"]
+ |  +-Jade.Indent [1941, 1942]["\t"]
+ |  +-Jade.Line [1942, 1952]["ul", "(", "id", "=", "id", ")", "\n"]
+ |     +-Jade.Tag [1942, 1951]["ul", "(", "id", "=", "id", ")"]
+ |        +-Jade.Id [1942, 1944]["ul"]
+ |        +-Jade.TagArgs [1944, 1951]["(", "id", "=", "id", ")"]
+ |           +-Jade.TagArg [1945, 1950]["id", "=", "id"]
+ |              +-Jade.TagParamKey [1945, 1947]["id"]
+ |              +-keywords!("=", "!=") [1947, 1948]["="]
+ |              +-Jade.TagParamValue [1948, 1950]["id"]
+ |                 +-Jade.ParamDExpression [1948, 1950]["id"]
+ +-Jade.Line [1952, 1973]["\t\t", "each", "item", "in", "items", "\n"]
+ |  +-Jade.Indent [1952, 1954]["\t\t"]
+ |  +-Jade.Line [1954, 1973]["each", "item", "in", "items", "\n"]
+ |     +-Jade.Iteration [1954, 1972]["each", "item", "in", "items"]
+ |        +-Jade.DVariableName [1959, 1963]["item"]
+ |        +-literal!("in") [1964, 1966]["in"]
+ |        +-Jade.DLineExpression [1967, 1972]["items"]
+ +-Jade.Line [1973, 1985]["\t\t\t", "li", "=", " item", "\n"]
+ |  +-Jade.Indent [1973, 1976]["\t\t\t"]
+ |  +-Jade.Line [1976, 1985]["li", "=", " item", "\n"]
+ |     +-Jade.Tag [1976, 1984]["li", "=", " item"]
+ |        +-Jade.Id [1976, 1978]["li"]
+ |        +-Jade.BufferedCode [1978, 1984]["=", " item"]
+ |           +-keywords!("=", "!=") [1978, 1979]["="]
+ |           +-Jade.DLineExpression [1979, 1984][" item"]
+ +-Jade.Line [1985, 1986]["\n"]
+ +-Jade.Line [1986, 2015]["+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")", "\n"]
+ |  +-Jade.Mixin [1986, 2014]["+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")"]
+ |     +-Jade.DVariableName [1987, 1991]["list"]
+ |     +-Jade.TagParamValue [1992, 2001]["'my-list'"]
+ |     |  +-Jade.ParamDExpression [1992, 2001]["'my-list'"]
+ |     +-Jade.TagParamValue [2003, 2004]["1"]
+ |     |  +-Jade.ParamDExpression [2003, 2004]["1"]
+ |     +-Jade.TagParamValue [2006, 2007]["2"]
+ |     |  +-Jade.ParamDExpression [2006, 2007]["2"]
+ |     +-Jade.TagParamValue [2009, 2010]["3"]
+ |     |  +-Jade.ParamDExpression [2009, 2010]["3"]
+ |     +-Jade.TagParamValue [2012, 2013]["4"]
+ |        +-Jade.ParamDExpression [2012, 2013]["4"]
+ +-Jade.Line [2015, 2016]["\n"]
+ +-Jade.Line [2016, 2371]["p", "\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n", "}", "\n"]
+ |  +-Jade.Tag [2016, 2370]["p", "\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n", "}"]
+ |     +-Jade.Id [2016, 2017]["p"]
+ |     +-Jade.BlockInATag [2017, 2370]["\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n", "}"]
+ +-Jade.Line [2371, 2427]["p", "\n\tThis is supposed to just be text inside a p tag.", "\n", "}", "\n"]
+ |  +-Jade.Tag [2371, 2426]["p", "\n\tThis is supposed to just be text inside a p tag.", "\n", "}"]
+ |     +-Jade.Id [2371, 2372]["p"]
+ |     +-Jade.BlockInATag [2372, 2426]["\n\tThis is supposed to just be text inside a p tag.", "\n", "}"]
+ +-Jade.Line [2427, 2470]["-", " var msg = {toUpperCase: function () {}};", "\n"]
+ |  +-Jade.UnbufferedCode [2427, 2469]["-", " var msg = {toUpperCase: function () {}};"]
+ |     +-Jade.DLineExpression [2428, 2469][" var msg = {toUpperCase: function () {}};"]
+ +-Jade.Line [2470, 2541]["p", "This is ", "#{", "msg.toUpperCase()", " <- ", "#[", "a", "(", "href", "=", "#", ")", "upper case", "]", " characters", "\n"]
+ |  +-Jade.Tag [2470, 2540]["p", "This is ", "#{", "msg.toUpperCase()", " <- ", "#[", "a", "(", "href", "=", "#", ")", "upper case", "]", " characters"]
+ |     +-Jade.Id [2470, 2471]["p"]
+ |     +-Jade.InlineText [2472, 2480]["This is "]
+ |     +-Jade.StringInterpolation [2480, 2500]["#{", "msg.toUpperCase()"]
+ |     +-Jade.InlineText [2500, 2504][" <- "]
+ |     +-Jade.StringInterpolation [2504, 2529]["#[", "a", "(", "href", "=", "#", ")", "upper case", "]"]
+ |     |  +-Jade.TagInterpolate [2506, 2528]["a", "(", "href", "=", "#", ")", "upper case"]
+ |     |     +-Jade.Id [2506, 2507]["a"]
+ |     |     +-Jade.TagArgs [2507, 2517]["(", "href", "=", "#", ")"]
+ |     |     |  +-Jade.TagArg [2508, 2516]["href", "=", "#"]
+ |     |     |     +-Jade.TagParamKey [2508, 2512]["href"]
+ |     |     |     +-keywords!("=", "!=") [2512, 2513]["="]
+ |     |     |     +-Jade.TagParamValue [2513, 2516]["#"]
+ |     |     |        +-Jade.Str [2513, 2516]["#"]
+ |     |     +-Jade.TextStop!(literal!("]")) [2518, 2528]["upper case"]
+ |     +-Jade.InlineText [2529, 2540][" characters"]
+ +-Jade.Line [2541, 2542]["\n"]
+ +-Jade.Line [2542, 2582]["//", "-", " Following is asdf, its the last tag", "\n"]
+ |  +-Jade.Comment [2542, 2581]["//", "-", " Following is asdf, its the last tag"]
+ |     +-literal!("-") [2544, 2545]["-"]
+ |     +-Jade.InlineText [2545, 2581][" Following is asdf, its the last tag"]
+ +-Jade.Line [2582, 2587]["asdf", "\n"]
+    +-Jade.Tag [2582, 2586]["asdf"]
+       +-Jade.Id [2582, 2586]["asdf"]
 
+writeln(`<!-- Jade.RootTag:["html", "\n", "<!--[if IE 8]>"] -->`);
 
+/** jade template: base_layout.jade 101 */
+writeln(`<!-- Jade.DocType:["html"] -->`);
+
+writeln(`<!-- 2 Jade.DocType depth:0 -->`);
+writeln(`<!-- Jade.RawHtmlTag:["<!--[if IE 8]>"] -->`);
+
+writeln(`<!-- 2 Jade.RawHtmlTag depth:0 -->`);
+writeln(`<!-- Jade.Tag:["html", "(", "lang"] -->`);
+<html lang="en" class="lt-ie9">|Jade.IdJade.TagArgs|</html>
+writeln(`<html></html>`);
+writeln(`<!-- Jade.RawHtmlTag:["<![endif]-->"] -->`);
+
+writeln(`<!-- 2 Jade.RawHtmlTag depth:0 -->`);
+writeln(`<!-- Jade.Tag:["html", "(", "lang"] -->`);
+<html lang="en">|Jade.IdJade.TagArgs|
+writeln(`<html>`);
+writeln(`	<!-- Jade.Tag:["head"] -->`);
+	<head>|Jade.Id|
+writeln(`	<head>`);
+writeln(`<!-- Jade.Block:["title"] -->`);
+
+writeln(`<block>`);
+writeln(`	<!-- Jade.Tag:["title", "Index of Demo"] -->`);
+	<title>|Jade.IdJade.InlineText|Index of Demo</title>
+writeln(`	<title></title>`);
+writeln(`</block>`);
+writeln(`		<!-- Jade.Tag:["style"] -->`);
+		<style>|Jade.Id|
+writeln(`		<style>`);
+writeln(`			<!-- Jade.Include:["style.css"] -->`);
+
+writeln(import(`style.css`));
+writeln(`		</style>`);
+		</style>
+writeln(`	</head>`);
+	</head>
+writeln(`	<!-- Jade.Tag:["body", ".", "base-css"] -->`);
+	<body ng-app="MyApp" ng-controller="CtrlII">|Jade.IdJade.CssClassJade.TagArgs|
+writeln(`	<body>`);
+writeln(`<!-- Jade.Block:["content"] -->`);
+
+writeln(`<block>`);
+writeln(`	<!-- Jade.Comment:["//", " this is the actual displayed content"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:1 -->`);
+writeln(`	<!-- Jade.Tag:["p", "(", "id"] -->`);
+	<p id= p-form-hook=some_d_var ? "yes" :"no" marked>|Jade.IdJade.TagArgsJade.InlineTextJade.StringInterpolationJade.InlineText| that
+writeln(`	<p>`);
+writeln(`				<!-- Jade.PipedText:["#[", "b", "test"] -->`);
+
+Jade.PipedText [220, 258]["#[", "b", "test", "]", " continues ", "#[", "i", "on", "]", " multiple"]
+ +-Jade.StringInterpolation [222, 231]["#[", "b", "test", "]"]
+ |  +-Jade.TagInterpolate [224, 230]["b", "test"]
+ |     +-Jade.Id [224, 225]["b"]
+ |     +-Jade.TextStop!(literal!("]")) [226, 230]["test"]
+ +-Jade.InlineText [231, 242][" continues "]
+ +-Jade.StringInterpolation [242, 249]["#[", "i", "on", "]"]
+ |  +-Jade.TagInterpolate [244, 248]["i", "on"]
+ |     +-Jade.Id [244, 245]["i"]
+ |     +-Jade.TextStop!(literal!("]")) [246, 248]["on"]
+ +-Jade.InlineText [249, 258][" multiple"]
+ continues  multiple
+writeln(`				<!-- Jade.PipedText:["lines goto ", "#[", "span"] -->`);
+
+Jade.PipedText [263, 414]["lines goto ", "#[", "span", "(", "woot", ")", "a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference", "]"]
+ +-Jade.InlineText [265, 276]["lines goto "]
+ +-Jade.StringInterpolation [276, 414]["#[", "span", "(", "woot", ")", "a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference", "]"]
+    +-Jade.TagInterpolate [278, 413]["span", "(", "woot", ")", "a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference"]
+       +-Jade.Id [278, 282]["span"]
+       +-Jade.TagArgs [282, 288]["(", "woot", ")"]
+       |  +-Jade.TagArg [283, 287]["woot"]
+       |     +-Jade.TagParamKey [283, 287]["woot"]
+       +-Jade.TextStop!(literal!("]")) [289, 413]["a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference"]
+lines goto 
+writeln(`				<!-- Jade.Comment:["//", " TODO: should allow empty lines in PipedText or at least show an error"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:4 -->`);
+writeln(`				<!-- Jade.Comment:["//", "|"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:4 -->`);
+writeln(`				<!-- Jade.PipedText:["to see examples of interpolation"] -->`);
+
+Jade.PipedText [504, 538]["to see examples of interpolation"]
+ +-Jade.InlineText [506, 538]["to see examples of interpolation"]
+to see examples of interpolation
+writeln(`	</p>`);
+	</p>
+writeln(`	<!-- Jade.Tag:["ul", "(", "isit"] -->`);
+	<ul isit=some_other_d_var == "woot">|Jade.IdJade.TagArgs|
+writeln(`	<ul>`);
+writeln(`		<!-- Jade.Tag:["li", ".", "one-css"] -->`);
+		<li>|Jade.IdJade.CssClassJade.CssClassJade.InlineTagJade.InlineTagJade.BufferedCode|</li>
+writeln(`		<li></li>`);
+writeln(`	</ul>`);
+	</ul>
+writeln(`	<!-- Jade.Tag:[".", "img-holder"] -->`);
+	<div>|Jade.CssClass|
+writeln(`	<div>`);
+writeln(`		<!-- Jade.Tag:["img", ".", "image"] -->`);
+		<img src="logo2.gif" style=background=background,padding=padding>|Jade.IdJade.CssClassJade.TagArgsJade.SelfCloser|</img>
+writeln(`		<img />`);
+writeln(`	</div>`);
+	</div>
+writeln(`</block>`);
+writeln(`	</body>`);
+	</body>
+writeln(`	<!-- Jade.Tag:["woot", "content1", "asdf"] -->`);
+	<woot id="content1">|Jade.IdJade.CssIdJade.InlineText|asdf
+writeln(`	<woot>`);
+writeln(`		<!-- Jade.Tag:["woot2", "(", "class"] -->`);
+		<woot2 id="woot2" class=c1,c2>|Jade.CssIdJade.TagArgsJade.InlineText|asdfasdf</woot2>
+writeln(`		<woot2></woot2>`);
+writeln(`		<!-- Jade.Tag:["woot3", "(", "class"] -->`);
+		<woot3 class=active=active>|Jade.IdJade.TagArgs|</woot3>
+writeln(`		<woot3></woot3>`);
+writeln(`<!-- Jade.Block:["footer"] -->`);
+
+writeln(`<block>`);
+writeln(`	<!-- Jade.Tag:["p", "This is the text in footer block"] -->`);
+	<p>|Jade.IdJade.InlineText|This is the text in footer block</p>
+writeln(`	<p></p>`);
+writeln(`</block>`);
+writeln(`	</woot>`);
+	</woot>
+writeln(`</html>`);
+</html>
+writeln(`<!-- Jade.UnbufferedCode:["-", " var localhost = \"remotehost\";"] -->`);
+ var localhost = "remotehost";
+writeln(`<!-- Jade.UnbufferedCode:["-", " var user = {};"] -->`);
+ var user = {};
+writeln(`<!-- Jade.Conditional:["if", " \"localhost\" == host"] -->`);
+
+writeln(`<!-- 2 Jade.Conditional depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["div", "foo", "("] -->`);
+	<div id="foo" data-bar="foo" goot-one>|Jade.IdJade.CssIdJade.TagArgsJade.AndAttributes|
+writeln(`	<div>`);
+writeln(`		<!-- Jade.Comment:["//", "-", " include:markdown ./includes/footer.jade"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:2 -->`);
+writeln(`	</div>`);
+	</div>
+writeln(`<!-- Jade.Conditional:["else"] -->`);
+
+writeln(`<!-- 2 Jade.Conditional depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["merrrt"] -->`);
+	<merrrt>|Jade.Id|</merrrt>
+writeln(`	<merrrt></merrrt>`);
+writeln(`<!-- Jade.Conditional:["unless", " !user.isAnonymous"] -->`);
+
+writeln(`<!-- 2 Jade.Conditional depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["You", "are logged in"] -->`);
+	<You>|Jade.IdJade.InlineText|are logged in</You>
+writeln(`	<You></You>`);
+writeln(`<!-- Jade.Comment:["//", "-", " :markdown"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:0 -->`);
+writeln(`<!-- Jade.Comment:["//", "-", " \t### Markdown Need dedent support to parse this"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:0 -->`);
+writeln(`<!-- Jade.Comment:["//", "-", " \tI often like including markdown documents.{"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:0 -->`);
+writeln(`<!-- Jade.AnyContentLine:["}"] -->`);
+
+writeln(`<!-- 2 Jade.AnyContentLine depth:0 -->`);
+writeln(`<!-- Jade.Tag:["ul"] -->`);
+<ul>|Jade.Id|
+writeln(`<ul>`);
+writeln(`	<!-- Jade.Iteration:["each", "val", ","] -->`);
+
+writeln(`<!-- 2 Jade.Iteration depth:1 -->`);
+writeln(`		<!-- Jade.Tag:["li", "=", " index + ': ' + val"] -->`);
+		<li>|Jade.IdJade.BufferedCode|</li>
+writeln(`		<li></li>`);
+writeln(`</ul>`);
+</ul>
+writeln(`<!-- Jade.Iteration:["while", " n < 4"] -->`);
+
+writeln(`<!-- 2 Jade.Iteration depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["li", "=", " n++"] -->`);
+	<li>|Jade.IdJade.BufferedCode|</li>
+writeln(`	<li></li>`);
+writeln(`<!-- Jade.UnbufferedCode:["-", " var friends = 0;"] -->`);
+ var friends = 0;
+writeln(`<!-- Jade.Case:["case", " ", "friends"] -->`);
+
+writeln(`<!-- 2 Jade.Case depth:0 -->`);
+writeln(`	<!-- Jade.Case:["when", " 0"] -->`);
+
+writeln(`<!-- 2 Jade.Case depth:1 -->`);
+writeln(`	<!-- Jade.Case:["when", " 1"] -->`);
+
+writeln(`<!-- 2 Jade.Case depth:1 -->`);
+writeln(`		<!-- Jade.Tag:["p", "you have very few friends"] -->`);
+		<p>|Jade.IdJade.InlineText|you have very few friends</p>
+writeln(`		<p></p>`);
+writeln(`	<!-- Jade.Case:["default", ":", "p"] -->`);
+
+writeln(`<!-- 2 Jade.Case depth:1 -->`);
+writeln(`<!-- Jade.Comment:["//", "-", " Declaration"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:0 -->`);
+writeln(`<!-- Jade.MixinDecl:["mixin", "list"] -->`);
+
+writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["ul"] -->`);
+	<ul>|Jade.Id|
+writeln(`	<ul>`);
+writeln(`		<!-- Jade.Tag:["li", "foo"] -->`);
+		<li>|Jade.IdJade.InlineText|foo</li>
+writeln(`		<li></li>`);
+writeln(`		<!-- Jade.Tag:["li", "bar"] -->`);
+		<li>|Jade.IdJade.InlineText|bar</li>
+writeln(`		<li></li>`);
+writeln(`		<!-- Jade.Tag:["li", "baz"] -->`);
+		<li>|Jade.IdJade.InlineText|baz</li>
+writeln(`		<li></li>`);
+writeln(`	</ul>`);
+	</ul>
+writeln(`<!-- Jade.Comment:["//", "-", " Use"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:0 -->`);
+writeln(`<!-- Jade.Mixin:["+", "list"] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`<!-- Jade.Mixin:["+", "list"] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`<!-- Jade.MixinDecl:["mixin", "pet", "("] -->`);
+
+writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["li", ".", "pet"] -->`);
+	<li>|Jade.IdJade.CssClassJade.BufferedCode|</li>
+writeln(`	<li></li>`);
+writeln(`<!-- Jade.Tag:["ul"] -->`);
+<ul>|Jade.Id|
+writeln(`<ul>`);
+writeln(`	<!-- Jade.Mixin:["+", "pet", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:1 -->`);
+writeln(`	<!-- Jade.Mixin:["+", "pet", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:1 -->`);
+writeln(`	<!-- Jade.Mixin:["+", "pet", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:1 -->`);
+writeln(`</ul>`);
+</ul>
+writeln(`<!-- Jade.MixinDecl:["mixin", "article", "("] -->`);
+
+writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);
+writeln(`	<!-- Jade.Tag:[".", "article"] -->`);
+	<div>|Jade.CssClass|
+writeln(`	<div>`);
+writeln(`		<!-- Jade.Tag:[".", "article-wrapper"] -->`);
+		<div>|Jade.CssClass|
+writeln(`		<div>`);
+writeln(`			<!-- Jade.Tag:["h1", "=", " title"] -->`);
+			<h1>|Jade.IdJade.BufferedCode|</h1>
+writeln(`			<h1></h1>`);
+writeln(`			<!-- Jade.Conditional:["if", "block"] -->`);
+
+writeln(`<!-- 2 Jade.Conditional depth:3 -->`);
+writeln(`				<!-- Jade.Tag:["block"] -->`);
+				<block>|Jade.Id|</block>
+writeln(`				<block></block>`);
+writeln(`			<!-- Jade.Conditional:["else"] -->`);
+
+writeln(`<!-- 2 Jade.Conditional depth:3 -->`);
+writeln(`				<!-- Jade.Tag:["p", "No content provided"] -->`);
+				<p>|Jade.IdJade.InlineText|No content provided</p>
+writeln(`				<p></p>`);
+writeln(`		</div>`);
+		</div>
+writeln(`	</div>`);
+	</div>
+writeln(`<!-- Jade.Mixin:["+", "article", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`<!-- Jade.Mixin:["+", "article", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["p", "This is my"] -->`);
+	<p>|Jade.IdJade.InlineText|This is my</p>
+writeln(`	<p></p>`);
+writeln(`	<!-- Jade.Tag:["p", "Amazing article"] -->`);
+	<p>|Jade.IdJade.InlineText|Amazing article</p>
+writeln(`	<p></p>`);
+writeln(`<!-- Jade.MixinDecl:["mixin", "link", "("] -->`);
+
+writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);
+writeln(`	<!-- Jade.Comment:["//", "-", " attributes == {class: \"btn\"}"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:1 -->`);
+writeln(`	<!-- Jade.Tag:["a", "(", "class"] -->`);
+	<a class!=attributes.class href=href>|Jade.IdJade.TagArgsJade.BufferedCode|</a>
+writeln(`	<a></a>`);
+writeln(`<!-- Jade.Mixin:["+", "link", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`<!-- Jade.MixinDecl:["mixin", "link", "("] -->`);
+
+writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["a", "(", "href"] -->`);
+	<a href=href>|Jade.IdJade.TagArgsJade.AndAttributesJade.BufferedCode|</a>
+writeln(`	<a></a>`);
+writeln(`<!-- Jade.Mixin:["+", "link", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`<!-- Jade.MixinDecl:["mixin", "list", "("] -->`);
+
+writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);
+writeln(`	<!-- Jade.Tag:["ul", "(", "id"] -->`);
+	<ul id=id>|Jade.IdJade.TagArgs|
+writeln(`	<ul>`);
+writeln(`		<!-- Jade.Iteration:["each", "item", "in"] -->`);
+
+writeln(`<!-- 2 Jade.Iteration depth:2 -->`);
+writeln(`			<!-- Jade.Tag:["li", "=", " item"] -->`);
+			<li>|Jade.IdJade.BufferedCode|</li>
+writeln(`			<li></li>`);
+writeln(`	</ul>`);
+	</ul>
+writeln(`<!-- Jade.Mixin:["+", "list", "("] -->`);
+
+writeln(`<!-- 2 Jade.Mixin depth:0 -->`);
+writeln(`<!-- Jade.Tag:["p", "\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n"] -->`);
+<p>|Jade.IdJade.BlockInATag|</p>
+writeln(`<p></p>`);
+writeln(`<!-- Jade.Tag:["p", "\n\tThis is supposed to just be text inside a p tag.", "\n"] -->`);
+<p>|Jade.IdJade.BlockInATag|</p>
+writeln(`<p></p>`);
+writeln(`<!-- Jade.UnbufferedCode:["-", " var msg = {toUpperCase: function () {}};"] -->`);
+ var msg = {toUpperCase: function () {}};
+writeln(`<!-- Jade.Tag:["p", "This is ", "#{"] -->`);
+<p>|Jade.IdJade.InlineTextJade.StringInterpolationJade.InlineTextJade.StringInterpolationJade.InlineText| characters</p>
+writeln(`<p></p>`);
+writeln(`<!-- Jade.Comment:["//", "-", " Following is asdf, its the last tag"] -->`);
+
+writeln(`<!-- 2 Jade.Comment depth:0 -->`);
+writeln(`<!-- Jade.Tag:["asdf"] -->`);
+<asdf>|Jade.Id|</asdf>
+writeln(`<asdf></asdf>`);
