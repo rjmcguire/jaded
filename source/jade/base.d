@@ -86,7 +86,7 @@ struct JadeParser {
 		string toString() {
 			auto ret = appender!string;
 			//ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 0 ? p.matches[0] : "");
-			ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
 			//return "%s".format(p.name);
 			ret ~= prolog;
 			foreach (item; items) {
@@ -99,13 +99,57 @@ struct JadeParser {
 			ret ~= epilog;
 			return ret.data;
 		}
-		string getOutput(Item[] blockTemplates) {
+		string getOutput(Item[] blockTemplates, Item rootItem=null) {
+			if (rootItem is null) {
+				rootItem = this;
+			}
 			auto ret = appender!string;
 			if (p.name == "Jade.MixinDecl") {
 				ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
+				// TODO: must render else block if there is no items for "if block"
+				auto conditionalBlock = this.findByMatch("Jade.Conditional", 1, "block");
+				if (conditionalBlock !is null) {
+					if (conditionalBlock.matches[0] == "if") {
+						if (conditionalBlock.items.length <= 0 || (conditionalBlock.items[0].name=="Jade.Tag" && conditionalBlock.items[0].matches[0]=="block")) {
+							conditionalBlock.prolog = "";
+							conditionalBlock.epilog = "";
+							conditionalBlock.items = [];
+						} else {
+							auto elseBlock = this.findByMatch("Jade.Conditional", 0, "else");
+							elseBlock.prolog = "";
+							elseBlock.epilog = "";
+							elseBlock.items = [];
+						}
+					}
+				}
 			}
 			if (p.name == "Jade.Mixin") {
-				ret ~= "%s MixinCHILDCOUNT:%s".format(p, items.length);
+				auto mixinDecl = rootItem.findByMatch("Jade.MixinDecl", 0, p.matches[0]);
+				if (mixinDecl is null) { throw new Exception("Mixin does not exist"); }
+
+				//mixinDecl = mixinDecl.dup;
+				auto conditionalBlock = mixinDecl.findByMatch("Jade.Conditional", 1, "block");
+				Item blockToReplace;
+				if (conditionalBlock !is null) {
+					if (conditionalBlock.matches[0] != "if") {
+						conditionalBlock = null;
+					} else {
+						blockToReplace = conditionalBlock;
+					}
+				}
+				if (!blockToReplace) {
+					blockToReplace = mixinDecl.findByMatch("Jade.Tag", 0, "block");
+				}
+				ret ~= "%s MixinCHILDCOUNT:%s, BlockReplace:%s".format(p, items.length, mixinDecl);
+				if (items.length > 0 && !blockToReplace) {
+					throw new Exception("warning: block supplied to mixin that has no block");
+				}
+				if (blockToReplace !is null) {
+					ret ~= "|||BTR:%s|||".format(blockToReplace.matches);
+					blockToReplace.items = this.items;
+					ret ~= mixinDecl.getOutput(blockTemplates);
+				}
+				return ret.data;
 			}
 			ret ~= "\n";
 			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
@@ -114,13 +158,13 @@ struct JadeParser {
 				foreach (item; blockTemplates) {
 					foreach (b; item.findAll("Jade.Block")) {
 						if (b.matches[0] == p.matches[0]) { // Do the block names match?
-							return b.getOutput(blockTemplates[1..$]);
+							return b.getOutput(blockTemplates[1..$], rootItem);
 						}
 					}
 				}
 			}
 			foreach(item; items) {
-				ret ~= item.getOutput(blockTemplates);
+				ret ~= item.getOutput(blockTemplates, rootItem);
 			}
 			ret ~= epilog;
 			return ret.data;
@@ -132,6 +176,18 @@ struct JadeParser {
 					return item;
 				}
 				auto innerItem = item.find(name);
+				if (innerItem !is null) {
+					return innerItem;
+				}
+			}
+			return null;
+		}
+		Item findByMatch(string name, int matchIndex, string matchValue) {
+			foreach (item; items) {
+				if (item.name == name && item.matches.length > matchIndex && item.matches[matchIndex] == matchValue) {
+					return item;
+				}
+				auto innerItem = item.findByMatch(name, matchIndex, matchValue);
 				if (innerItem !is null) {
 					return innerItem;
 				}
@@ -334,7 +390,7 @@ struct JadeParser {
 					argNames ~= name;
 				}
 
-				token.prolog ~= "\nvoid JadeMixin_%s(Attributes, %s)(Attributes attributes, %s) {\n\t".format(token.matches[0], templateArgNames.join(", "), argNames.join(", "));
+				//token.prolog ~= "\nvoid JadeMixin_%s(Attributes, %s)(Attributes attributes, %s) {\n\t".format(token.matches[0], templateArgNames.join(", "), argNames.join(", "));
 				range.popFront();
 				token.items ~= render(token.depth);
 				token.epilog ~= "\n}";
@@ -357,12 +413,16 @@ struct JadeParser {
 				}
 				range.popFront();
 				token.items = render(token.depth);
-				token.prolog ~= "string block;";
-				foreach (item; token.items) {
-					token.prolog ~= "\nblock ~= `%s`;".format(item.getOutput([]));
-				}
-				token.items = []; // remove all children, we've processed them.
-				token.prolog ~= "%s\nJadeMixin_%s(%s, %s, block);".format(token.p, token.matches[0], attributesString, args.join(", "));
+				//token.prolog ~= "string block;";
+				//foreach (item; token.items) {
+				//	token.prolog ~= "\nblock ~= `%s`;".format(item.getOutput([]));
+				//}
+				//token.items = []; // remove all children, we've processed them.
+				//token.prolog ~= "%s\nJadeMixin_%s(%s, %s, block);".format(token.p, token.matches[0], attributesString, args.join(", "));
+				break;
+			case "Jade.Conditional":
+				range.popFront();
+				token.items = render(token.depth);
 				break;
 			case "Jade.Line":
 			default:
@@ -500,15 +560,23 @@ struct JadeParser {
 			if (name == "|") {
 				return "%s|%s".format(str, inlineText);
 			}
+			string classString;
+			if (cssClasses.length > 0) {
+				classString ~= ` class="`;
+				classString ~= cssClasses.join(" ");
+				classString ~= `"`;
+			}
 			string attribs;
 			if (cssId.matches) {
 				attribs ~= " id=\"%s\"".format(cssId.matches[0]);
 			}
 			attribs ~= tagArgs.toHtml;
+
+			if (str.length>0) str = "|"~ str ~"|";
 			if (!hasChildren) {
-				return "%s<%s%s>|%s|%s</%s>".format("\t".replicate(indent), name, attribs, str, inlineText, name);
+				return "%s<%s%s%s>%s%s</%s>".format("\t".replicate(indent), name, classString, attribs, str, inlineText, name);
 			}
-			return "%s<%s%s>|%s|%s".format("\t".replicate(indent), name, attribs, str, inlineText);
+			return "%s<%s%s%s>%s%s".format("\t".replicate(indent), name, classString, attribs, str, inlineText);
 		}
 		string epilog() {
 			if (!hasChildren || name == "|") {
