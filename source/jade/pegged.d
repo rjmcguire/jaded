@@ -76,9 +76,9 @@ JsonKey <~
 JsonObjectDExpression <~ (! (',' / '}') .)+
 InlineText	<~ (! ('\r\n' / "\n" / '#[' / '#{' / '!{') .)*
 PipedText	<-
-	/ :'|' :Spacing+ InlineText? (StringInterpolation+ InlineText)*
-	#/ :'|' (! NewLine .)+
-	#/ :'|' endOfLine
+	/ '|' :Spacing+ InlineText? (StringInterpolation+ InlineText)*
+	#/ '|' (! NewLine .)+
+	#/ '|' endOfLine
 Spacing	<- (' ' / tab)+
 NewLine <: ('\r\n' / '\n')+ # Used <: to make sure this is not in the ParseTree, also left ^ off the brackets to leave the newline chars out
 Str	<- :doublequote ~(Char*) :doublequote
