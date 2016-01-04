@@ -1,11 +1,10 @@
 Performing "debug" build using dmd for x86_64.
 pegged 0.2.1: target for configuration "library" is up to date.
-jade ~master: building configuration "application"...
-Linking...
+jade ~master: target for configuration "application" is up to date.
 To force a rebuild of up-to-date targets, run again with --force.
 Running ./jade 
 templates count: 3
-Jade.RootTag [0, 2587]["html", "\n", "<!--[if IE 8]>", "\n", "html", "(", "lang", "=", "en", ",", "class", "=", "lt-ie9", ")", "\n", "<![endif]-->", "\n", "html", "(", "lang", "=", "en", ")", "\n", "\t", "head", "\n", "\t\t", "title", "\n", "\t\t\t", "title", "Page Title Here", "\n", "\t\t", "style", "\n", "\t\t\t", "style.css", "\n", "\t", "body", ".", "base-css", "(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")", "\n", "\t\t", "content", "\n", "\t\t\t", "//", " this is the displayed content", "\n", "\t\t\t", "p", "(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")", "This is a paragraph", "\n", "\t\t\t\t", "That continues on", "\n", "\t\t\t\t", "multiple lines", "\n", "\t\t\t", "ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")", "\n", "\t\t\t\t", "li", ".", "one-css", ".", "two-css", ":", "a", "(", "href", "!=", "#", ")", ":", "a", "(", "href", "!=", "#", ")", "!=", " clickme", "\n", "\t\t\t", ".", "img-holder", "\n", "\t\t\t\t", "img", ".", "image", "(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")", "/", "\n", "\t", "woot", "content1", "asdf", "\n", "\t\t", "woot2", "(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")", "asdfasdf", "\n", "\t\t", "woot3", "(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")", "\n", "\t\t", "footer", "\n", "\t\t\t", "p", "Placeholder footer block", "\n", "-", " var localhost = \"remotehost\";", "\n", "-", " var user = {};", "\n", "if", " \"localhost\" == host", "\n", "\t", "div", "foo", "(", "data-bar", "=", "foo", ",", "goot-one", ")", "&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")", "\n", "\t\t", "//", "-", " include:markdown ./includes/footer.jade", "\n", "else", "\n", "\t", "merrrt", "\n", "unless", " !user.isAnonymous", "\n", "\t", "You", "are logged in", "\n", "//", "-", " :markdown", "\n", "//", "-", " \t### Markdown Need dedent support to parse this", "\n", "//", "-", " \tI often like including markdown documents.{", "\n", "}", "\n", "ul", "\n", "\t", "each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n", "\t\t", "li", "=", " index + ': ' + val", "\n", "while", " n < 4", "\n", "\t", "li", "=", " n++", "\n", "\n", "-", " var friends = 0;", "\n", "case", " ", "friends", "\n", "\t", "when", " 0", "\n", "\t", "when", " 1", "\n", "\t\t", "p", "you have very few friends", "\n", "\t", "default", ":", "p", "you have ", "#{", "friends", " friends", "\n", "//", "-", " Declaration", "\n", "mixin", "list", "\n", "\t", "ul", "\n", "\t\t", "li", "foo", "\n", "\t\t", "li", "bar", "\n", "\t\t", "li", "baz", "\n", "//", "-", " Use", "\n", "+", "list", "\n", "+", "list", "\n", "mixin", "pet", "(", "name", ")", "\n", "\t", "li", ".", "pet", "=", " name", "\n", "ul", "\n", "\t", "+", "pet", "(", "cat", ")", "\n", "\t", "+", "pet", "(", "dog", ")", "\n", "\t", "+", "pet", "(", "pig", ")", "\n", "mixin", "article", "(", "title", ")", "\n", "\t", ".", "article", "\n", "\t\t", ".", "article-wrapper", "\n", "\t\t\t", "h1", "=", " title", "\n", "\t\t\t", "if", "block", "\n", "\t\t\t\t", "block", "\n", "\t\t\t", "else", "\n", "\t\t\t\t", "p", "No content provided", "\n", "\n", "+", "article", "(", "'Hello world'", ")", "\n", "\n", "+", "article", "(", "'Hello world'", ")", "\n", "\t", "p", "This is my", "\n", "\t", "p", "Amazing article", "\n", "mixin", "link", "(", "href", ",", "name", ")", "\n", "\t", "//", "-", " attributes == {class: \"btn\"}", "\n", "\t", "a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", " name", "\n", "+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n", "mixin", "link", "(", "href", ",", "name", ")", "\n", "\t", "a", "(", "href", "=", "href", ")", "&", "attributes", "(", "attributes", ")", "=", " name", "\n", "\n", "+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n", "mixin", "list", "(", "id", ",", "...", "items", ")", "\n", "\t", "ul", "(", "id", "=", "id", ")", "\n", "\t\t", "each", "item", "in", "items", "\n", "\t\t\t", "li", "=", " item", "\n", "\n", "+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")", "\n", "\n", "p", "\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n", "}", "\n", "p", "\n\tThis is supposed to just be text inside a p tag.", "\n", "}", "\n", "-", " var msg = {toUpperCase: function () {}};", "\n", "p", "This is ", "#{", "msg.toUpperCase()", " <- ", "#[", "a", "(", "href", "=", "#", ")", "upper case", "]", " characters", "\n", "\n", "//", "-", " Following is asdf, its the last tag", "\n", "asdf", "\n"]
+Jade.RootTag [0, 2587]["html", "\n", "<!--[if IE 8]>", "\n", "html", "(", "lang", "=", "en", ",", "class", "=", "lt-ie9", ")", "\n", "<![endif]-->", "\n", "html", "(", "lang", "=", "en", ")", "\n", "\t", "head", "\n", "\t\t", "title", "\n", "\t\t\t", "title", "Page Title Here", "\n", "\t\t", "style", "\n", "\t\t\t", "style.css", "\n", "\t", "body", ".", "base-css", "(", "ng-app", "=", "MyApp", ",", "ng-controller", "=", "CtrlII", ")", "\n", "\t\t", "content", "\n", "\t\t\t", "//", " this is the displayed content", "\n", "\t\t\t", "p", "(", "id", "=", ",", "p-form-hook", "=", "some_d_var ? \"yes\" :\"no\"", ",", "marked", ")", "This is a paragraph", "\n", "\t\t\t\t", "|", "That continues on", "\n", "\t\t\t\t", "|", "multiple lines", "\n", "\t\t\t", "ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")", "\n", "\t\t\t\t", "li", ".", "one-css", ".", "two-css", ":", "a", "(", "href", "!=", "#", ")", ":", "a", "(", "href", "!=", "#", ")", "!=", " clickme", "\n", "\t\t\t", ".", "img-holder", "\n", "\t\t\t\t", "img", ".", "image", "(", "src", "=", "logo.gif", ",", "style", "=", "background", ":", "\"red\"", "padding", ":", "\"0px\"", ")", "/", "\n", "\t", "woot", "content1", "asdf", "\n", "\t\t", "woot2", "(", "class", "=", "[", "\"", "c1", "\"", ",", "\"", "c2", "\"", "]", ")", "asdfasdf", "\n", "\t\t", "woot3", "(", "class", "=", "active", ":", "currentUrl === \"/about\"", ")", "\n", "\t\t", "footer", "\n", "\t\t\t", "p", "Placeholder footer block", "\n", "-", " var localhost = \"remotehost\";", "\n", "-", " var user = {};", "\n", "if", " \"localhost\" == host", "\n", "\t", "div", "foo", "(", "data-bar", "=", "foo", ",", "goot-one", ")", "&", "attributes", "(", "data-cew", ":", "\"baer\"", "ng-show", ":", "1234", ")", "\n", "\t\t", "//", "-", " include:markdown ./includes/footer.jade", "\n", "else", "\n", "\t", "merrrt", "\n", "unless", " !user.isAnonymous", "\n", "\t", "You", "are logged in", "\n", "//", "-", " :markdown", "\n", "//", "-", " \t### Markdown Need dedent support to parse this", "\n", "//", "-", " \tI often like including markdown documents.{", "\n", "}", "\n", "ul", "\n", "\t", "each", "val", ",", "index", "in", "{1:'one',2:'two',3:'three'}", "\n", "\t\t", "li", "=", " index + ': ' + val", "\n", "while", " n < 4", "\n", "\t", "li", "=", " n++", "\n", "\n", "-", " var friends = 0;", "\n", "case", " ", "friends", "\n", "\t", "when", " 0", "\n", "\t", "when", " 1", "\n", "\t\t", "p", "you have very few friends", "\n", "\t", "default", ":", "p", "you have ", "#{", "friends", " friends", "\n", "//", "-", " Declaration", "\n", "mixin", "list", "\n", "\t", "ul", "\n", "\t\t", "li", "foo", "\n", "\t\t", "li", "bar", "\n", "\t\t", "li", "baz", "\n", "//", "-", " Use", "\n", "+", "list", "\n", "+", "list", "\n", "mixin", "pet", "(", "name", ")", "\n", "\t", "li", ".", "pet", "=", " name", "\n", "ul", "\n", "\t", "+", "pet", "(", "cat", ")", "\n", "\t", "+", "pet", "(", "dog", ")", "\n", "\t", "+", "pet", "(", "pig", ")", "\n", "mixin", "article", "(", "title", ")", "\n", "\t", ".", "article", "\n", "\t\t", ".", "article-wrapper", "\n", "\t\t\t", "h1", "=", " title", "\n", "\t\t\t", "if", "block", "\n", "\t\t\t\t", "block", "\n", "\t\t\t", "else", "\n", "\t\t\t\t", "p", "No content provided", "\n", "\n", "+", "article", "(", "'Hello world'", ")", "\n", "\n", "+", "article", "(", "'Hello world'", ")", "\n", "\t", "p", "This is my", "\n", "\t", "p", "Amazing article", "\n", "mixin", "link", "(", "href", ",", "name", ")", "\n", "\t", "//", "-", " attributes == {class: \"btn\"}", "\n", "\t", "a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", " name", "\n", "+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n", "mixin", "link", "(", "href", ",", "name", ")", "\n", "\t", "a", "(", "href", "=", "href", ")", "&", "attributes", "(", "attributes", ")", "=", " name", "\n", "\n", "+", "link", "(", "'/foo'", ",", "'foo'", ")", "(", "class", "=", "btn", ")", "\n", "mixin", "list", "(", "id", ",", "...", "items", ")", "\n", "\t", "ul", "(", "id", "=", "id", ")", "\n", "\t\t", "each", "item", "in", "items", "\n", "\t\t\t", "li", "=", " item", "\n", "\n", "+", "list", "(", "'my-list'", ",", "1", ",", "2", ",", "3", ",", "4", ")", "\n", "\n", "p", "\n\tIf you take a look at this page's source #[span(woot) a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") on GitHub],\n\tyoull see several places where the tag interpolation operator is\n\tused like so.\n\t.quote // this is raw text so the .quote means nothing to jade\n\t\tp Joel: !{riskyBusiness}", "\n", "}", "\n", "p", "\n\tThis is supposed to just be text inside a p tag.", "\n", "}", "\n", "-", " var msg = {toUpperCase: function () {}};", "\n", "p", "This is ", "#{", "msg.toUpperCase()", " <- ", "#[", "a", "(", "href", "=", "#", ")", "upper case", "]", " characters", "\n", "\n", "//", "-", " Following is asdf, its the last tag", "\n", "asdf", "\n"]
  +-Jade.DocType [0, 12]["html"]
  +-Jade.Line [13, 28]["<!--[if IE 8]>", "\n"]
  |  +-Jade.RawHtmlTag [13, 27]["<!--[if IE 8]>"]
@@ -104,15 +103,15 @@ Jade.RootTag [0, 2587]["html", "\n", "<!--[if IE 8]>", "\n", "html", "(", "lang"
  |        |  +-Jade.TagArg [320, 326]["marked"]
  |        |     +-Jade.TagParamKey [320, 326]["marked"]
  |        +-Jade.InlineText [328, 347]["This is a paragraph"]
- +-Jade.Line [348, 372]["\t\t\t\t", "That continues on", "\n"]
+ +-Jade.Line [348, 372]["\t\t\t\t", "|", "That continues on", "\n"]
  |  +-Jade.Indent [348, 352]["\t\t\t\t"]
- |  +-Jade.Line [352, 372]["That continues on", "\n"]
- |     +-Jade.PipedText [352, 371]["That continues on"]
+ |  +-Jade.Line [352, 372]["|", "That continues on", "\n"]
+ |     +-Jade.PipedText [352, 371]["|", "That continues on"]
  |        +-Jade.InlineText [354, 371]["That continues on"]
- +-Jade.Line [372, 393]["\t\t\t\t", "multiple lines", "\n"]
+ +-Jade.Line [372, 393]["\t\t\t\t", "|", "multiple lines", "\n"]
  |  +-Jade.Indent [372, 376]["\t\t\t\t"]
- |  +-Jade.Line [376, 393]["multiple lines", "\n"]
- |     +-Jade.PipedText [376, 392]["multiple lines"]
+ |  +-Jade.Line [376, 393]["|", "multiple lines", "\n"]
+ |     +-Jade.PipedText [376, 392]["|", "multiple lines"]
  |        +-Jade.InlineText [378, 392]["multiple lines"]
  +-Jade.Line [393, 432]["\t\t\t", "ul", "(", "isit", "=", "some_other_d_var == \"woot\"", ")", "\n"]
  |  +-Jade.Indent [393, 396]["\t\t\t"]
@@ -716,45 +715,26 @@ writeln(`	<!-- Jade.Comment:["//", " this is the actual displayed content"] -->`
 
 writeln(`<!-- 2 Jade.Comment depth:1 -->`);
 writeln(`	<!-- Jade.Tag:["p", "(", "id"] -->`);
-	<p id= p-form-hook=some_d_var ? "yes" :"no" marked>|Jade.IdJade.TagArgsJade.InlineTextJade.StringInterpolationJade.InlineText| that
+	<p id= p-form-hook=some_d_var ? "yes" :"no" marked>|Jade.IdJade.TagArgsJade.InlineTextJade.StringInterpolationJade.InlineText|This is the index.jade 	<i>|Jade.IdJade.TextStop!(literal!("]"))|paragraph</i> that
 writeln(`	<p>`);
-writeln(`				<!-- Jade.PipedText:["#[", "b", "test"] -->`);
-
-Jade.PipedText [220, 258]["#[", "b", "test", "]", " continues ", "#[", "i", "on", "]", " multiple"]
- +-Jade.StringInterpolation [222, 231]["#[", "b", "test", "]"]
- |  +-Jade.TagInterpolate [224, 230]["b", "test"]
- |     +-Jade.Id [224, 225]["b"]
- |     +-Jade.TextStop!(literal!("]")) [226, 230]["test"]
- +-Jade.InlineText [231, 242][" continues "]
- +-Jade.StringInterpolation [242, 249]["#[", "i", "on", "]"]
- |  +-Jade.TagInterpolate [244, 248]["i", "on"]
- |     +-Jade.Id [244, 245]["i"]
- |     +-Jade.TextStop!(literal!("]")) [246, 248]["on"]
- +-Jade.InlineText [249, 258][" multiple"]
- continues  multiple
-writeln(`				<!-- Jade.PipedText:["lines goto ", "#[", "span"] -->`);
-
-Jade.PipedText [263, 414]["lines goto ", "#[", "span", "(", "woot", ")", "a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference", "]"]
- +-Jade.InlineText [265, 276]["lines goto "]
- +-Jade.StringInterpolation [276, 414]["#[", "span", "(", "woot", ")", "a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference", "]"]
-    +-Jade.TagInterpolate [278, 413]["span", "(", "woot", ")", "a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference"]
-       +-Jade.Id [278, 282]["span"]
-       +-Jade.TagArgs [282, 288]["(", "woot", ")"]
-       |  +-Jade.TagArg [283, 287]["woot"]
-       |     +-Jade.TagParamKey [283, 287]["woot"]
-       +-Jade.TextStop!(literal!("]")) [289, 413]["a(target=\"_blank\", href=\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\") Jade Reference"]
-lines goto 
+writeln(`				<!-- Jade.PipedText:["|", "#[", "b"] -->`);
+				<|>|Jade.StringInterpolationJade.InlineTextJade.StringInterpolationJade.InlineText|				<b>|Jade.IdJade.TextStop!(literal!("]"))|test</b> continues 				<i>|Jade.IdJade.TextStop!(literal!("]"))|on</i> multiple</|>
+================END PipedText===================
+				</|>
+writeln(`				<!-- Jade.PipedText:["|", "lines goto ", "#["] -->`);
+				<|>|Jade.InlineTextJade.StringInterpolation|lines goto 				<span woot>|Jade.IdJade.TagArgsJade.TextStop!(literal!("]"))|a(target="_blank", href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade") Jade Reference</span></|>
+================END PipedText===================
+				</|>
 writeln(`				<!-- Jade.Comment:["//", " TODO: should allow empty lines in PipedText or at least show an error"] -->`);
 
 writeln(`<!-- 2 Jade.Comment depth:4 -->`);
 writeln(`				<!-- Jade.Comment:["//", "|"] -->`);
 
 writeln(`<!-- 2 Jade.Comment depth:4 -->`);
-writeln(`				<!-- Jade.PipedText:["to see examples of interpolation"] -->`);
-
-Jade.PipedText [504, 538]["to see examples of interpolation"]
- +-Jade.InlineText [506, 538]["to see examples of interpolation"]
-to see examples of interpolation
+writeln(`				<!-- Jade.PipedText:["|", "to see examples of interpolation"] -->`);
+				<|>|Jade.InlineText|to see examples of interpolation</|>
+================END PipedText===================
+				</|>
 writeln(`	</p>`);
 	</p>
 writeln(`	<!-- Jade.Tag:["ul", "(", "isit"] -->`);
@@ -1005,7 +985,7 @@ writeln(`<p></p>`);
 writeln(`<!-- Jade.UnbufferedCode:["-", " var msg = {toUpperCase: function () {}};"] -->`);
  var msg = {toUpperCase: function () {}};
 writeln(`<!-- Jade.Tag:["p", "This is ", "#{"] -->`);
-<p>|Jade.IdJade.InlineTextJade.StringInterpolationJade.InlineTextJade.StringInterpolationJade.InlineText| characters</p>
+<p>|Jade.IdJade.InlineTextJade.StringInterpolationJade.InlineTextJade.StringInterpolationJade.InlineText|This is escape:["msg.toUpperCase()"] // EscapedStringInterpolation <- <a href="#">|Jade.IdJade.TagArgsJade.TextStop!(literal!("]"))|upper case</a> characters</p>
 writeln(`<p></p>`);
 writeln(`<!-- Jade.Comment:["//", "-", " Following is asdf, its the last tag"] -->`);
 

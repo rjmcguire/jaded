@@ -103,7 +103,7 @@
 			"file": "source/app.d",
 			"settings":
 			{
-				"buffer_size": 629,
+				"buffer_size": 1204,
 				"line_ending": "Unix"
 			}
 		},
@@ -128,7 +128,31 @@
 			"file": "source/jade/base.d",
 			"settings":
 			{
-				"buffer_size": 9490,
+				"buffer_size": 17920,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "[\n	writeln(`<!-- Jade.RootTag:[\"html\", \"\\n\", \"<!--[if IE 8]>\"] -->`);\n\n	/** jade template: base_layout.jade 101 */\n	writeln(`<!-- Jade.DocType:[\"html\"] -->`);\n\n	writeln(`<!-- 2 Jade.DocType depth:0 -->`);\n	writeln(`<!-- Jade.RawHtmlTag:[\"<!--[if IE 8]>\"] -->`);\n\n	writeln(`<!-- 2 Jade.RawHtmlTag depth:0 -->`);\n	writeln(`<!-- Jade.Tag:[\"html\", \"(\", \"lang\"] -->`);\n\n	writeln(`<html></html>`);\n	writeln(`<!-- Jade.RawHtmlTag:[\"<![endif]-->\"] -->`);\n\n	writeln(`<!-- 2 Jade.RawHtmlTag depth:0 -->`);\n	writeln(`<!-- Jade.Tag:[\"html\", \"(\", \"lang\"] -->`);\n\n	writeln(`<html>`);\n	writeln(`	<!-- Jade.Tag:[\"head\"] -->`);\n\n	writeln(`	<head>`);\n	writeln(`		<!-- Jade.Block:[\"block\", \"title\"] -->`);\n\n	writeln(`<block>`);\n	writeln(`			<!-- Jade.Tag:[\"title\", \"Page Title Here\"] -->`);\n\n	writeln(`			<title></title>`);\n	writeln(`</block>`);\n	writeln(`		<!-- Jade.Tag:[\"style\"] -->`);\n\n	writeln(`		<style>`);\n	writeln(`			<!-- Jade.Include:[\"style.css\"] -->`);\n\n	writeln(import(`style.css`));\n	writeln(`		</style>`);\n	writeln(`	</head>`);\n	writeln(`	<!-- Jade.Tag:[\"body\", \".\", \"base-css\"] -->`);\n\n	writeln(`	<body>`);\n	writeln(`		<!-- Jade.Block:[\"block\", \"content\"] -->`);\n\n	writeln(`<block>`);\n	writeln(`			<!-- Jade.Comment:[\"//\", \" this is the displayed content\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:3 -->`);\n	writeln(`			<!-- Jade.Tag:[\"p\", \"(\", \"id\"] -->`);\n\n	writeln(`			<p>`);\n	writeln(` That continues on`);\n	writeln(` multiple lines`);\n	writeln(`			</p>`);\n	writeln(`			<!-- Jade.Tag:[\"ul\", \"(\", \"isit\"] -->`);\n\n	writeln(`			<ul>`);\n	writeln(`				<!-- Jade.Tag:[\"li\", \".\", \"one-css\"] -->`);\n\n	writeln(`				<li></li>`);\n	writeln(`			</ul>`);\n	writeln(`			<!-- Jade.Tag:[\".\", \"img-holder\"] -->`);\n\n	writeln(`			<div>`);\n	writeln(`				<!-- Jade.Tag:[\"img\", \".\", \"image\"] -->`);\n\n	writeln(`				<img />`);\n	writeln(`			</div>`);\n	writeln(`</block>`);\n	writeln(`	</body>`);\n	writeln(`	<!-- Jade.Tag:[\"woot\", \"content1\", \"asdf\"] -->`);\n\n	writeln(`	<woot>`);\n	writeln(`		<!-- Jade.Tag:[\"woot2\", \"(\", \"class\"] -->`);\n\n	writeln(`		<woot2></woot2>`);\n	writeln(`		<!-- Jade.Tag:[\"woot3\", \"(\", \"class\"] -->`);\n\n	writeln(`		<woot3></woot3>`);\n	writeln(`		<!-- Jade.Block:[\"block\", \"footer\"] -->`);\n\n	writeln(`<block>`);\n	writeln(`			<!-- Jade.Tag:[\"p\", \"Placeholder footer block\"] -->`);\n\n	writeln(`			<p></p>`);\n	writeln(`</block>`);\n	writeln(`	</woot>`);\n	writeln(`</html>`);\n	writeln(`<!-- Jade.UnbufferedCode:[\"-\", \" var localhost = \\\"remotehost\\\"\"] -->`);\n\n	writeln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\n	writeln(`<!-- Jade.UnbufferedCode:[\"-\", \" var user = {}\"] -->`);\n\n	writeln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\n	writeln(`<!-- Jade.Conditional:[\"if\", \" \\\"localhost\\\" == host\"] -->`);\n\n	writeln(`<!-- 2 Jade.Conditional depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"div\", \"foo\", \"(\"] -->`);\n\n	writeln(`	<div>`);\n	writeln(`		<!-- Jade.Comment:[\"//\", \"-\", \" include:markdown ./includes/footer.jade\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:2 -->`);\n	writeln(`	</div>`);\n	writeln(`<!-- Jade.Conditional:[\"else\"] -->`);\n\n	writeln(`<!-- 2 Jade.Conditional depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"merrrt\"] -->`);\n\n	writeln(`	<merrrt></merrrt>`);\n	writeln(`<!-- Jade.Conditional:[\"unless\", \" !user.isAnonymous\"] -->`);\n\n	writeln(`<!-- 2 Jade.Conditional depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"You\", \"are logged in\"] -->`);\n\n	writeln(`	<You></You>`);\n	writeln(`<!-- Jade.Comment:[\"//\", \"-\", \" :markdown\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:0 -->`);\n	writeln(`<!-- Jade.Comment:[\"//\", \"-\", \" \\t### Markdown Need dedent support to parse this\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:0 -->`);\n	writeln(`<!-- Jade.Comment:[\"//\", \"-\", \" \\tI often like including markdown documents.{\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:0 -->`);\n	writeln(`<!-- Jade.AnyContentLine:[\"}\"] -->`);\n\n	writeln(`<!-- 2 Jade.AnyContentLine depth:0 -->`);\n	writeln(`<!-- Jade.Tag:[\"ul\"] -->`);\n\n	writeln(`<ul>`);\n	writeln(`	<!-- Jade.Iteration:[\"each\", \"val\", \",\"] -->`);\n\n	writeln(`<!-- 2 Jade.Iteration depth:1 -->`);\n	writeln(`		<!-- Jade.Tag:[\"li\", \"=\", \" index + ': ' + val\"] -->`);\n\n	writeln(`		<li></li>`);\n	writeln(`</ul>`);\n	writeln(`<!-- Jade.Iteration:[\"while\", \" n < 4\"] -->`);\n\n	writeln(`<!-- 2 Jade.Iteration depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"li\", \"=\", \" n++\"] -->`);\n\n	writeln(`	<li></li>`);\n	writeln(`<!-- Jade.UnbufferedCode:[\"-\", \" var friends = 0\"] -->`);\n\n	writeln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\n	writeln(`<!-- Jade.Case:[\"case\", \" \", \"friends\"] -->`);\n\n	writeln(`<!-- 2 Jade.Case depth:0 -->`);\n	writeln(`	<!-- Jade.Case:[\"when\", \" 0\"] -->`);\n\n	writeln(`<!-- 2 Jade.Case depth:1 -->`);\n	writeln(`	<!-- Jade.Case:[\"when\", \" 1\"] -->`);\n\n	writeln(`<!-- 2 Jade.Case depth:1 -->`);\n	writeln(`		<!-- Jade.Tag:[\"p\", \"you have very few friends\"] -->`);\n\n	writeln(`		<p></p>`);\n	writeln(`	<!-- Jade.Case:[\"default\", \":\", \"p\"] -->`);\n\n	writeln(`<!-- 2 Jade.Case depth:1 -->`);\n	writeln(`<!-- Jade.Comment:[\"//\", \"-\", \" Declaration\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:0 -->`);\n	writeln(`<!-- Jade.MixinDecl:[\"mixin\", \"list\"] -->`);\n\n	writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"ul\"] -->`);\n\n	writeln(`	<ul>`);\n	writeln(`		<!-- Jade.Tag:[\"li\", \"foo\"] -->`);\n\n	writeln(`		<li></li>`);\n	writeln(`		<!-- Jade.Tag:[\"li\", \"bar\"] -->`);\n\n	writeln(`		<li></li>`);\n	writeln(`		<!-- Jade.Tag:[\"li\", \"baz\"] -->`);\n\n	writeln(`		<li></li>`);\n	writeln(`	</ul>`);\n	writeln(`<!-- Jade.Comment:[\"//\", \"-\", \" Use\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:0 -->`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"list\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"list\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`<!-- Jade.MixinDecl:[\"mixin\", \"pet\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"li\", \".\", \"pet\"] -->`);\n\n	writeln(`	<li></li>`);\n	writeln(`<!-- Jade.Tag:[\"ul\"] -->`);\n\n	writeln(`<ul>`);\n	writeln(`	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:1 -->`);\n	writeln(`	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:1 -->`);\n	writeln(`	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:1 -->`);\n	writeln(`</ul>`);\n	writeln(`<!-- Jade.MixinDecl:[\"mixin\", \"article\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\".\", \"article\"] -->`);\n\n	writeln(`	<div>`);\n	writeln(`		<!-- Jade.Tag:[\".\", \"article-wrapper\"] -->`);\n\n	writeln(`		<div>`);\n	writeln(`			<!-- Jade.Tag:[\"h1\", \"=\", \" title\"] -->`);\n\n	writeln(`			<h1></h1>`);\n	writeln(`			<!-- Jade.Conditional:[\"if\", \"block\"] -->`);\n\n	writeln(`<!-- 2 Jade.Conditional depth:3 -->`);\n	writeln(`				<!-- Jade.Tag:[\"block\"] -->`);\n\n	writeln(`				<block></block>`);\n	writeln(`			<!-- Jade.Conditional:[\"else\"] -->`);\n\n	writeln(`<!-- 2 Jade.Conditional depth:3 -->`);\n	writeln(`				<!-- Jade.Tag:[\"p\", \"No content provided\"] -->`);\n\n	writeln(`				<p></p>`);\n	writeln(`		</div>`);\n	writeln(`	</div>`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"article\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"article\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"p\", \"This is my\"] -->`);\n\n	writeln(`	<p></p>`);\n	writeln(`	<!-- Jade.Tag:[\"p\", \"Amazing article\"] -->`);\n\n	writeln(`	<p></p>`);\n	writeln(`<!-- Jade.MixinDecl:[\"mixin\", \"link\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\n	writeln(`	<!-- Jade.Comment:[\"//\", \"-\", \" attributes == {class: \\\"btn\\\"}\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:1 -->`);\n	writeln(`	<!-- Jade.Tag:[\"a\", \"(\", \"class\"] -->`);\n\n	writeln(`	<a></a>`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"link\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`<!-- Jade.MixinDecl:[\"mixin\", \"link\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"a\", \"(\", \"href\"] -->`);\n\n	writeln(`	<a></a>`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"link\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`<!-- Jade.MixinDecl:[\"mixin\", \"list\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\n	writeln(`	<!-- Jade.Tag:[\"ul\", \"(\", \"id\"] -->`);\n\n	writeln(`	<ul>`);\n	writeln(`		<!-- Jade.Iteration:[\"each\", \"item\", \"in\"] -->`);\n\n	writeln(`<!-- 2 Jade.Iteration depth:2 -->`);\n	writeln(`			<!-- Jade.Tag:[\"li\", \"=\", \" item\"] -->`);\n\n	writeln(`			<li></li>`);\n	writeln(`	</ul>`);\n	writeln(`<!-- Jade.Mixin:[\"+\", \"list\", \"(\"] -->`);\n\n	writeln(`<!-- 2 Jade.Mixin depth:0 -->`);\n	writeln(`<!-- Jade.Tag:[\"p\", \"\\n\\tIf you take a look at this page's source #[span(woot) a(target=\\\"_blank\\\", href=\\\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\\\") on GitHub],\\n\\tyoull see several places where the tag interpolation operator is\\n\\tused like so.\\n\\t.quote // this is raw text so the .quote means nothing to jade\\n\\t\\tp Joel: !{riskyBusiness}\", \"\\n\"] -->`);\n\n	writeln(`<p></p>`);\n	writeln(`<!-- Jade.Tag:[\"p\", \"\\n\\tThis is supposed to just be text inside a p tag.\", \"\\n\"] -->`);\n\n	writeln(`<p></p>`);\n	writeln(`<!-- Jade.UnbufferedCode:[\"-\", \" var msg = {toUpperCase: function () {}}\"] -->`);\n\n	writeln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\n	writeln(`<!-- Jade.Tag:[\"p\", \"This is \", \"#{\"] -->`);\n\n	writeln(`<p></p>`);\n	writeln(`<!-- Jade.Comment:[\"//\", \"-\", \" Following is asdf, its the last tag\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:0 -->`);\n	writeln(`<!-- Jade.Tag:[\"asdf\"] -->`);\n\n	writeln(`<asdf></asdf>`);\n	,\n	writeln(`<!-- Jade.RootTag:[\"base_layout.jade\", \"\\n\", \"block\"] -->`);\n\n	/** jade template: second_layout.jade 3 */\n	writeln(`<!-- Jade.Extend:[\"base_layout.jade\"] -->`);\n\n	writeln(`<!-- Jade.Block:[\"block\", \"footer\"] -->`);\n\n	writeln(`<block>`);\n	writeln(`	<!-- Jade.Tag:[\"p\", \"This is the text in footer block\"] -->`);\n\n	writeln(`	<p></p>`);\n	writeln(`</block>`);\n	,\n	writeln(`<!-- Jade.RootTag:[\"second_layout.jade\", \"\\n\", \"\\n\"] -->`);\n\n	/** jade template: index.jade 14 */\n	writeln(`<!-- Jade.Extend:[\"second_layout.jade\"] -->`);\n\n	writeln(`<!-- Jade.Block:[\"block\", \"title\"] -->`);\n\n	writeln(`<block>`);\n	writeln(`	<!-- Jade.Tag:[\"title\", \"Index of Demo\"] -->`);\n\n	writeln(`	<title></title>`);\n	writeln(`</block>`);\n	writeln(`<!-- Jade.Block:[\"block\", \"content\"] -->`);\n\n	writeln(`<block>`);\n	writeln(`	<!-- Jade.Comment:[\"//\", \" this is the actual displayed content\"] -->`);\n\n	writeln(`<!-- 2 Jade.Comment depth:1 -->`);\n	writeln(`	<!-- Jade.Tag:[\"p\", \"(\", \"id\"] -->`);\n\n	writeln(`	<p>`);\n	writeln(` That continues on`);\n	writeln(` multiple lines of index.jade`);\n	writeln(`	</p>`);\n	writeln(`	<!-- Jade.Tag:[\"ul\", \"(\", \"isit\"] -->`);\n\n	writeln(`	<ul>`);\n	writeln(`		<!-- Jade.Tag:[\"li\", \".\", \"one-css\"] -->`);\n\n	writeln(`		<li></li>`);\n	writeln(`	</ul>`);\n	writeln(`	<!-- Jade.Tag:[\".\", \"img-holder\"] -->`);\n\n	writeln(`	<div>`);\n	writeln(`		<!-- Jade.Tag:[\"img\", \".\", \"image\"] -->`);\n\n	writeln(`		<img />`);\n	writeln(`	</div>`);\n	writeln(`</block>`);\n]\n",
+			"settings":
+			{
+				"buffer_size": 10977,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "<!-- Jade.RootTag:[\"extends\", \"base_layout.jade\", \"\\n\"] -->\n<!-- jade template: index.jade 14-->\n<!-- Jade.Extend:[\"extends\", \"base_layout.jade\"] -->\n<!-- Jade.RootTag:[\"html\", \"\\n\", \"<!--[if IE 8]>\"] -->\n<!-- jade template: base_layout.jade 99-->\n<!-- Jade.DocType:[\"html\"] -->\n<!-- 2 Jade.DocType depth:0 -->\n<!-- Jade.RawHtmlTag:[\"<!--[if IE 8]>\"] -->\n<!-- 2 Jade.RawHtmlTag depth:0 -->\n<!-- Jade.Tag:[\"html\", \"(\", \"lang\"] -->\n<html></html>\n<!-- Jade.RawHtmlTag:[\"<![endif]-->\"] -->\n<!-- 2 Jade.RawHtmlTag depth:0 -->\n<!-- Jade.Tag:[\"html\", \"(\", \"lang\"] -->\n<html>\n	<!-- Jade.Tag:[\"head\"] -->\n	<head>\n		<!-- Jade.Block:[\"block\", \"title\"] -->\n<block>\n			<!-- Jade.Tag:[\"title\", \"Page Title Here\"] -->\n			<title></title>\n</block>\n		<!-- Jade.Tag:[\"style\"] -->\n		<style>\n			<!-- Jade.Include:[\"style.css\"] -->\nbody {\n	margin: 0px;\n	background-color: #eee;\n}\n		</style>\n	</head>\n	<!-- Jade.Tag:[\"body\", \".\", \"base-css\"] -->\n	<body>\n		<!-- Jade.Block:[\"block\", \"content\"] -->\n<block>\n			<!-- Jade.Comment:[\"//\", \" this is the displayed content\"] -->\n<!-- 2 Jade.Comment depth:3 -->\n			<!-- Jade.Tag:[\"p\", \"(\", \"id\"] -->\n			<p>\n That continues on\n multiple lines\n			</p>\n			<!-- Jade.Tag:[\"ul\", \"(\", \"isit\"] -->\n			<ul>\n				<!-- Jade.Tag:[\"li\", \".\", \"one-css\"] -->\n				<li></li>\n			</ul>\n			<!-- Jade.Tag:[\".\", \"img-holder\"] -->\n			<div>\n				<!-- Jade.Tag:[\"img\", \".\", \"image\"] -->\n				<img />\n			</div>\n</block>\n	</body>\n	<!-- Jade.Tag:[\"woot\", \"content1\", \"asdf\"] -->\n	<woot>\n		<!-- Jade.Tag:[\"woot2\", \"(\", \"class\"] -->\n		<woot2></woot2>\n		<!-- Jade.Tag:[\"woot3\", \"(\", \"class\"] -->\n		<woot3></woot3>\n	</woot>\n</html>\n<!-- Jade.UnbufferedCode:[\"-\", \" var localhost = \\\"remotehost\\\"\"] -->\n<!-- 2 Jade.UnbufferedCode depth:0 -->\n<!-- Jade.UnbufferedCode:[\"-\", \" var user = {}\"] -->\n<!-- 2 Jade.UnbufferedCode depth:0 -->\n<!-- Jade.Conditional:[\"if\", \" \\\"localhost\\\" == host\"] -->\n<!-- 2 Jade.Conditional depth:0 -->\n	<!-- Jade.Tag:[\"div\", \"foo\", \"(\"] -->\n	<div>\n		<!-- Jade.Comment:[\"//\", \"-\", \" include:markdown ./includes/footer.jade\"] -->\n<!-- 2 Jade.Comment depth:2 -->\n	</div>\n<!-- Jade.Conditional:[\"else\"] -->\n<!-- 2 Jade.Conditional depth:0 -->\n	<!-- Jade.Tag:[\"merrrt\"] -->\n	<merrrt></merrrt>\n<!-- Jade.Conditional:[\"unless\", \" !user.isAnonymous\"] -->\n<!-- 2 Jade.Conditional depth:0 -->\n	<!-- Jade.Tag:[\"You\", \"are logged in\"] -->\n	<You></You>\n<!-- Jade.Comment:[\"//\", \"-\", \" :markdown\"] -->\n<!-- 2 Jade.Comment depth:0 -->\n<!-- Jade.Comment:[\"//\", \"-\", \" \\t### Markdown Need dedent support to parse this\"] -->\n<!-- 2 Jade.Comment depth:0 -->\n<!-- Jade.Comment:[\"//\", \"-\", \" \\tI often like including markdown documents.{\"] -->\n<!-- 2 Jade.Comment depth:0 -->\n<!-- Jade.AnyContentLine:[\"}\"] -->\n<!-- 2 Jade.AnyContentLine depth:0 -->\n<!-- Jade.Tag:[\"ul\"] -->\n<ul>\n	<!-- Jade.Iteration:[\"each\", \"val\", \",\"] -->\n<!-- 2 Jade.Iteration depth:1 -->\n		<!-- Jade.Tag:[\"li\", \"=\", \" index + ': ' + val\"] -->\n		<li></li>\n</ul>\n<!-- Jade.Iteration:[\"while\", \" n < 4\"] -->\n<!-- 2 Jade.Iteration depth:0 -->\n	<!-- Jade.Tag:[\"li\", \"=\", \" n++\"] -->\n	<li></li>\n<!-- Jade.UnbufferedCode:[\"-\", \" var friends = 0\"] -->\n<!-- 2 Jade.UnbufferedCode depth:0 -->\n<!-- Jade.Case:[\"case\", \" \", \"friends\"] -->\n<!-- 2 Jade.Case depth:0 -->\n	<!-- Jade.Case:[\"when\", \" 0\"] -->\n<!-- 2 Jade.Case depth:1 -->\n	<!-- Jade.Case:[\"when\", \" 1\"] -->\n<!-- 2 Jade.Case depth:1 -->\n		<!-- Jade.Tag:[\"p\", \"you have very few friends\"] -->\n		<p></p>\n	<!-- Jade.Case:[\"default\", \":\", \"p\"] -->\n<!-- 2 Jade.Case depth:1 -->\n<!-- Jade.Comment:[\"//\", \"-\", \" Declaration\"] -->\n<!-- 2 Jade.Comment depth:0 -->\n<!-- Jade.MixinDecl:[\"mixin\", \"list\"] -->\n<!-- 2 Jade.MixinDecl depth:0 -->\n	<!-- Jade.Tag:[\"ul\"] -->\n	<ul>\n		<!-- Jade.Tag:[\"li\", \"foo\"] -->\n		<li></li>\n		<!-- Jade.Tag:[\"li\", \"bar\"] -->\n		<li></li>\n		<!-- Jade.Tag:[\"li\", \"baz\"] -->\n		<li></li>\n	</ul>\n<!-- Jade.Comment:[\"//\", \"-\", \" Use\"] -->\n<!-- 2 Jade.Comment depth:0 -->\n<!-- Jade.Mixin:[\"+\", \"list\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n<!-- Jade.Mixin:[\"+\", \"list\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n<!-- Jade.MixinDecl:[\"mixin\", \"pet\", \"(\"] -->\n<!-- 2 Jade.MixinDecl depth:0 -->\n	<!-- Jade.Tag:[\"li\", \".\", \"pet\"] -->\n	<li></li>\n<!-- Jade.Tag:[\"ul\"] -->\n<ul>\n	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:1 -->\n	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:1 -->\n	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:1 -->\n</ul>\n<!-- Jade.MixinDecl:[\"mixin\", \"article\", \"(\"] -->\n<!-- 2 Jade.MixinDecl depth:0 -->\n	<!-- Jade.Tag:[\".\", \"article\"] -->\n	<div>\n		<!-- Jade.Tag:[\".\", \"article-wrapper\"] -->\n		<div>\n			<!-- Jade.Tag:[\"h1\", \"=\", \" title\"] -->\n			<h1></h1>\n			<!-- Jade.Conditional:[\"if\", \"block\"] -->\n<!-- 2 Jade.Conditional depth:3 -->\n				<!-- Jade.Tag:[\"block\"] -->\n				<block></block>\n			<!-- Jade.Conditional:[\"else\"] -->\n<!-- 2 Jade.Conditional depth:3 -->\n				<!-- Jade.Tag:[\"p\", \"No content provided\"] -->\n				<p></p>\n		</div>\n	</div>\n<!-- Jade.Mixin:[\"+\", \"article\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n<!-- Jade.Mixin:[\"+\", \"article\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n	<!-- Jade.Tag:[\"p\", \"This is my\"] -->\n	<p></p>\n	<!-- Jade.Tag:[\"p\", \"Amazing article\"] -->\n	<p></p>\n<!-- Jade.MixinDecl:[\"mixin\", \"link\", \"(\"] -->\n<!-- 2 Jade.MixinDecl depth:0 -->\n	<!-- Jade.Comment:[\"//\", \"-\", \" attributes == {class: \\\"btn\\\"}\"] -->\n<!-- 2 Jade.Comment depth:1 -->\n	<!-- Jade.Tag:[\"a\", \"(\", \"class\"] -->\n	<a></a>\n<!-- Jade.Mixin:[\"+\", \"link\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n<!-- Jade.MixinDecl:[\"mixin\", \"link\", \"(\"] -->\n<!-- 2 Jade.MixinDecl depth:0 -->\n	<!-- Jade.Tag:[\"a\", \"(\", \"href\"] -->\n	<a></a>\n<!-- Jade.Mixin:[\"+\", \"link\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n<!-- Jade.MixinDecl:[\"mixin\", \"list\", \"(\"] -->\n<!-- 2 Jade.MixinDecl depth:0 -->\n	<!-- Jade.Tag:[\"ul\", \"(\", \"id\"] -->\n	<ul>\n		<!-- Jade.Iteration:[\"each\", \"item\", \"in\"] -->\n<!-- 2 Jade.Iteration depth:2 -->\n			<!-- Jade.Tag:[\"li\", \"=\", \" item\"] -->\n			<li></li>\n	</ul>\n<!-- Jade.Mixin:[\"+\", \"list\", \"(\"] -->\n<!-- 2 Jade.Mixin depth:0 -->\n<!-- Jade.Tag:[\"p\", \"\\n\\tIf you take a look at this page's source #[span(woot) a(target=\\\"_blank\\\", href=\\\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\\\") on GitHub],\\n\\tyoull see several places where the tag interpolation operator is\\n\\tused like so.\\n\\t.quote // this is raw text so the .quote means nothing to jade\\n\\t\\tp Joel: !{riskyBusiness}\", \"\\n\"] -->\n<p></p>\n<!-- Jade.Tag:[\"p\", \"\\n\\tThis is supposed to just be text inside a p tag.\", \"\\n\"] -->\n<p></p>\n<!-- Jade.UnbufferedCode:[\"-\", \" var msg = {toUpperCase: function () {}}\"] -->\n<!-- 2 Jade.UnbufferedCode depth:0 -->\n<!-- Jade.Tag:[\"p\", \"This is \", \"#{\"] -->\n<p></p>\n<!-- Jade.Comment:[\"//\", \"-\", \" Following is asdf, its the last tag\"] -->\n<!-- 2 Jade.Comment depth:0 -->\n<!-- Jade.Tag:[\"asdf\"] -->\n<asdf></asdf>\n<!-- Jade.Block:[\"block\", \"title\"] -->\n<block>\n	<!-- Jade.Tag:[\"title\", \"Index of Demo\"] -->\n	<title></title>\n</block>\n<!-- Jade.Block:[\"block\", \"content\"] -->\n<block>\n	<!-- Jade.Comment:[\"//\", \" this is the actual displayed content\"] -->\n<!-- 2 Jade.Comment depth:1 -->\n	<!-- Jade.Tag:[\"p\", \"(\", \"id\"] -->\n	<p>\n That continues on\n multiple lines of index.jade\n	</p>\n	<!-- Jade.Tag:[\"ul\", \"(\", \"isit\"] -->\n	<ul>\n		<!-- Jade.Tag:[\"li\", \".\", \"one-css\"] -->\n		<li></li>\n	</ul>\n	<!-- Jade.Tag:[\".\", \"img-holder\"] -->\n	<div>\n		<!-- Jade.Tag:[\"img\", \".\", \"image\"] -->\n		<img />\n	</div>\n</block>\n",
+			"settings":
+			{
+				"buffer_size": 7397,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\nwriteln(`<!-- Jade.RootTag:[\"html\", \"\\n\", \"<!--[if IE 8]>\"] -->`);\nwriteln(`<!-- jade template: base_layout.jade 99-->`);\nwriteln(`<!-- Jade.DocType:[\"html\"] -->`);\nwriteln(`<!-- 2 Jade.DocType depth:0 -->`);\nwriteln(`<!-- Jade.RawHtmlTag:[\"<!--[if IE 8]>\"] -->`);\nwriteln(`<!-- 2 Jade.RawHtmlTag depth:0 -->`);\nwriteln(`<!-- Jade.Tag:[\"html\", \"(\", \"lang\"] -->`);\nwriteln(`<html></html>`);\nwriteln(`<!-- Jade.RawHtmlTag:[\"<![endif]-->\"] -->`);\nwriteln(`<!-- 2 Jade.RawHtmlTag depth:0 -->`);\nwriteln(`<!-- Jade.Tag:[\"html\", \"(\", \"lang\"] -->`);\nwriteln(`<html>`);\nwriteln(`	<!-- Jade.Tag:[\"head\"] -->`);\nwriteln(`	<head>`);\nwriteln(`		<!-- Jade.Block:[\"block\", \"title\"] -->`);\nwriteln(`<block>`);\nwriteln(`			<!-- Jade.Tag:[\"title\", \"Page Title Here\"] -->`);\nwriteln(`			<title></title>`);\nwriteln(`</block>`);\nwriteln(`		<!-- Jade.Tag:[\"style\"] -->`);\nwriteln(`		<style>`);\nwriteln(`			<!-- Jade.Include:[\"style.css\"] -->`);\nwriteln(import(`style.css`));\nwriteln(`		</style>`);\nwriteln(`	</head>`);\nwriteln(`	<!-- Jade.Tag:[\"body\", \".\", \"base-css\"] -->`);\nwriteln(`	<body>`);\nwriteln(`		<!-- Jade.Block:[\"block\", \"content\"] -->`);\nwriteln(`<block>`);\nwriteln(`			<!-- Jade.Comment:[\"//\", \" this is the displayed content\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:3 -->`);\nwriteln(`			<!-- Jade.Tag:[\"p\", \"(\", \"id\"] -->`);\nwriteln(`			<p>`);\nwriteln(` That continues on`);\nwriteln(` multiple lines`);\nwriteln(`			</p>`);\nwriteln(`			<!-- Jade.Tag:[\"ul\", \"(\", \"isit\"] -->`);\nwriteln(`			<ul>`);\nwriteln(`				<!-- Jade.Tag:[\"li\", \".\", \"one-css\"] -->`);\nwriteln(`				<li></li>`);\nwriteln(`			</ul>`);\nwriteln(`			<!-- Jade.Tag:[\".\", \"img-holder\"] -->`);\nwriteln(`			<div>`);\nwriteln(`				<!-- Jade.Tag:[\"img\", \".\", \"image\"] -->`);\nwriteln(`				<img />`);\nwriteln(`			</div>`);\nwriteln(`</block>`);\nwriteln(`	</body>`);\nwriteln(`	<!-- Jade.Tag:[\"woot\", \"content1\", \"asdf\"] -->`);\nwriteln(`	<woot>`);\nwriteln(`		<!-- Jade.Tag:[\"woot2\", \"(\", \"class\"] -->`);\nwriteln(`		<woot2></woot2>`);\nwriteln(`		<!-- Jade.Tag:[\"woot3\", \"(\", \"class\"] -->`);\nwriteln(`		<woot3></woot3>`);\nwriteln(`	</woot>`);\nwriteln(`</html>`);\nwriteln(`<!-- Jade.UnbufferedCode:[\"-\", \" var localhost = \\\"remotehost\\\"\"] -->`);\nwriteln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\nwriteln(`<!-- Jade.UnbufferedCode:[\"-\", \" var user = {}\"] -->`);\nwriteln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\nwriteln(`<!-- Jade.Conditional:[\"if\", \" \\\"localhost\\\" == host\"] -->`);\nwriteln(`<!-- 2 Jade.Conditional depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"div\", \"foo\", \"(\"] -->`);\nwriteln(`	<div>`);\nwriteln(`		<!-- Jade.Comment:[\"//\", \"-\", \" include:markdown ./includes/footer.jade\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:2 -->`);\nwriteln(`	</div>`);\nwriteln(`<!-- Jade.Conditional:[\"else\"] -->`);\nwriteln(`<!-- 2 Jade.Conditional depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"merrrt\"] -->`);\nwriteln(`	<merrrt></merrrt>`);\nwriteln(`<!-- Jade.Conditional:[\"unless\", \" !user.isAnonymous\"] -->`);\nwriteln(`<!-- 2 Jade.Conditional depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"You\", \"are logged in\"] -->`);\nwriteln(`	<You></You>`);\nwriteln(`<!-- Jade.Comment:[\"//\", \"-\", \" :markdown\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:0 -->`);\nwriteln(`<!-- Jade.Comment:[\"//\", \"-\", \" \\t### Markdown Need dedent support to parse this\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:0 -->`);\nwriteln(`<!-- Jade.Comment:[\"//\", \"-\", \" \\tI often like including markdown documents.{\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:0 -->`);\nwriteln(`<!-- Jade.AnyContentLine:[\"}\"] -->`);\nwriteln(`<!-- 2 Jade.AnyContentLine depth:0 -->`);\nwriteln(`<!-- Jade.Tag:[\"ul\"] -->`);\nwriteln(`<ul>`);\nwriteln(`	<!-- Jade.Iteration:[\"each\", \"val\", \",\"] -->`);\nwriteln(`<!-- 2 Jade.Iteration depth:1 -->`);\nwriteln(`		<!-- Jade.Tag:[\"li\", \"=\", \" index + ': ' + val\"] -->`);\nwriteln(`		<li></li>`);\nwriteln(`</ul>`);\nwriteln(`<!-- Jade.Iteration:[\"while\", \" n < 4\"] -->`);\nwriteln(`<!-- 2 Jade.Iteration depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"li\", \"=\", \" n++\"] -->`);\nwriteln(`	<li></li>`);\nwriteln(`<!-- Jade.UnbufferedCode:[\"-\", \" var friends = 0\"] -->`);\nwriteln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\nwriteln(`<!-- Jade.Case:[\"case\", \" \", \"friends\"] -->`);\nwriteln(`<!-- 2 Jade.Case depth:0 -->`);\nwriteln(`	<!-- Jade.Case:[\"when\", \" 0\"] -->`);\nwriteln(`<!-- 2 Jade.Case depth:1 -->`);\nwriteln(`	<!-- Jade.Case:[\"when\", \" 1\"] -->`);\nwriteln(`<!-- 2 Jade.Case depth:1 -->`);\nwriteln(`		<!-- Jade.Tag:[\"p\", \"you have very few friends\"] -->`);\nwriteln(`		<p></p>`);\nwriteln(`	<!-- Jade.Case:[\"default\", \":\", \"p\"] -->`);\nwriteln(`<!-- 2 Jade.Case depth:1 -->`);\nwriteln(`<!-- Jade.Comment:[\"//\", \"-\", \" Declaration\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:0 -->`);\nwriteln(`<!-- Jade.MixinDecl:[\"mixin\", \"list\"] -->`);\nwriteln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"ul\"] -->`);\nwriteln(`	<ul>`);\nwriteln(`		<!-- Jade.Tag:[\"li\", \"foo\"] -->`);\nwriteln(`		<li></li>`);\nwriteln(`		<!-- Jade.Tag:[\"li\", \"bar\"] -->`);\nwriteln(`		<li></li>`);\nwriteln(`		<!-- Jade.Tag:[\"li\", \"baz\"] -->`);\nwriteln(`		<li></li>`);\nwriteln(`	</ul>`);\nwriteln(`<!-- Jade.Comment:[\"//\", \"-\", \" Use\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:0 -->`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"list\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"list\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`<!-- Jade.MixinDecl:[\"mixin\", \"pet\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"li\", \".\", \"pet\"] -->`);\nwriteln(`	<li></li>`);\nwriteln(`<!-- Jade.Tag:[\"ul\"] -->`);\nwriteln(`<ul>`);\nwriteln(`	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:1 -->`);\nwriteln(`	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:1 -->`);\nwriteln(`	<!-- Jade.Mixin:[\"+\", \"pet\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:1 -->`);\nwriteln(`</ul>`);\nwriteln(`<!-- Jade.MixinDecl:[\"mixin\", \"article\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\".\", \"article\"] -->`);\nwriteln(`	<div>`);\nwriteln(`		<!-- Jade.Tag:[\".\", \"article-wrapper\"] -->`);\nwriteln(`		<div>`);\nwriteln(`			<!-- Jade.Tag:[\"h1\", \"=\", \" title\"] -->`);\nwriteln(`			<h1></h1>`);\nwriteln(`			<!-- Jade.Conditional:[\"if\", \"block\"] -->`);\nwriteln(`<!-- 2 Jade.Conditional depth:3 -->`);\nwriteln(`				<!-- Jade.Tag:[\"block\"] -->`);\nwriteln(`				<block></block>`);\nwriteln(`			<!-- Jade.Conditional:[\"else\"] -->`);\nwriteln(`<!-- 2 Jade.Conditional depth:3 -->`);\nwriteln(`				<!-- Jade.Tag:[\"p\", \"No content provided\"] -->`);\nwriteln(`				<p></p>`);\nwriteln(`		</div>`);\nwriteln(`	</div>`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"article\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"article\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"p\", \"This is my\"] -->`);\nwriteln(`	<p></p>`);\nwriteln(`	<!-- Jade.Tag:[\"p\", \"Amazing article\"] -->`);\nwriteln(`	<p></p>`);\nwriteln(`<!-- Jade.MixinDecl:[\"mixin\", \"link\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\nwriteln(`	<!-- Jade.Comment:[\"//\", \"-\", \" attributes == {class: \\\"btn\\\"}\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:1 -->`);\nwriteln(`	<!-- Jade.Tag:[\"a\", \"(\", \"class\"] -->`);\nwriteln(`	<a></a>`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"link\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`<!-- Jade.MixinDecl:[\"mixin\", \"link\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"a\", \"(\", \"href\"] -->`);\nwriteln(`	<a></a>`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"link\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`<!-- Jade.MixinDecl:[\"mixin\", \"list\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.MixinDecl depth:0 -->`);\nwriteln(`	<!-- Jade.Tag:[\"ul\", \"(\", \"id\"] -->`);\nwriteln(`	<ul>`);\nwriteln(`		<!-- Jade.Iteration:[\"each\", \"item\", \"in\"] -->`);\nwriteln(`<!-- 2 Jade.Iteration depth:2 -->`);\nwriteln(`			<!-- Jade.Tag:[\"li\", \"=\", \" item\"] -->`);\nwriteln(`			<li></li>`);\nwriteln(`	</ul>`);\nwriteln(`<!-- Jade.Mixin:[\"+\", \"list\", \"(\"] -->`);\nwriteln(`<!-- 2 Jade.Mixin depth:0 -->`);\nwriteln(`<!-- Jade.Tag:[\"p\", \"\\n\\tIf you take a look at this page's source #[span(woot) a(target=\\\"_blank\\\", href=\\\"https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade\\\") on GitHub],\\n\\tyoull see several places where the tag interpolation operator is\\n\\tused like so.\\n\\t.quote // this is raw text so the .quote means nothing to jade\\n\\t\\tp Joel: !{riskyBusiness}\", \"\\n\"] -->`);\nwriteln(`<p></p>`);\nwriteln(`<!-- Jade.Tag:[\"p\", \"\\n\\tThis is supposed to just be text inside a p tag.\", \"\\n\"] -->`);\nwriteln(`<p></p>`);\nwriteln(`<!-- Jade.UnbufferedCode:[\"-\", \" var msg = {toUpperCase: function () {}}\"] -->`);\nwriteln(`<!-- 2 Jade.UnbufferedCode depth:0 -->`);\nwriteln(`<!-- Jade.Tag:[\"p\", \"This is \", \"#{\"] -->`);\nwriteln(`<p></p>`);\nwriteln(`<!-- Jade.Comment:[\"//\", \"-\", \" Following is asdf, its the last tag\"] -->`);\nwriteln(`<!-- 2 Jade.Comment depth:0 -->`);\nwriteln(`<!-- Jade.Tag:[\"asdf\"] -->`);\nwriteln(`<asdf></asdf>`);\n",
+			"settings":
+			{
+				"buffer_size": 9041,
 				"line_ending": "Unix"
 			}
 		},
@@ -185,7 +209,7 @@
 			"file": "views/index.jade",
 			"settings":
 			{
-				"buffer_size": 437,
+				"buffer_size": 439,
 				"line_ending": "Unix"
 			}
 		},
@@ -193,7 +217,15 @@
 			"file": "views/base_layout.jade",
 			"settings":
 			{
-				"buffer_size": 2528,
+				"buffer_size": 2577,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/second_layout.jade",
+			"settings":
+			{
+				"buffer_size": 74,
 				"line_ending": "Unix"
 			}
 		},
@@ -201,7 +233,7 @@
 			"file": "source/jade/pegged.d",
 			"settings":
 			{
-				"buffer_size": 6009,
+				"buffer_size": 6011,
 				"line_ending": "Unix"
 			}
 		}
@@ -213,10 +245,34 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 167.0,
-		"last_filter": "move",
+		"height": 588.0,
+		"last_filter": "tabs",
 		"selected_items":
 		[
+			[
+				"tabs",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"wr",
+				"Word Wrap: Toggle"
+			],
+			[
+				"d",
+				"Set Syntax: D"
+			],
+			[
+				"ssh",
+				"Set Syntax: HTML"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"ssd",
+				"Set Syntax: D"
+			],
 			[
 				"move",
 				"File: Move"
@@ -226,24 +282,12 @@
 				"File: Delete"
 			],
 			[
-				"d",
-				"Set Syntax: D"
-			],
-			[
 				"ren",
 				"File: Rename"
 			],
 			[
 				"inst",
 				"Package Control: Install Package"
-			],
-			[
-				"html",
-				"Set Syntax: HTML"
-			],
-			[
-				"tabs",
-				"Indentation: Convert to Tabs"
 			],
 			[
 				"jade",
@@ -294,6 +338,7 @@
 	],
 	"file_history":
 	[
+		"/home/rmcguire/Projects/examples/d_tests/delegates_at_compile_time_cannot.d",
 		"/usr/local/dmd/current/src/druntime/src/object.d",
 		"/home/rmcguire/Projects/jade/source/jade/base.d",
 		"/home/rmcguire/Projects/jade/views/style.css",
@@ -353,6 +398,34 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"tag.",
+			"Comment",
+			"toString",
+			"compileTime",
+			"compileTime.",
+			"subtemplate",
+			"find",
+			"/`",
+			"ret",
+			"compileTime",
+			"\"writeln",
+			"render",
+			"renderParseTree",
+			"renderTag(",
+			"render(",
+			" render",
+			"render(",
+			"render",
+			"Item",
+			".toString",
+			";writeln",
+			"\n\n",
+			"\n",
+			"writeln",
+			"html",
+			"writeln",
+			"{",
+			"writeln",
 			"String(scope void",
 			"toString",
 			"ret ~=",
@@ -452,35 +525,7 @@
 			"Jade.TagArgs",
 			"TagArgs",
 			"&item",
-			"id",
-			"renderTag",
-			"if",
-			"&",
-			"', '",
-			"p)",
-			"p.matches[0]",
-			"InlineText",
-			"StringInterpolation+",
-			"StringInterpolation",
-			" p.children",
-			"opCall",
-			"Buffered",
-			"renderBufferedCode",
-			"Buffered",
-			"item",
-			"in_block",
-			"trim",
-			"', '",
-			"Line",
-			"nextLine",
-			"p.",
-			"line_number",
-			"sinclude",
-			"t) {\n		return ",
-			"line_number, render",
-			", ",
-			" / ",
-			";\n"
+			"id"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -507,15 +552,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 629,
+						"buffer_size": 1204,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								577,
-								577
+								1035,
+								1035
 							]
 						],
 						"settings":
@@ -527,7 +572,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -556,7 +601,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -585,7 +630,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -594,15 +639,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9490,
+						"buffer_size": 17920,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5716,
-								5716
+								12017,
+								12020
 							]
 						],
 						"settings":
@@ -611,7 +656,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3212.0,
+						"translation.y": 7243.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -619,6 +664,92 @@
 				},
 				{
 					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10977,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10977,
+								10977
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/home/rmcguire/Projects/jade",
+							"syntax": "Packages/D/D.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 5437.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7397,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								816,
+								816
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/home/rmcguire/Projects/jade",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9041,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								675,
+								675
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"default_dir": "/home/rmcguire/Projects/jade",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"file": "/usr/local/dmd/current/src/druntime/src/object.d",
 					"semi_transient": false,
 					"settings":
@@ -644,11 +775,11 @@
 						"translation.y": 32068.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 8,
 					"semi_transient": false,
 					"settings":
 					{
@@ -673,11 +804,11 @@
 						"translation.y": 4956.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 9,
 					"semi_transient": false,
 					"settings":
 					{
@@ -702,11 +833,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 10,
 					"semi_transient": false,
 					"settings":
 					{
@@ -730,11 +861,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 11,
 					"file": "current_output.txt",
 					"semi_transient": false,
 					"settings":
@@ -760,11 +891,11 @@
 						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 12,
 					"semi_transient": false,
 					"settings":
 					{
@@ -788,27 +919,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3142.0,
+						"translation.y": 2995.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 13,
 					"file": "views/index.jade",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 437,
+						"buffer_size": 439,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								437,
-								437
+								439,
+								439
 							]
 						],
 						"settings":
@@ -820,24 +951,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 14,
 					"file": "views/base_layout.jade",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2528,
+						"buffer_size": 2577,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1315,
-								1315
+								2460,
+								2460
 							]
 						],
 						"settings":
@@ -846,27 +977,55 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 189.0,
+						"translation.y": 250.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "source/jade/pegged.d",
+					"buffer": 15,
+					"file": "views/second_layout.jade",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6009,
+						"buffer_size": 74,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								575,
-								575
+								74,
+								74
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "source/jade/pegged.d",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6011,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2131,
+								2131
 							]
 						],
 						"settings":
@@ -878,7 +1037,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -915,6 +1074,10 @@
 		]
 	},
 	"menu_visible": true,
+	"output.GoSublime-main-output":
+	{
+		"height": 136.0
+	},
 	"output.MarGo-output":
 	{
 		"height": 150.0

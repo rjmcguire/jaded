@@ -151,7 +151,7 @@ struct JadeParser {
 		size_t index = 0;
 		Item front() {
 			ulong depth;
-			if (lines[index].name == "Jade.Line" && lines[index].children.length > 0 && lines[index].children[0].name == "Jade.Indent") {
+			if (lines[index].name == "Jade.Line" && lines[index].children.length > 0 && lines[index].children[0].name == "Jade.Indent" && lines[index].children[1].children.length > 0) {
 				depth = lines[index].children[0].matches[0].length;
 				return new Item(cast(int)depth, lines[index].children[1].children[0]);
 			} else if (lines[index].name == "Jade.Line") {
@@ -238,6 +238,8 @@ struct JadeParser {
 				break;
 			case "Jade.Tag":
 				range.popFront();
+				auto tag = Tag.parse(token, !range.empty && range.front.depth > token.depth);
+				token.prolog ~= tag.prolog;
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
 				auto name = token.matches[0];
 				if (name==".") {
@@ -255,10 +257,26 @@ struct JadeParser {
 					//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `tag:%s`);".format(ranges.length, token.name, token.depth, token.matches[0]);
 					token.items = render(token.depth);
 					token.epilog ~= "\nwriteln(`%s</%s>`);".format("\t".replicate(token.depth), name);
+					token.epilog ~= tag.epilog;
 				}
 				break;
 			case "Jade.PipedText":
-				token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
+				//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
+				//token.prolog ~= "\n%s".format(token.matches[0]);
+				token.prolog ~= "\n%s\n===============PipedText====================".format(token.p);
+				auto tag = Tag.parse(token, false);
+				token.prolog = tag.prolog;
+				token.epilog = tag.epilog;
+				//foreach (child; token.children) {
+				//	if (child.name == "Jade.InlineText") {
+				//		token.prolog ~= child.matches[0];
+				//	} else if (child.name == "Jade.StringInterpolation") {
+				//		auto tag = Tag.parse(new Item(token.depth+1, child), false); // Tag Interpolation does not allow tags containing tags.
+				//		token.prolog ~= tag.prolog;
+				//		token.prolog ~= tag.epilog;
+				//	}
+				//}
+				token.prolog ~= "\n================END PipedText===================";
 				range.popFront();
 				break;
 			case "Jade.UnbufferedCode":
@@ -276,17 +294,248 @@ struct JadeParser {
 		}
 		return token;
 	}
+	struct AndAttribute {
+		ParseTree key;
+		ParseTree value;
+		static AndAttribute parse(ParseTree p) {
+			AndAttribute ret;
+
+			return ret;
+		}
+	}
+	struct AndAttributes {
+		AndAttribute[] attributes;
+		static AndAttributes parse(ParseTree p) {
+			AndAttributes ret;
+
+			return ret;
+		}
+	}
+
+	struct TagArg {
+		ParseTree* key;
+		string assignType;
+		ParseTree* value;
+		static TagArg parse(ref ParseTree p) {
+				TagArg ret;
+				ret.key = &p.children[0];
+				if (p.children.length > 1) {
+						ret.assignType = p.children[1].matches[0];
+				}
+				if (p.children.length > 2) {
+						ret.value = &p.children[2];
+				}
+				return ret;
+		}
+		string getValue() {
+				import std.array : appender;
+				auto ret = appender!string;
+				auto type = value is null ? "<null>" : value.children[0].name;
+				ret.reserve = 1024;
+				switch (type) {
+				case "Jade.Str":
+						ret ~= '"';
+						ret ~= value.matches[0];
+						ret ~= '"';
+						return ret.data;
+				case "Jade.ParamDExpression":
+						return value.matches[0];
+				case "Jade.AttributeJsonObject":
+						assert(key.matches[0] == "style" || key.matches[0] == "class", "AttributeJsonObject as parameter only supported for style tag parameter, not: "~ key.matches[0]);
+						if (value.children[0].children.length > 0) {
+								ret ~= value.children[0].children[0].children[0].matches[0];
+								ret ~= '=';
+								ret ~= value.children[0].children[0].children[0].matches[0];
+								foreach (keyvalue; value.children[0].children[1..$]) {
+										ret ~= ",";
+										ret ~= keyvalue.children[0].matches[0];
+										ret ~= '=';
+										ret ~= keyvalue.children[0].matches[0];
+								}
+						}
+						return ret.data;
+				case "Jade.CssClassArray":
+						if (value.children[0].children.length > 0) {
+								ret ~= value.children[0].children[0].matches[0];
+								foreach (clazz; value.children[0].children[1..$]) {
+										ret ~= ",";
+										ret ~= clazz.matches[0];
+								}
+						}
+						return ret.data;
+				case "<null>":
+						//return `""`;
+						return ``;
+				default:
+						assert(0, "Unsupported value type: "~ type ~" for TagArg key:"~ key.matches[0]);
+				}
+		}
+
+		string toString() {
+				return "%s%s%s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
+		}
+		string toHtml() {
+				return "%s%s%s".format(key.matches[0], assignType, getValue());
+		}
+	}
+
+	struct TagArgs {
+		string str;
+		TagArg[] args;
+		static TagArgs parse(ref ParseTree token) {
+			TagArgs ret;
+			with (ret) {
+			str ~= "%s".format(token);
+				foreach (argtree; token.children) {
+					ret.args ~= TagArg.parse(argtree);
+				}
+			}
+			return ret;
+		}
+		string toHtml() {
+			auto ret = appender!string;
+			if (args.length > 0) {
+				ret.reserve = 1024;
+				foreach (arg; args) {
+					ret ~= " ";
+					ret ~= arg.toHtml;
+				}
+			}
+			return ret.data;
+
+		}
+	}
+
+	struct Tag {
+		string str;
+		string prolog() {
+			string attribs;
+			if (cssId.matches) {
+				attribs ~= " id=\"%s\"".format(cssId.matches[0]);
+			}
+			attribs ~= tagArgs.toHtml;
+			if (!hasChildren) {
+				return "%s<%s%s>|%s|%s</%s>".format("\t".replicate(indent), name, attribs, str, inlineText, name);
+			}
+			return "%s<%s%s>|%s|%s".format("\t".replicate(indent), name, attribs, str, inlineText);
+		}
+		string epilog() {
+			return "\n%s</%s>".format("\t".replicate(indent), name);
+		}
+		string name;
+		bool hasChildren;
+
+		ParseTree cssId;
+		ParseTree blockInATag;
+		bool hasBlock;
+		string[] cssClasses;
+		TagArgs tagArgs;
+		string inlineText;
+		int indent;
+		AndAttributes andAttributes;
+
+		static Tag parse(Item token, bool has_children) {
+			Tag tag;
+			with (tag) {
+				name = token.matches[0] == "." ? name = "div" : token.matches[0];
+
+				indent = token.depth;
+				tag.hasChildren = has_children;
+
+
+
+				tag.hasBlock = findParseTree(token, "Jade.BlockInATag") !is null;
+				string[] s;
+				//str ~= "%s".format(token.p);
+				auto childHolder = token;
+				//auto childHolder = token.children[0];
+				//if (token.name == "Jade.InlineTag" || token.name == "Jade.TagInterpolate") {
+				//		childHolder = token;
+				//}
+				foreach (item; childHolder.children) {
+					tag.str ~= item.name;
+						switch (item.name) {
+								case "Jade.Id":
+										assert(item.matches[0] == name);
+										//tag.id = item.matches[0];
+										//s ~= "id:"~ tag.id;
+										break;
+								case "Jade.BlockInATag":
+										tag.blockInATag = item;
+										s ~= "block:"~ tag.blockInATag.name;
+										break;
+								case "Jade.CssClass":
+										tag.cssClasses ~= item.matches[0];
+										//s ~= "cssClass:"~ tag.cssClasses[$-1].matches[0];
+										break;
+								case "Jade.CssId":
+										tag.cssId = item;
+										s ~= "cssId:"~ tag.cssId.matches[0];
+										break;
+								case "Jade.TagArgs":
+										tag.tagArgs = TagArgs.parse(item);
+										s ~= "tagArgs:%s".format(tag.tagArgs);
+										break;
+								case "Jade.BufferedCode":
+										//s ~= "bufferedCode:%s".format(renderBufferedCode(item, indent));
+										break;
+								case `Jade.TextStop!(literal!("]"))`:
+									goto case;
+								case "Jade.InlineText":
+										tag.inlineText ~= item.matches[0];
+										//s ~= "inlineText:%s".format(item.matches[0]);
+										assert(item.matches.length == 1, "Surely inlineText should only have one match?");
+										break;
+								case "Jade.InlineTag":
+										//s ~= "inlineTag:%s".format(renderTag(item, indent));
+										break;
+								case "Jade.SelfCloser":
+										s ~= "selfcloser:true"; // we could put the automatica selfcloser for img, br, etc... by the Jade.Id detection above
+										break;
+								case "Jade.AndAttributes":
+										tag.andAttributes = AndAttributes.parse(item);
+										s ~= "andAttributes:%s".format(tag.andAttributes);
+										break;
+								case "Jade.StringInterpolation":
+										tag.inlineText ~= renderStringInterpolation(item, indent);
+										break;
+								default:
+										//id = &item;
+										s ~= "default:"~item.name;
+						}
+				}
+
+
+
+
+			}
+			return tag;
+		}
+		string renderStringInterpolation(ParseTree p, int indent) {
+			switch (p.matches[0]) {
+				case "#{":
+						return "escape:%s // EscapedStringInterpolation".format(p.matches[1..$]);
+				case "#[":
+						auto tag = Tag.parse(new Item(indent, p.children[0]), false);
+						return "%s".format(tag.prolog);
+				case "!{":
+						return "<unescaped-interpolation>%s</unescaped-interpolation>".format(p.matches[1]);
+				default:
+						assert(0, "Unrecognized StringInterpolation");
+			}
+		}
+	}
 }
 
-bool isIndentedLine(ParseTree p) {
-	if (p.children.length < 1 || p.name != "Jade.Line" || p.children[0].name != "Jade.Indent" || p.children[1].name != "Jade.Line") {
-		return false;
-	}
-	if (p.matches.length > 0 && p.children.length > 0 && p.matches[0][0]=='\t') {
-		return true;
-	}
-	return false;
-}
+//bool isIndentedLine(ParseTree p) {
+//	if (p.children.length < 1 || p.name != "Jade.Line" || p.children[0].name != "Jade.Indent" || p.children[1].name != "Jade.Line") {
+//		return false;
+//	}
+//	if (p.matches.length > 0 && p.children.length > 0 && p.matches[0][0]=='\t') {
+//		return true;
+//	}
+//	return false;
+//}
 
 ParseTree* findParseTree(ref ParseTree p, string name, int maxDepth=int.min) {
 	if (maxDepth != int.min && maxDepth < 0) return null;
