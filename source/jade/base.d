@@ -346,6 +346,8 @@ struct JadeParser {
 				if (attributestoken !is null) {
 					auto tagargs = TagArgs.parse(*attributestoken);
 					attributesString ~= tagargs.toJson;
+				} else {
+					attributesString ~= "{}";
 				}
 				token.prolog ~= "%s\nJadeMixin_%s(%s, %s);".format(token.p, token.matches[0], attributesString, args.join(", "));
 				range.popFront();
