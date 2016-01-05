@@ -12,7 +12,7 @@ import std.uni : asCapitalized;
 string renderToString(alias filename)() {
 	return render!filename.toString;
 }
-auto render(alias filename)() {
+JadeParser.Item[] render(alias filename)() {
 	enum templ = import(filename);
 	enum tmp = blockWrapJadeFile(templ);
 	pragma(msg, "===============================================================================");
@@ -37,17 +37,25 @@ auto render(alias filename)() {
 	return ret;
 }
 
-void render(T)(T output_stream, string filename) {
+JadeParser.Item[] render(string filename) {
 	auto templ = readText("views/"~filename);
 	auto tmp = blockWrapJadeFile(templ);
-	writeln("tmp)", tmp);
-	//auto parse_tree = Jade(tmp);
-	////writeln("tree\n", parse_tree);
-	////auto tmp2 = jadeToTree(parse_tree);
-	////output_stream.write(tmp2);
-	//auto result = renderParseTree(filename, parse_tree);
+	//writeln("blockWrapJadeFile output:\n", tmp);
+	auto parse_tree = Jade(tmp);
+	//writeln("tree\n", parse_tree);
+	auto tree = renderParseTree(filename, parse_tree);
+	auto extend = tree[0].find("Jade.Extend");
+	JadeParser.Item[] ret;
+	if (extend !is null) {
+		writeln("extended");
+		auto base = render(extend.matches[0]);
+		ret ~= base;
+	} else {
+		writeln("not extended");
+	}
+	ret ~= tree[0];
 	//////auto result = "%s".format(parse_tree);
-	//output_stream.write(result);
+	return ret;
 }
 
 import pegged.parser;
@@ -84,27 +92,27 @@ struct JadeParser {
 			this.depth = depth;
 			this.p = p;
 		}
-		override
-		string toString() {
-			auto ret = appender!string;
-			//ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 0 ? p.matches[0] : "");
-			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
-			//return "%s".format(p.name);
-			ret ~= code_prolog.join("\n");
-			ret ~= "\nbuf ~= `";
-			ret ~= prolog.join("`);\nbuf ~= `");
-			foreach (item; items) {
-				if (item.name == "Jade.PipedText") {
-					ret ~= "\nwriteln(`%s`);".format(item.matches[0]);
-				} else {
-					ret ~= item.toString();
-				}
-			}
-			ret ~= epilog.join("`);buf ~= `");
-			ret ~= "`);";
-			ret ~= code_epilog.join("\n");
-			return ret.data;
-		}
+		//override
+		//string toString() {
+		//	auto ret = appender!string;
+		//	//ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 0 ? p.matches[0] : "");
+		//	ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+		//	//return "%s".format(p.name);
+		//	ret ~= code_prolog.join("\n");
+		//	ret ~= "\nbuf ~= `";
+		//	ret ~= prolog.join("`);\nbuf ~= `");
+		//	foreach (item; items) {
+		//		if (item.name == "Jade.PipedText") {
+		//			ret ~= "\nwriteln(`%s`);".format(item.matches[0]);
+		//		} else {
+		//			ret ~= item.toString();
+		//		}
+		//	}
+		//	ret ~= epilog.join("`);buf ~= `");
+		//	ret ~= "`);";
+		//	ret ~= code_epilog.join("\n");
+		//	return ret.data;
+		//}
 		string getOutput(Item[] blockTemplates, Item rootItem=null) {
 			if (rootItem is null) {
 				rootItem = this;
@@ -159,7 +167,7 @@ struct JadeParser {
 				}
 				return ret.data;
 			}
-			ret ~= "\n%s/+ <!-- %s:%s -->+/".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+			//ret ~= "\n%s/+ <!-- %s:%s -->+/".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
 			if (code_prolog) {
 				ret ~= "\n";
 				ret ~= code_prolog.join("\n");
@@ -225,8 +233,13 @@ struct JadeParser {
 			return ret;
 		}
 	}
-	struct LineRange {
-		@disable this();
+	class LineRange {
+	//struct LineRange {
+		//@disable this();
+		static LineRange opCall(ParseTree[] lines, int min_depth) {
+			return new LineRange(lines, min_depth);
+		}
+
 		this(ParseTree[] lines, int min_depth) {
 			this.lines = lines;
 			this.index = 0;
@@ -324,7 +337,9 @@ struct JadeParser {
 				//token.epilog ~= "\nwriteln(`</block>`);";
 				break;
 			case "Jade.Tag":
+				//writeln("tag popfront", range.front);
 				range.popFront();
+				//writeln("tag 2popfront2", range.front);
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
 				auto tag = Tag.parse(token, hasChildren);
 				tag.appendProlog(token.prolog);
@@ -806,7 +821,6 @@ string blockWrapJadeFile(string templ) {
 
 			buf ~= line;
 			buf ~= '{';
-			//writeln("ADDDED");
 			isRawBlock = true;
 			raw_indent = indent;
 		} else if (isRawBlock && indent <= raw_indent) {
@@ -815,7 +829,6 @@ string blockWrapJadeFile(string templ) {
 			buf ~= line;
 			if (strippedLine[$-1] == '.') {
 				buf ~= "{";
-				writeln("ASDDSDF");
 				isRawBlock = true;
 			}
 		} else {
