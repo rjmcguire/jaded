@@ -42,7 +42,7 @@ JadeParser.Item[] render(string filename) {
 	auto tmp = blockWrapJadeFile(templ);
 	//writeln("blockWrapJadeFile output:\n", tmp);
 	auto parse_tree = Jade(tmp);
-	//writeln("tree\n", parse_tree);
+	writeln("tree\n", parse_tree);
 	auto tree = renderParseTree(filename, parse_tree);
 	auto extend = tree[0].find("Jade.Extend");
 	JadeParser.Item[] ret;
@@ -162,7 +162,7 @@ struct JadeParser {
 				}
 				if (blockToReplace !is null) {
 					//ret ~= "|||BTR:%s|||".format(blockToReplace.matches);
-					//blockToReplace.items = this.items;
+					blockToReplace.items = this.items;
 					ret ~= mixinDecl.getOutput(blockTemplates);
 				}
 				return ret.data;
@@ -406,7 +406,7 @@ struct JadeParser {
 				auto mixinDeclArgs = token.findParseTree("Jade.MixinDeclArgs");
 				string[] templateArgNames;
 				string[] argNames;
-				if (mixinDeclArgs !is null) {
+				if (!mixinDeclArgs.isNull) {
 					foreach (arg; mixinDeclArgs.children) {
 						if (arg.name != "Jade.DVariableName") continue;
 						auto name = to!string(arg.matches[0].asCapitalized);
@@ -417,7 +417,7 @@ struct JadeParser {
 					}
 				}
 				auto mixinVarArg = token.findParseTree("Jade.MixinVarArg");
-				if (mixinVarArg) {
+				if (!mixinVarArg.isNull) {
 					auto name = to!string(mixinVarArg.matches[0].asCapitalized);
 					templateArgNames ~= name ~ "...";
 					name ~= " ";
@@ -433,15 +433,15 @@ struct JadeParser {
 			case "Jade.Mixin":
 				auto mixinArgs = token.findParseTree("Jade.MixinArgs");
 				string[] args;
-				if (mixinArgs !is null) {
+				if (!mixinArgs.isNull) {
 					foreach (arg; mixinArgs.children) {
 						args ~= arg.matches[0];
 					}
 				}
 				auto attributestoken = token.findParseTree("Jade.TagArgs");
 				string attributesString;
-				if (attributestoken !is null) {
-					auto tagargs = TagArgs.parse(*attributestoken);
+				if (!attributestoken.isNull) {
+					auto tagargs = TagArgs.parse(attributestoken);
 					attributesString ~= tagargs.toJson;
 				} else {
 					attributesString ~= "{}";
@@ -678,7 +678,7 @@ struct JadeParser {
 
 
 
-				tag.hasRawBlock = findParseTree(token, "Jade.BlockInATag") !is null;
+				tag.hasRawBlock = !(findParseTree(token, "Jade.BlockInATag").isNull);
 				string[] s;
 				//str ~= "%s".format(token.p);
 				auto childHolder = token;
@@ -774,19 +774,22 @@ struct JadeParser {
 //	}
 //	return false;
 //}
-
-ParseTree* findParseTree(ref ParseTree p, string name, int maxDepth=int.min) {
-	if (maxDepth != int.min && maxDepth < 0) return null;
+import std.typecons : Nullable;
+Nullable!ParseTree findParseTree(ref ParseTree p, string name, int maxDepth=int.min) {
+	Nullable!ParseTree ret;
+	if (maxDepth != int.min && maxDepth < 0) return ret;
 	if (p.name == name) {
-		return &p;
+		ret = p;
+		return ret;
 	}
 	foreach (child; p.children) {
 		auto tmp = findParseTree(child, name, maxDepth-1);
-		if (tmp !is null) {
-			return tmp;
+		if (!tmp.isNull) {
+			ret = tmp;
+			return ret;
 		}
 	}
-	return null;
+	return ret;
 }
 
 
