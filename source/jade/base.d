@@ -112,14 +112,16 @@ struct JadeParser {
 				if (conditionalBlock !is null) {
 					if (conditionalBlock.matches[0] == "if") {
 						if (conditionalBlock.items.length <= 0 || (conditionalBlock.items[0].name=="Jade.Tag" && conditionalBlock.items[0].matches[0]=="block")) {
-							conditionalBlock.prolog = "";
-							conditionalBlock.epilog = "";
-							conditionalBlock.items = [];
+							conditionalBlock.prolog ~= "should we remove this if prolog?";
+							//conditionalBlock.prolog = "";
+							//conditionalBlock.epilog = "";
+							//conditionalBlock.items = [];
 						} else {
 							auto elseBlock = this.findByMatch("Jade.Conditional", 0, "else");
-							elseBlock.prolog = "";
-							elseBlock.epilog = "";
-							elseBlock.items = [];
+							elseBlock.prolog ~= "should we remove this else prolog?";
+							//elseBlock.prolog = "";
+							//elseBlock.epilog = "";
+							//elseBlock.items = [];
 						}
 					}
 				}
@@ -424,13 +426,21 @@ struct JadeParser {
 			case "Jade.Conditional":
 				switch (token.matches[0]) {
 					case "if":
-						token.prolog = "";
+						token.prolog = "if ("~ token.matches[1] ~") {";
+						token.epilog = "\n}";
 						break;
 					case "else":
-						token.prolog = "";
+						if (token.matches.length > 1 && token.matches[1] == "if") {
+							token.prolog = "} else if ("~ token.matches[2] ~") {";
+							token.epilog = "\n}";
+						} else {
+							token.prolog = "} else {";
+							token.epilog = "\n}";
+						}
 						break;
 					case "unless":
-						token.prolog = "";
+						token.prolog = "if (!("~ token.matches[1] ~")) {";
+						token.epilog = "\n}";
 						break;
 					default:
 						throw new Exception("Unknown conditional");

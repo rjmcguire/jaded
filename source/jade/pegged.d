@@ -39,8 +39,11 @@ UnbufferedCode <- '-' DLineExpression*
 BufferedCode <- ^('=' / '!=') DLineExpression* # Surely we don't need the * on the end here?
 Conditional <-
 	/ IfBlock
-	/ ('if' / 'unless') DLineExpression
-	/ 'else' (:Spacing+ 'if' :Spacing+ DLineExpression)?
+	/ ('if' / 'unless') ConditionalExpression
+	/ 'else' (:Spacing+ 'if' ConditionalExpression)?
+ConditionalExpression <~
+	/ :Spacing+ (! endOfLine .)+
+	/ :Spacing* :'(' (! ')' .)+ :')'
 IfBlock <- 'if' :Spacing+ 'block'
 Extend <- :'extends' :Spacing+ FileName
 Block <- :'block' :Spacing+ DLineExpression?
