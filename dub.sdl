@@ -1,0 +1,6 @@
+name "jade"
+description "A minimal D application."
+copyright "Copyright © 2015, rmcguire"
+authors "rmcguire"
+dependency "pegged" version=">=0.2.1"
+dependency "jsvar" version=">=0.0.1" path="../jsvar"

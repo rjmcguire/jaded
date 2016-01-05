@@ -161,8 +161,8 @@ struct JadeParser {
 					throw new Exception("warning: block supplied to mixin that has no block");
 				}
 				if (blockToReplace !is null) {
-					ret ~= "|||BTR:%s|||".format(blockToReplace.matches);
-					blockToReplace.items = this.items;
+					//ret ~= "|||BTR:%s|||".format(blockToReplace.matches);
+					//blockToReplace.items = this.items;
 					ret ~= mixinDecl.getOutput(blockTemplates);
 				}
 				return ret.data;
@@ -482,7 +482,7 @@ struct JadeParser {
 				break;
 			case "Jade.Line":
 			default:
-				token.prolog ~= "writeln(`<!-- %s %s depth:%s -->`);".format(ranges.length, token.name, token.depth);
+				token.prolog ~= "<!-- %s %s depth:%s -->".format(ranges.length, token.name, token.depth);
 				range.popFront();
 		}
 		return token;
