@@ -3,11 +3,11 @@ import std.stdio;
 import jade;
 
 void main(string[] args) {
-	auto filename = "plaintext.jade";
+	auto filename = "conditionals.jade";
 	if (args.length > 1) {
 		filename = args[1];
 	}
-	//enum compileTime = render!"plaintext.jade";
+	enum compileTime = render!"conditionals.jade";
 	//pragma(msg, compileTime);
 	//auto writelnSink(string s, int line_number=0, int indent=0) {
 	//	import std.array : replicate;
@@ -23,7 +23,7 @@ void main(string[] args) {
 	//}
 	//mixin(compileTime);
 	//writeln("compileTime: %s", compileTime);
-	//writeln("templates count: ", compileTime.length);
+	writeln("templates count: ", compileTime.length);
 	//static if (compileTime.length > 1) {
 	//	foreach (subtemplate; compileTime[1..$]) {
 	//		enum blocks = compileTime[1].findAll("Jade.Block"); // changing this to use the subtemplate causes "subtemplate cannot be read at compile time".
@@ -33,10 +33,10 @@ void main(string[] args) {
 	//	}
 	//	writeln(compileTime[1].items[1].name);
 	//}
-	//compileTime[0].getOutput(compileTime).writeln;
+	compileTime[0].getOutput(compileTime).writeln;
 	//foreach (item; compileTime) {
 	//	writeln(item.toString);
 	//}
 	//writeln("runtime:");
-	render(stdout, filename);
+	//render(stdout, filename);
 }

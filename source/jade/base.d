@@ -799,13 +799,13 @@ string blockWrapJadeFile(string templ) {
 		indent = indent < 0 ? 0 : indent;
 
 		//buf ~= to!string(indent);
-		writeln(line, "\n", line.length>0 , strippedLine.length >0 ? strippedLine[$-1]=='.' : false );
+		//writeln(line, "\n", line.length>0 , strippedLine.length >0 ? strippedLine[$-1]=='.' : false );
 		if (!isRawBlock && line.length>0 && strippedLine[$-1]=='.') {
 			if (isRawBlock) buf ~= "}\n"; // if a raw block tag follows a raw block tag
 
 			buf ~= line;
 			buf ~= '{';
-			writeln("ADDDED");
+			//writeln("ADDDED");
 			isRawBlock = true;
 			raw_indent = indent;
 		} else if (isRawBlock && indent <= raw_indent) {
