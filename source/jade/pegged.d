@@ -14,7 +14,7 @@ Line	<-
 	/  (Include / Extend / Block / Conditional / UnbufferedCode / BufferedCode / Iteration / MixinDecl / Mixin / Case / Tag / PipedText / Comment / RawHtmlTag / Filter / AnyContentLine) (endOfLine / endOfInput)
 	/ endOfLine
 AnyContentLine <~ (! endOfLine .)*
-BlockInATag <- :'.{' ~(! StopBlockInATag .)+ endOfLine '}'
+BlockInATag <- :'.{' :endOfLine ~(! StopBlockInATag .)+ endOfLine '}'
 StopBlockInATag <- endOfLine '}' endOfLine
 StringInterpolation <-
 	/ ('!{' ~(! '}' .)* :'}')
@@ -40,7 +40,7 @@ BufferedCode <- ^('=' / '!=') DLineExpression* # Surely we don't need the * on t
 Conditional <-
 	/ IfBlock
 	/ ('if' / 'unless') DLineExpression
-	/ 'else'
+	/ 'else' (:Spacing+ 'if' :Spacing+ DLineExpression)?
 IfBlock <- 'if' :Spacing+ 'block'
 Extend <- :'extends' :Spacing+ FileName
 Block <- :'block' :Spacing+ DLineExpression?

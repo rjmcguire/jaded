@@ -40,6 +40,7 @@ auto render(alias filename)() {
 void render(T)(T output_stream, string filename) {
 	auto templ = readText("views/"~filename);
 	auto tmp = blockWrapJadeFile(templ);
+	writeln("tmp)", tmp);
 	auto parse_tree = Jade(tmp);
 	//writeln("tree\n", parse_tree);
 	//auto tmp2 = jadeToTree(parse_tree);
@@ -50,7 +51,7 @@ void render(T)(T output_stream, string filename) {
 }
 
 import pegged.parser;
-import std.string : format;
+import std.string : format, splitLines;
 auto renderParseTree(string filename, ParseTree p) {
 	auto parser = new JadeParser(filename, p);
 	return parser.render();
@@ -421,6 +422,19 @@ struct JadeParser {
 				//token.prolog ~= "%s\nJadeMixin_%s(%s, %s, block);".format(token.p, token.matches[0], attributesString, args.join(", "));
 				break;
 			case "Jade.Conditional":
+				switch (token.matches[0]) {
+					case "if":
+						token.prolog = "";
+						break;
+					case "else":
+						token.prolog = "";
+						break;
+					case "unless":
+						token.prolog = "";
+						break;
+					default:
+						throw new Exception("Unknown conditional");
+				}
 				range.popFront();
 				token.items = render(token.depth);
 				break;
@@ -572,6 +586,18 @@ struct JadeParser {
 			}
 			attribs ~= tagArgs.toHtml;
 
+			if (hasRawBlock) {
+				auto tmp = appender!string;
+				if (this.name == "pre" || this.name == "script" || this.name == "style") tmp ~= "\n";
+				foreach (line; blockInATag.matches[0].splitLines) { // should replace tabs first to be same as jade because jade seems to do that
+					pragma(msg, typeof(line));
+					tmp ~= line.strip;
+				}
+				if (this.name == "pre" || this.name == "script" || this.name == "style") tmp ~= "\n";
+				inlineText = tmp.data;
+
+			}
+
 			if (str.length>0) str = "|"~ str ~"|";
 			if (!hasChildren) {
 				return "%s<%s%s%s>%s%s</%s>".format("\t".replicate(indent), name, classString, attribs, str, inlineText, name);
@@ -589,7 +615,7 @@ struct JadeParser {
 
 		ParseTree cssId;
 		ParseTree blockInATag;
-		bool hasBlock;
+		bool hasRawBlock;
 		string[] cssClasses;
 		TagArgs tagArgs;
 		string inlineText;
@@ -606,7 +632,7 @@ struct JadeParser {
 
 
 
-				tag.hasBlock = findParseTree(token, "Jade.BlockInATag") !is null;
+				tag.hasRawBlock = findParseTree(token, "Jade.BlockInATag") !is null;
 				string[] s;
 				//str ~= "%s".format(token.p);
 				auto childHolder = token;
@@ -738,7 +764,8 @@ string blockWrapJadeFile(string templ) {
 		indent = indent < 0 ? 0 : indent;
 
 		//buf ~= to!string(indent);
-		if (line.length>0 && strippedLine[$-1]=='.' && indent <= raw_indent) {
+		//writeln(line, "\n", line.length>0 , strippedLine[$-1]=='.' , indent <= raw_indent || raw_indent == 0);
+		if (line.length>0 && strippedLine[$-1]=='.' && (indent <= raw_indent || raw_indent == 0)) {
 			if (isRawBlock) buf ~= "}\n"; // if a raw block tag follows a raw block tag
 
 			buf ~= line;
@@ -755,7 +782,6 @@ string blockWrapJadeFile(string templ) {
 		buf ~= '\n';
 		last_indent = indent;
 	}
-
 	return buf.data;
 }
 //Node jadeToTree(ref ParseTree p) {
