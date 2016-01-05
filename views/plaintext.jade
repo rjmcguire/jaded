@@ -1,0 +1,26 @@
+| Plain text can include <strong>html</strong>
+p
+	| It must always be on its own line
+
+p Plain text can include <strong>html</strong>
+
+head
+	script.
+		if (usingJade)
+			console.log('you are awesome')
+		else
+			console.log('use jade')
+
+//- :markdown
+//- 	### Markdown Need dedent support to parse this
+//- 	I often like including markdown documents.
+
+.test2.
+	This is just some text
+	a
+		The a in the line above is not a tag
+
+.test3
+	| Some text
+	.p.my-p-tag.
+		This can be anything
