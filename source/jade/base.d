@@ -795,8 +795,9 @@ string blockWrapJadeFile(string templ) {
 	foreach (line; templ.lineSplitter) {
 		if (line == "}") throw new Exception("Unexpected } on line by itself"); // protect against accidental use of our special marker
 		auto indent = line.countUntil!"a != 0x09";
-		auto strippedLine = line.strip;
 		indent = indent < 0 ? 0 : indent;
+		auto strippedLine = line.strip;
+		if (strippedLine == "") continue;
 
 		//buf ~= to!string(indent);
 		//writeln(line, "\n", line.length>0 , strippedLine.length >0 ? strippedLine[$-1]=='.' : false );
@@ -812,6 +813,11 @@ string blockWrapJadeFile(string templ) {
 			buf ~= "}\n";
 			isRawBlock = false;
 			buf ~= line;
+			if (strippedLine[$-1] == '.') {
+				buf ~= "{";
+				writeln("ASDDSDF");
+				isRawBlock = true;
+			}
 		} else {
 			buf ~= line;
 		}
@@ -821,7 +827,7 @@ string blockWrapJadeFile(string templ) {
 	if (isRawBlock) {
 		buf ~= "}\n";
 	}
-	return buf.data;
+	return buf.data.replace("{\n}", "");
 }
 //Node jadeToTree(ref ParseTree p) {
 //	size_t index;
