@@ -35,7 +35,7 @@ Iteration <-
 	/ ('each' / 'for') :Spacing+ DVariableName (',' :Spacing* DVariableName)? :Spacing+ ^'in' :Spacing+ DLineExpression
 	/ 'while' DLineExpression
 DVariableName <~ [A-Za-z][A-Za-z0-9]*
-UnbufferedCode <- '-' DLineExpression*
+UnbufferedCode <- '-' :Spacing* DLineExpression*
 BufferedCode <- ^('=' / '!=') DLineExpression* # Surely we don't need the * on the end here?
 Conditional <-
 	/ IfBlock

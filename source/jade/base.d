@@ -41,17 +41,17 @@ void render(T)(T output_stream, string filename) {
 	auto templ = readText("views/"~filename);
 	auto tmp = blockWrapJadeFile(templ);
 	writeln("tmp)", tmp);
-	auto parse_tree = Jade(tmp);
-	//writeln("tree\n", parse_tree);
-	//auto tmp2 = jadeToTree(parse_tree);
-	//output_stream.write(tmp2);
-	auto result = renderParseTree(filename, parse_tree);
-	////auto result = "%s".format(parse_tree);
-	output_stream.write(result);
+	//auto parse_tree = Jade(tmp);
+	////writeln("tree\n", parse_tree);
+	////auto tmp2 = jadeToTree(parse_tree);
+	////output_stream.write(tmp2);
+	//auto result = renderParseTree(filename, parse_tree);
+	//////auto result = "%s".format(parse_tree);
+	//output_stream.write(result);
 }
 
 import pegged.parser;
-import std.string : format, splitLines;
+import std.string : format, splitLines, stripLeft;
 auto renderParseTree(string filename, ParseTree p) {
 	auto parser = new JadeParser(filename, p);
 	return parser.render();
@@ -76,7 +76,8 @@ struct JadeParser {
 	class Item {
 		int depth;
 		ParseTree p;
-		string prolog, epilog;
+		string[] code_prolog, code_epilog;
+		string[] prolog, epilog;
 		Item[] items;
 		alias p this;
 		this(int depth, ParseTree p) {
@@ -89,7 +90,9 @@ struct JadeParser {
 			//ret ~= "\nwriteln(`%s<!-- %s:%s -->`);\n".format("\t".replicate(depth), p.name, p.matches.length > 0 ? p.matches[0] : "");
 			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
 			//return "%s".format(p.name);
-			ret ~= prolog;
+			ret ~= code_prolog.join("\n");
+			ret ~= "\nbuf ~= `";
+			ret ~= prolog.join("`);\nbuf ~= `");
 			foreach (item; items) {
 				if (item.name == "Jade.PipedText") {
 					ret ~= "\nwriteln(`%s`);".format(item.matches[0]);
@@ -97,7 +100,9 @@ struct JadeParser {
 					ret ~= item.toString();
 				}
 			}
-			ret ~= epilog;
+			ret ~= epilog.join("`);buf ~= `");
+			ret ~= "`);";
+			ret ~= code_epilog.join("\n");
 			return ret.data;
 		}
 		string getOutput(Item[] blockTemplates, Item rootItem=null) {
@@ -106,25 +111,25 @@ struct JadeParser {
 			}
 			auto ret = appender!string;
 			if (p.name == "Jade.MixinDecl") {
-				ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
+				/// I wonder if it would be interesting to output these mixin declarations as AngularJS templates so they are available in browser using <script id="mixinName">The MixinDecl's items</script>
+				//ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
 				// TODO: must render else block if there is no items for "if block"
-				auto conditionalBlock = this.findByMatch("Jade.Conditional", 1, "block");
-				if (conditionalBlock !is null) {
-					if (conditionalBlock.matches[0] == "if") {
-						if (conditionalBlock.items.length <= 0 || (conditionalBlock.items[0].name=="Jade.Tag" && conditionalBlock.items[0].matches[0]=="block")) {
-							conditionalBlock.prolog ~= "should we remove this if prolog?";
-							//conditionalBlock.prolog = "";
-							//conditionalBlock.epilog = "";
-							//conditionalBlock.items = [];
-						} else {
-							auto elseBlock = this.findByMatch("Jade.Conditional", 0, "else");
-							elseBlock.prolog ~= "should we remove this else prolog?";
-							//elseBlock.prolog = "";
-							//elseBlock.epilog = "";
-							//elseBlock.items = [];
-						}
-					}
-				}
+				//auto conditionalBlock = this.findByMatch("Jade.Conditional", 1, "block");
+				//if (conditionalBlock !is null) {
+				//	if (conditionalBlock.matches[0] == "if") {
+				//		if (conditionalBlock.items.length <= 0 || (conditionalBlock.items[0].name=="Jade.Tag" && conditionalBlock.items[0].matches[0]=="block")) {
+				//			//conditionalBlock.prolog ~= "";
+				//			//conditionalBlock.epilog ~= "";
+				//			//conditionalBlock.items = [];
+				//		} else {
+				//			auto elseBlock = this.findByMatch("Jade.Conditional", 0, "else");
+				//			//elseBlock.prolog ~= "";
+				//			//elseBlock.epilog ~= "";
+				//			//elseBlock.items = [];
+				//		}
+				//	}
+				//}
+				return "";
 			}
 			if (p.name == "Jade.Mixin") {
 				auto mixinDecl = rootItem.findByMatch("Jade.MixinDecl", 0, p.matches[0]);
@@ -143,7 +148,7 @@ struct JadeParser {
 				if (!blockToReplace) {
 					blockToReplace = mixinDecl.findByMatch("Jade.Tag", 0, "block");
 				}
-				ret ~= "%s MixinCHILDCOUNT:%s, BlockReplace:%s".format(p, items.length, mixinDecl);
+				//ret ~= "%s MixinCHILDCOUNT:%s, BlockReplace:%s".format(p, items.length, mixinDecl);
 				if (items.length > 0 && !blockToReplace) {
 					throw new Exception("warning: block supplied to mixin that has no block");
 				}
@@ -154,9 +159,16 @@ struct JadeParser {
 				}
 				return ret.data;
 			}
-			ret ~= "\n";
-			ret ~= "\n%s<!-- %s:%s -->\n".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
-			ret ~= prolog;
+			ret ~= "\n%s/+ <!-- %s:%s -->+/".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
+			if (code_prolog) {
+				ret ~= "\n";
+				ret ~= code_prolog.join("\n");
+			}
+			if (prolog) {
+				ret ~= "\nbuf ~= `";
+				ret ~= prolog.join("`);\nbuf ~= `");
+				ret ~= "`;";
+			}
 			if (p.name == "Jade.Block") { // This is how we do template inheritance with extends
 				foreach (item; blockTemplates) {
 					foreach (b; item.findAll("Jade.Block")) {
@@ -169,7 +181,12 @@ struct JadeParser {
 			foreach(item; items) {
 				ret ~= item.getOutput(blockTemplates, rootItem);
 			}
-			ret ~= epilog;
+			if (epilog) {
+				ret ~= "\nbuf ~= `";
+				ret ~= epilog.join("`;\nbuf ~= `");
+				ret ~= "`;";
+			}
+			ret ~= code_epilog.join("\n");
 			return ret.data;
 		}
 
@@ -257,7 +274,6 @@ struct JadeParser {
 		//if (!range.empty)
 		//	ret ~= "\nwriteln(`range empty? %s - %s vs %s vs %s - %s || %s -- %s`);".format(range.empty, range.front.depth, range.min_depth ? range.min_depth : stop_depth, range.index, range.index >= range.lines.length, range.front.depth < range.min_depth, range.lines.length > range.index ? range.front.name : "empty for real");
 		while (!range.empty) {
-			pragma(msg, 1);
 			ret ~= renderTag(range.front);
 			//auto item = renderTag(range.front);
 			//ret ~= "%s".format(item);
@@ -281,7 +297,8 @@ struct JadeParser {
 	private Item renderTag(Item token) {
 		switch (token.name) {
 			case "Jade.RootTag":
-				token.prolog ~= "\n/** jade template: %s.jade %s */".format(name, token.children.length);
+				token.code_prolog ~= "/** jade template: %s.jade %s */".format(name, token.children.length);
+				token.code_prolog ~= "import std.array : appender;\nauto buf = appender!string;";
 				ranges ~= LineRange(token.children, token.depth);
 				//token.prolog ~= render();
 				token.items ~= render();
@@ -296,7 +313,7 @@ struct JadeParser {
 				range.popFront();
 				break;
 			case "Jade.Include":
-				token.prolog ~= "\nwriteln(import(`%s`));".format(token.matches[0]);
+				token.code_prolog ~= "buf ~= import(`%s`);".format(token.matches[0]);
 				range.popFront();
 				break;
 			case "Jade.Block":
@@ -310,11 +327,11 @@ struct JadeParser {
 				range.popFront();
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
 				auto tag = Tag.parse(token, hasChildren);
-				token.prolog ~= tag.prolog;
+				tag.appendProlog(token.prolog);
 				if (hasChildren) {
 					token.items ~= render(token.depth);
 				}
-				token.epilog ~= tag.epilog;
+				tag.appendEpilog(token.epilog);
 				//auto name = token.matches[0];
 				//if (name==".") {
 				//	name = "div";
@@ -338,8 +355,8 @@ struct JadeParser {
 				//token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->` `PipedText:%s`);".format(ranges.length, token.name, token.depth, token.matches);
 				//token.prolog ~= "\n%s".format(token.matches[0]);
 				auto tag = Tag.parse(token, false);
-				token.prolog ~= tag.prolog;
-				token.epilog ~= tag.epilog;
+				tag.appendProlog(token.prolog);
+				tag.appendEpilog(token.epilog);
 				//foreach (child; token.children) {
 				//	if (child.name == "Jade.InlineText") {
 				//		token.prolog ~= child.matches[0];
@@ -356,17 +373,17 @@ struct JadeParser {
 				if (!token.matches[1].endsWith(";")) {
 					throw new Exception("UnbufferedCode must end with a ';' at: %s".format(token.matches[1]));
 				}
-				token.prolog ~= "%s".format(token.matches[1]);
+				token.code_prolog ~= "%s".format(token.matches[1]);
 				range.popFront();
 				break;
 			case "Jade.RawHtmlTag":
-				token.prolog = "%s%s".format("\t".replicate(token.depth), token.matches[0]);
+				token.prolog ~= "%s%s".format("\t".replicate(token.depth), token.matches[0]);
 				range.popFront();
 				break;
 			case "Jade.Comment":
 				if (token.matches[0] == "//") {
-					token.prolog = "%s<!-- %s ".format("\t".replicate(token.depth), token.matches.length > 2 ? token.matches[2] : token.matches[1]);
-					token.epilog = "-->";
+					token.prolog ~= "%s<!-- %s ".format("\t".replicate(token.depth), token.matches.length > 2 ? token.matches[2] : token.matches[1]);
+					token.epilog ~= "-->";
 				}
 				range.popFront();
 				break;
@@ -426,31 +443,31 @@ struct JadeParser {
 			case "Jade.Conditional":
 				switch (token.matches[0]) {
 					case "if":
-						token.prolog = "if ("~ token.matches[1] ~") {";
-						token.epilog = "\n}";
+						token.code_prolog ~= "if ("~ token.matches[1] ~") {";
+						token.code_epilog ~= "\n}";
 						break;
 					case "else":
 						if (token.matches.length > 1 && token.matches[1] == "if") {
-							token.prolog = "} else if ("~ token.matches[2] ~") {";
-							token.epilog = "\n}";
+							token.code_prolog ~= " else if ("~ token.matches[2] ~") {";
+							token.code_epilog ~= "\n}";
 						} else {
-							token.prolog = "} else {";
-							token.epilog = "\n}";
+							token.code_prolog ~= " else {";
+							token.code_epilog ~= "\n}";
 						}
 						break;
 					case "unless":
-						token.prolog = "if (!("~ token.matches[1] ~")) {";
-						token.epilog = "\n}";
+						token.code_prolog ~= "if (!("~ token.matches[1] ~")) {";
+						token.code_epilog ~= "\n}";
 						break;
 					default:
-						throw new Exception("Unknown conditional");
+						assert(0, "Unknown conditional");
 				}
 				range.popFront();
 				token.items = render(token.depth);
 				break;
 			case "Jade.Line":
 			default:
-				token.prolog ~= "\nwriteln(`<!-- %s %s depth:%s -->`);".format(ranges.length, token.name, token.depth);
+				token.prolog ~= "writeln(`<!-- %s %s depth:%s -->`);".format(ranges.length, token.name, token.depth);
 				range.popFront();
 		}
 		return token;
@@ -580,9 +597,12 @@ struct JadeParser {
 
 	struct Tag {
 		string str;
-		string prolog() {
+		void appendProlog(ref string[] prolog) {
 			if (name == "|") {
-				return "%s|%s".format(str, inlineText);
+				if (str) str ~= "|";
+
+				prolog ~= "%s%s".format(str, inlineText);
+				return;
 			}
 			string classString;
 			if (cssClasses.length > 0) {
@@ -598,27 +618,28 @@ struct JadeParser {
 
 			if (hasRawBlock) {
 				auto tmp = appender!string;
-				if (this.name == "pre" || this.name == "script" || this.name == "style") tmp ~= "\n";
-				foreach (line; blockInATag.matches[0].splitLines) { // should replace tabs first to be same as jade because jade seems to do that
-					pragma(msg, typeof(line));
-					tmp ~= line.strip;
+				auto keepLines = this.name == "pre" || this.name == "script" || this.name == "style";
+				if (keepLines) tmp ~= "\n";
+				auto keep = keepLines ? KeepTerminator.yes : KeepTerminator.no;
+				foreach (line; blockInATag.matches[0].splitLines(keep)) { // should replace tabs first to be same as jade because jade seems to do that
+					tmp ~= keep ? line : line.stripLeft;
 				}
-				if (this.name == "pre" || this.name == "script" || this.name == "style") tmp ~= "\n";
+				if (keepLines) tmp ~= "\n";
 				inlineText = tmp.data;
 
 			}
 
 			if (str.length>0) str = "|"~ str ~"|";
 			if (!hasChildren) {
-				return "%s<%s%s%s>%s%s</%s>".format("\t".replicate(indent), name, classString, attribs, str, inlineText, name);
+				prolog ~= "<%s%s%s>%s%s</%s>".format(name, classString, attribs, str, inlineText, name);
+				return;
 			}
-			return "%s<%s%s%s>%s%s".format("\t".replicate(indent), name, classString, attribs, str, inlineText);
+			prolog ~= "<%s%s%s>%s%s".format(name, classString, attribs, str, inlineText);
 		}
-		string epilog() {
-			if (!hasChildren || name == "|") {
-				return "";
+		void appendEpilog(ref string[] epilog) {
+			if (hasChildren && name != "|") {
+				epilog ~= "</%s>".format(name);
 			}
-			return "\n%s</%s>".format("\t".replicate(indent), name);
 		}
 		string name;
 		bool hasChildren;
@@ -695,7 +716,7 @@ struct JadeParser {
 										s ~= "andAttributes:%s".format(tag.andAttributes);
 										break;
 								case "Jade.StringInterpolation":
-										tag.inlineText ~= renderStringInterpolation(item, indent);
+										tag.inlineText ~= renderStringInterpolation(item, indent).join("");
 										break;
 								default:
 										//id = &item;
@@ -709,15 +730,19 @@ struct JadeParser {
 			}
 			return tag;
 		}
-		string renderStringInterpolation(ParseTree p, int indent) {
+		string[] renderStringInterpolation(ParseTree p, int indent) {
+			string[] ret;
 			switch (p.matches[0]) {
 				case "#{":
-						return "escape:%s // EscapedStringInterpolation".format(p.matches[1..$]);
+					ret ~= "escape:%s // EscapedStringInterpolation".format(p.matches[1..$]);
+					return ret;
 				case "#[":
-						auto tag = Tag.parse(new Item(indent, p.children[0]), false);
-						return "%s".format(tag.prolog);
+					auto tag = Tag.parse(new Item(indent, p.children[0]), false);
+					tag.appendProlog(ret);
+					return ret;
 				case "!{":
-						return "<unescaped-interpolation>%s</unescaped-interpolation>".format(p.matches[1]);
+					ret ~= "<unescaped-interpolation>%s</unescaped-interpolation>".format(p.matches[1]);
+					return ret;
 				default:
 						assert(0, "Unrecognized StringInterpolation");
 			}
@@ -774,12 +799,13 @@ string blockWrapJadeFile(string templ) {
 		indent = indent < 0 ? 0 : indent;
 
 		//buf ~= to!string(indent);
-		//writeln(line, "\n", line.length>0 , strippedLine[$-1]=='.' , indent <= raw_indent || raw_indent == 0);
-		if (line.length>0 && strippedLine[$-1]=='.' && (indent <= raw_indent || raw_indent == 0)) {
+		writeln(line, "\n", line.length>0 , strippedLine.length >0 ? strippedLine[$-1]=='.' : false );
+		if (!isRawBlock && line.length>0 && strippedLine[$-1]=='.') {
 			if (isRawBlock) buf ~= "}\n"; // if a raw block tag follows a raw block tag
 
 			buf ~= line;
 			buf ~= '{';
+			writeln("ADDDED");
 			isRawBlock = true;
 			raw_indent = indent;
 		} else if (isRawBlock && indent <= raw_indent) {
@@ -791,6 +817,9 @@ string blockWrapJadeFile(string templ) {
 		}
 		buf ~= '\n';
 		last_indent = indent;
+	}
+	if (isRawBlock) {
+		buf ~= "}\n";
 	}
 	return buf.data;
 }
