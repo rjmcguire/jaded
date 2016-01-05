@@ -1,26 +1,33 @@
-| Plain text can include <strong>html</strong>
-p
-	| It must always be on its own line
+asdf
+	asdf2.
+		| Plain text can include <strong>html</strong>
+		p
+			| It must always be on its own line
 
-p Plain text can include <strong>html</strong>
+		p Plain text can include <strong>html</strong>
+	asdf3
+		head
+			script.
+				if (usingJade)
+					console.log('you are awesome')
+				else
+					console.log('use jade')
 
-head
-	script.
-		if (usingJade)
-			console.log('you are awesome')
-		else
-			console.log('use jade')
+		//- :markdown
+		//- 	### Markdown Need dedent support to parse this
+		//- 	I often like including markdown documents.
 
-//- :markdown
-//- 	### Markdown Need dedent support to parse this
-//- 	I often like including markdown documents.
+		.test2.
+			This is just some text
+			a
+				The a in the line above is not a tag
 
-.test2.
-	This is just some text
-	a
-		The a in the line above is not a tag
+		.test3
+			| Some text
+			.p.my-p-tag.
+				This can be anything
 
-.test3
-	| Some text
-	.p.my-p-tag.
-		This can be anything
+
+
+p Come up with a test that checks if I can strip the {\n} at the end of markdown.
+	| This line should be in a tag called p and should have a #[a(href="jade-lang.com") link] to Jade.
