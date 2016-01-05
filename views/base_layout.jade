@@ -30,7 +30,7 @@ if "localhost" == host
 		//- include:markdown ./includes/footer.jade
 else
 	merrrt
-unless !user.isAnonymous
+unless user.isAnonymous
 	You are logged in
 //- :markdown
 //- 	### Markdown Need dedent support to parse this
