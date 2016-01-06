@@ -25,7 +25,7 @@ mixin list2(id, ...items)
 
 mixin link(href, name)
 	//- attributes == {class: "btn"}
-	a(class!=attributes.class, href=href)= name
+	a(class!=attributes["class"], href=href)= name
 
 +link("/foo", "foo")(class="btn")
 
@@ -33,10 +33,10 @@ mixin article(title)
 	.article
 		.article-wrapper
 			h1= title
-				if block
-					block
-				else
-					p No content provided
+			if block
+				block
+			else
+				p No content provided
 
 +article("Hello world")
 

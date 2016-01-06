@@ -38,7 +38,7 @@ JadeParser.Item[] render(alias filename)() {
 }
 
 JadeParser.Item[] render(string filename) {
-	auto templ = readText("views/"~filename);
+	auto templ = readText(filename);
 	auto tmp = blockWrapJadeFile(templ);
 	//writeln("blockWrapJadeFile output:\n", tmp);
 	auto parse_tree = Jade(tmp);
@@ -344,6 +344,12 @@ struct JadeParser {
 				//writeln("tag 2popfront2", range.front);
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
 				auto tag = Tag.parse(token, hasChildren);
+				/// Special handling of tag called block which is used to output the block argument of Mixin values within MixinDecl
+				if (tag.name == "block") {
+					token.code_prolog ~= "buf ~= block();";
+					break;
+				}
+
 				tag.appendProlog(token.prolog);
 				if (hasChildren) {
 					token.items ~= render(token.depth);
@@ -427,7 +433,7 @@ struct JadeParser {
 					argNames ~= name;
 				}
 
-				token.code_prolog ~= "void JadeMixin_%s(Attributes, BlockT%s)(Attributes attributes, BlockT block%s) {".format(token.matches[0], templateArgNames.length ? ", "~templateArgNames.join(", ") : "", argNames.length ? ", "~argNames.join(", ") : "");
+				token.code_prolog ~= "void JadeMixin_%s(alias block, Attributes%s)(Attributes attributes%s) {".format(token.matches[0], templateArgNames.length ? ", "~templateArgNames.join(", ") : "", argNames.length ? ", "~argNames.join(", ") : "");
 				range.popFront();
 				token.items ~= render(token.depth);
 				token.code_epilog ~= "\n}";
@@ -452,23 +458,37 @@ struct JadeParser {
 				}
 				range.popFront();
 				token.items = render(token.depth);
-				auto block = "() { auto buf = appender!string;";
+				string block;
 				foreach (item; token.items) {
 					block ~= "%s\n".format(item.getOutput([]));
 				}
-				block ~= "return buf.data; }";
+				if (block.length) {
+					block = "() { auto buf = appender!string;"~ block ~"return buf.data; }";
+				} else {
+					block = "null";
+				}
 				token.items = []; // remove all children, we've processed them.
-				token.code_prolog ~= "JadeMixin_%s(%s, %s%s);".format(token.matches[0], attributesString, block, args.length ? ","~args.join(", ") : "");
+				token.code_prolog ~= "JadeMixin_%s!(%s)(%s%s);".format(token.matches[0], block, attributesString, args.length ? ","~args.join(", ") : "");
 				break;
 			case "Jade.Conditional":
 				switch (token.matches[0]) {
 					case "if":
-						token.code_prolog ~= "if ("~ token.matches[1] ~") {";
+						/// Special handling of tag called block which is used to output the block argument of Mixin values within MixinDecl
+						if (token.matches[1] == "block") {
+							token.code_prolog ~= "static if (isCallable!block) {";
+						} else {
+							token.code_prolog ~= "if ("~ token.matches[1] ~") {";
+						}
 						token.code_epilog ~= "\n}";
 						break;
 					case "else":
 						if (token.matches.length > 1 && token.matches[1] == "if") {
-							token.code_prolog ~= " else if ("~ token.matches[2] ~") {";
+							/// Special handling of tag called block which is used to output the block argument of Mixin values within MixinDecl
+							if (token.matches[1] == "block") {
+								token.code_prolog ~= " else static if (isCallable!block) {";
+							} else {
+								token.code_prolog ~= " else if ("~ token.matches[2] ~") {";
+							}
 							token.code_epilog ~= "\n}";
 						} else {
 							token.code_prolog ~= " else {";
@@ -484,6 +504,18 @@ struct JadeParser {
 				}
 				range.popFront();
 				token.items = render(token.depth);
+				break;
+			case "Jade.Iteration":
+				range.popFront();
+				import std.exception : enforce;
+				auto itemName = token.findParseTree("Jade.DVariableName");
+				enforce(!itemName.isNull, "Iteration expects an item name.");
+				auto expression = token.findParseTree("Jade.DLineExpression");
+				enforce(!expression.isNull, "Iteration expects an range to iterate");
+
+				token.code_prolog ~= "foreach (%s; %s) {".format(itemName.matches[0], expression.matches[0]);
+				token.items = render(token.depth);
+				token.code_epilog ~= "\n}";
 				break;
 			case "Jade.Line":
 			default:
