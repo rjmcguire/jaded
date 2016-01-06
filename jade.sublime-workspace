@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"attr",
+				"attributesString	variable"
+			],
+			[
+				"mix",
+				"mixinVarArg_ptr	variable"
+			],
+			[
+				"block",
+				"blockInATag	variable"
+			],
+			[
 				"mat",
 				"matchValue	variable"
 			],
@@ -115,35 +127,7 @@
 			"file": "source/jade/base.d",
 			"settings":
 			{
-				"buffer_size": 24899,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "<ul>\n    <li>foo</li>\n    <li>bar</li>\n    <li>baz</li>\n</ul>\n<ul>\n    <li>foo</li>\n    <li>bar</li>\n    <li>baz</li>\n</ul>\n<ul>\n    <li class=\"pet\">cat</li>\n    <li class=\"pet\">dog</li>\n    <li class=\"pet\">pig</li>\n</ul>\n<ul id=\"my-list\">\n    <li>1</li>\n    <li>2</li>\n    <li>3</li>\n    <li>4</li>\n</ul><a href=\"/foo\" class=\"btn\">foo</a>\n<div class=\"article\">\n    <div class=\"article-wrapper\">\n        <h1>Hello world<p>No content provided</p></h1></div>\n</div>\n<div class=\"article\">\n    <div class=\"article-wrapper\">\n        <h1>Hello world<p>This is my</p><p>Amazing article</p></h1></div>\n</div>\n",
-			"file": "views/mixins.html",
-			"file_size": 496,
-			"file_write_time": 130964105295897047,
-			"settings":
-			{
-				"buffer_size": 601,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "<!-- Jade.MixinDecl:[\"article\", \"(\", \"title\"] -->\n\n\n	<!-- Jade.Tag:[\".\", \"article\"] -->\n	<div class=\"article\">\n\n		<!-- Jade.Tag:[\".\", \"article-wrapper\"] -->\n		<div class=\"article-wrapper\">\n\n	<!-- Jade.Tag:[\"p\", \"This is my\"] -->\n	<p>This is my</p>\n\n	<!-- Jade.Tag:[\"p\", \"Amazing article\"] -->\n	<p>Amazing article</p>\n		</div>\n	</div>\n}\n",
-			"settings":
-			{
-				"buffer_size": 336,
-				"line_ending": "Unix",
-				"name": "<!-- Jade.MixinDecl:[\"article\", \"(\", \"title\"] -->"
-			}
-		},
-		{
-			"file": "source/app.d",
-			"settings":
-			{
-				"buffer_size": 1206,
+				"buffer_size": 28007,
 				"line_ending": "Unix"
 			}
 		},
@@ -151,16 +135,60 @@
 			"file": "views/mixins.jade",
 			"settings":
 			{
-				"buffer_size": 597,
-				"line_ending": "Unix",
-				"name": "//- Declaration"
+				"buffer_size": 602,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "views/base_layout.jade",
+			"file": "source/app.d",
 			"settings":
 			{
-				"buffer_size": 2567,
+				"buffer_size": 526,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "<ul1>\n    <li>foo</li>\n    <li>bar</li>\n    <li>baz</li>\n</ul1>\n<ul1>\n    <li>foo</li>\n    <li>bar</li>\n    <li>baz</li>\n</ul1>\n<ul2>\n    <li class=\"pet\"></li>\n    <li class=\"pet\"></li>\n    <li class=\"pet\"></li>\n</ul2>\n<ul3 id=id>\n    <!-- 2 Jade.Iteration depth:2 -->\n    <li></li>\n</ul3>\n<a class=attributes.class href=href></a>\n<div class=\"article\">\n    <div class=\"article-wrapper\">\n        <h1><block></block></h1></div>\n</div>\n<div class=\"article\">\n    <div class=\"article-wrapper\">\n        <h1><block></block></h1></div>\n</div>\n",
+			"settings":
+			{
+				"buffer_size": 535,
+				"line_ending": "Unix",
+				"name": "<ul1>"
+			}
+		},
+		{
+			"contents": "<ul1>\n    <li>foo</li>\n    <li>bar</li>\n    <li>baz</li>\n</ul1>\n<ul1>\n    <li>foo</li>\n    <li>bar</li>\n    <li>baz</li>\n</ul1>\n<ul2>\n    <li class=\"pet\">cat</li>\n    <li class=\"pet\">dog</li>\n    <li class=\"pet\">pig</li>\n</ul2>\n<ul3 id=\"my-list\">\n    <li>1</li>\n    <li>2</li>\n    <li>3</li>\n    <li>4</li>\n</ul3><a href=\"/foo\" class=\"btn\">foo</a>\n<div class=\"article\">\n    <div class=\"article-wrapper\">\n        <h1>Hello world<p>No content provided</p></h1></div>\n</div>\n<div class=\"article\">\n    <div class=\"article-wrapper\">\n        <h1>Hello world<p>This is my</p><p>Amazing article</p></h1></div>\n</div>\n",
+			"file": "views/mixins.html",
+			"file_size": 504,
+			"file_write_time": 130965465113292291,
+			"settings":
+			{
+				"buffer_size": 609,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/** jade template: mixins.jade 36 */\nimport std.array : appender;\nauto buf = appender!string;\nvoid JadeMixin_list(Attributes, )(Attributes attributes, ) {\nbuf ~= `<ul1>`;\nbuf ~= `<li>foo</li>`;\nbuf ~= `<li>bar</li>`;\nbuf ~= `<li>baz</li>`;\nbuf ~= `</ul1>`;}\nJadeMixin_list({}, , () { auto buf = appender!string;return buf.data; });\nJadeMixin_list({}, , () { auto buf = appender!string;return buf.data; });\nvoid JadeMixin_pet(Attributes, Name)(Attributes attributes, Name name) {\nbuf ~= `<li class=\"pet\"></li>`;}\nbuf ~= `<ul2>`;\nJadeMixin_pet({}, 'cat', () { auto buf = appender!string;return buf.data; });\nJadeMixin_pet({}, 'dog', () { auto buf = appender!string;return buf.data; });\nJadeMixin_pet({}, 'pig', () { auto buf = appender!string;return buf.data; });\nbuf ~= `</ul2>`;\nvoid JadeMixin_list(Attributes, Id, Items...)(Attributes attributes, Id id, Items items) {\nbuf ~= `<ul3 id=id>`;\nbuf ~= `<!-- 2 Jade.Iteration depth:2 -->`;\nbuf ~= `<li></li>`;\nbuf ~= `</ul3>`;}\nJadeMixin_list({}, 'my-list', 1, 2, 3, 4, () { auto buf = appender!string;return buf.data; });\nvoid JadeMixin_link(Attributes, Href, Name)(Attributes attributes, Href href, Name name) {\nbuf ~= `<a class!=attributes.class href=href></a>`;}\nJadeMixin_link({class=\"btn\"}, '/foo', 'foo', () { auto buf = appender!string;return buf.data; });\nvoid JadeMixin_article(Attributes, Title)(Attributes attributes, Title title) {\nbuf ~= `<div class=\"article\">`;\nbuf ~= `<div class=\"article-wrapper\">`;\nbuf ~= `<h1>`;\nif (block) {\nbuf ~= `<block></block>`;\n}\n else {\nbuf ~= `<p>No content provided</p>`;\n}\nbuf ~= `</h1>`;\nbuf ~= `</div>`;\nbuf ~= `</div>`;}\nJadeMixin_article({}, 'Hello world', () { auto buf = appender!string;return buf.data; });\nJadeMixin_article({}, 'Hello world', () { auto buf = appender!string;\nbuf ~= `<p>This is my</p>`;\n\nbuf ~= `<p>Amazing article</p>`;\nreturn buf.data; });\n",
+			"settings":
+			{
+				"buffer_size": 1860,
+				"line_ending": "Unix",
+				"name": "/** jade template: mixins.jade 36 */"
+			}
+		},
+		{
+			"file": "/home/rmcguire/Projects/examples/d_tests/struct_init.d",
+			"settings":
+			{
+				"buffer_size": 394,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/plaintext.jade",
+			"settings":
+			{
+				"buffer_size": 738,
 				"line_ending": "Unix"
 			}
 		},
@@ -168,7 +196,7 @@
 			"file": "source/jade/pegged.d",
 			"settings":
 			{
-				"buffer_size": 6162,
+				"buffer_size": 6315,
 				"line_ending": "Unix"
 			}
 		}
@@ -180,13 +208,53 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 588.0,
-		"last_filter": "prett",
+		"height": 486.0,
+		"last_filter": "html",
 		"selected_items":
 		[
 			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
 				"prett",
 				"HTMLPrettify"
+			],
+			[
+				"dele",
+				"File: Delete"
+			],
+			[
+				"move",
+				"File: Move"
+			],
+			[
+				"ssd",
+				"Set Syntax: D"
+			],
+			[
+				"d",
+				"Set Syntax: D"
+			],
+			[
+				"rena",
+				"File: Rename"
+			],
+			[
+				"rename",
+				"File: Rename"
+			],
+			[
+				"tabs",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"spaces",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"ren",
+				"File: Rename"
 			],
 			[
 				"insta",
@@ -201,10 +269,6 @@
 				"Package Control: Install Package"
 			],
 			[
-				"html",
-				"Set Syntax: HTML"
-			],
-			[
 				"xml",
 				"xml2json"
 			],
@@ -213,36 +277,12 @@
 				"Set Syntax: XML"
 			],
 			[
-				"tabs",
-				"Indentation: Convert to Tabs"
-			],
-			[
 				"wr",
 				"Word Wrap: Toggle"
 			],
 			[
-				"d",
-				"Set Syntax: D"
-			],
-			[
 				"ssh",
 				"Set Syntax: HTML"
-			],
-			[
-				"ssd",
-				"Set Syntax: D"
-			],
-			[
-				"move",
-				"File: Move"
-			],
-			[
-				"dele",
-				"File: Delete"
-			],
-			[
-				"ren",
-				"File: Rename"
 			],
 			[
 				"inst",
@@ -265,7 +305,7 @@
 				"DKit: Restart DCD Autocompletion Server"
 			]
 		],
-		"width": 1484.0
+		"width": 766.0
 	},
 	"console":
 	{
@@ -293,16 +333,35 @@
 	],
 	"file_history":
 	[
-		"/home/rmcguire/.config/sublime-text-3/Packages/HTML-CSS-JS Prettify/HTMLPrettify.sublime-settings",
+		"/home/rmcguire/Projects/jade/views/mixins.js",
 		"/home/rmcguire/Projects/jade/views/mixins.html",
+		"/home/rmcguire/Projects/jsvar/example/source/app.d",
+		"/home/rmcguire/Projects/jsvar/source/arsd/jsvar.d",
+		"/home/rmcguire/Projects/examples/d_tests/statement_not_reachable_jsvar2.d",
+		"/home/rmcguire/Projects/examples/d_tests/statement_not_reachable_jsvar.d",
+		"/home/rmcguire/Projects/jsvar/dub.sdl",
+		"/home/rmcguire/Projects/journeyd/dub.sdl",
+		"/home/rmcguire/Projects/jsvar/example/dub.sdl",
+		"/home/rmcguire/Projects/jade/dub.sdl",
+		"/home/rmcguire/Projects/jade/current_output.txt",
+		"/home/rmcguire/Projects/jade/views/index.html",
+		"/home/rmcguire/Projects/jade/views/base_layout.jade",
+		"/home/rmcguire/Projects/jade/views/conditionals.jade",
+		"/home/rmcguire/Projects/jade/test.d",
+		"/home/rmcguire/Projects/jade/views/plaintext.jade",
+		"/home/rmcguire/Projects/jade/views/plaintext.html",
+		"/home/rmcguire/Projects/jade/views/plaintext.",
+		"/home/rmcguire/Projects/jade/views/mixins.jade",
+		"/home/rmcguire/Projects/jade/views/conditionals.html",
+		"/home/rmcguire/Projects/jade/views/conditionals.js",
+		"/home/rmcguire/Projects/jade/views/conditionals.",
+		"/home/rmcguire/.config/sublime-text-3/Packages/HTML-CSS-JS Prettify/HTMLPrettify.sublime-settings",
 		"/home/rmcguire/Projects/jade/source/app.d",
 		"/home/rmcguire/Projects/jade/source/jade/package.d",
 		"/home/rmcguire/Projects/jade/views/second_layout.jade",
 		"/home/rmcguire/Projects/jade/views/taginterpolation.jade",
 		"/usr/local/dmd/current/src/druntime/src/object.d",
-		"/home/rmcguire/Projects/jade/current_output.txt",
 		"/home/rmcguire/Projects/jade/views/index.jade",
-		"/home/rmcguire/Projects/jade/views/base_layout.jade",
 		"/home/rmcguire/.config/sublime-text-3/Packages/GoSublime/CHANGELOG.md",
 		"/home/rmcguire/Projects/examples/d_tests/delegates_at_compile_time_cannot.d",
 		"/home/rmcguire/Projects/jade/source/jade/base.d",
@@ -362,6 +421,91 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"list",
+			"toJson",
+			"emptyAr",
+			", assignType",
+			"TagArgs",
+			"attributesString",
+			"class",
+			"Str",
+			"Value",
+			"String",
+			"'",
+			",",
+			"Mixin",
+			"MixinDecl",
+			"MOO",
+			"index",
+			"items =",
+			"find",
+			"items = ",
+			"findParseTree",
+			".items = ",
+			".items = mixin",
+			"{}",
+			"writeln(`",
+			"writeln(",
+			"`writeln(",
+			"`writeln(`",
+			"Jade",
+			"plaintext",
+			"!--",
+			"writeln",
+			"writeln(",
+			"writeln(`",
+			"writeln(`|",
+			"popFront",
+			"asdf",
+			"writeln",
+			"'}'",
+			"stripLeft",
+			"std.string",
+			"strip",
+			"strip;",
+			"script",
+			"logg",
+			"you",
+			"appendProlog",
+			"pragma(msg, typ",
+			"pragma(",
+			"\\n",
+			"writeln(`<!-- %",
+			"Mixin",
+			"conditionals",
+			"alias this",
+			"auto",
+			"var",
+			"template",
+			"inlineText",
+			"renderStringInterpolation",
+			"appendEpilog",
+			"t Tag",
+			"\"\"",
+			"~= \"\"",
+			"} else",
+			".join(\"\")",
+			"/**",
+			"~= code_prolog",
+			"~= code_epilog",
+			"epilo",
+			"prolog",
+			"Condition",
+			"prolog",
+			"prolog.join",
+			"join(\"",
+			"epilog.join(\"",
+			"epilog =",
+			"prolog =",
+			"token.epilog = \"}\";",
+			"Conditional",
+			"Condition",
+			"Conditional",
+			"splitLines",
+			"hasBlock",
+			"&&",
+			"blockWrapJadeFile",
+			"'.'",
 			"str ~=",
 			"\\nwriteln",
 			"Jade.Mixin",
@@ -404,92 +548,7 @@
 			"Comment",
 			"toString",
 			"compileTime",
-			"compileTime.",
-			"subtemplate",
-			"find",
-			"/`",
-			"ret",
-			"compileTime",
-			"\"writeln",
-			"render",
-			"renderParseTree",
-			"renderTag(",
-			"render(",
-			" render",
-			"render(",
-			"render",
-			"Item",
-			".toString",
-			";writeln",
-			"\n\n",
-			"\n",
-			"writeln",
-			"html",
-			"writeln",
-			"{",
-			"writeln",
-			"String(scope void",
-			"toString",
-			"ret ~=",
-			"render",
-			"Line(",
-			"Line",
-			"token.matches[0]",
-			"startDepth",
-			"format(",
-			"`<!--",
-			"'\\n'",
-			"depth);",
-			"range",
-			"jadeToTree",
-			"p.name",
-			"TemplateS",
-			"DLineExpression",
-			"Indent",
-			"children",
-			"base_layout",
-			"matches[0]",
-			".name",
-			"children",
-			"T",
-			"= ",
-			"*index_ptr",
-			"current",
-			"int ",
-			"ulong",
-			"]);\n",
-			"previous_list[0]",
-			"previous_indent,",
-			"p.",
-			"previous.matches[1",
-			"previous.name",
-			"parent",
-			"&&",
-			"struct_o",
-			"renderBl",
-			"blockWrapJadeFile",
-			"sink",
-			"string ",
-			"3",
-			"index",
-			"renderBlock",
-			"block",
-			"TagArgs",
-			"Tag",
-			"-1",
-			"index",
-			"Extend",
-			"renderExtend",
-			"base_page",
-			"Empty",
-			"Entend",
-			"renderEntend",
-			"renderInclude",
-			"\\n",
-			"inner",
-			"sink",
-			"renderInclude",
-			"sink"
+			"compileTime."
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -507,7 +566,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -516,15 +575,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 24899,
+						"buffer_size": 28007,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3644,
-								3644
+								16374,
+								16374
 							]
 						],
 						"settings":
@@ -533,27 +592,114 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1974.0,
+						"translation.y": 8149.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "views/mixins.html",
+					"file": "views/mixins.jade",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 601,
+						"buffer_size": 602,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								594,
-								594
+								164,
+								164
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "source/app.d",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 526,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								526,
+								526
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/D/D.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 535,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								440,
+								440
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<ul1>",
+							"default_dir": "/home/rmcguire/Projects/jade",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "views/mixins.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 609,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -568,122 +714,29 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 336,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								336,
-								336
-							]
-						],
-						"settings":
-						{
-							"auto_name": "<!-- Jade.MixinDecl:[\"article\", \"(\", \"title\"] -->",
-							"default_dir": "/home/rmcguire/Projects/jade",
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "source/app.d",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1206,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								84,
-								84
-							],
-							[
-								175,
-								175
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/D/D.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "views/mixins.jade",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 597,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								477,
-								477
-							]
-						],
-						"settings":
-						{
-							"auto_name": "//- Declaration",
-							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
 					"buffer": 5,
-					"file": "views/base_layout.jade",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2567,
+						"buffer_size": 1860,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2526,
-								2526
+								351,
+								351
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"auto_name": "/** jade template: mixins.jade 36 */",
+							"default_dir": "/home/rmcguire/Projects/jade",
+							"syntax": "Packages/D/D.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 250.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
@@ -691,19 +744,76 @@
 				},
 				{
 					"buffer": 6,
-					"file": "source/jade/pegged.d",
+					"file": "/home/rmcguire/Projects/examples/d_tests/struct_init.d",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6162,
+						"buffer_size": 394,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1484,
-								1484
+								394,
+								394
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/D/D.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "views/plaintext.jade",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 738,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								545,
+								545
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "source/jade/pegged.d",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6315,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4230,
+								4230
 							]
 						],
 						"settings":
@@ -712,7 +822,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1321.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
