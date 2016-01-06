@@ -339,9 +339,8 @@ struct JadeParser {
 				//token.epilog ~= "\nwriteln(`</block>`);";
 				break;
 			case "Jade.Tag":
-				//writeln("tag popfront", range.front);
+				writeln("tag:", token.p);
 				range.popFront();
-				//writeln("tag 2popfront2", range.front);
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
 				auto tag = Tag.parse(token, hasChildren);
 				/// Special handling of tag called block which is used to output the block argument of Mixin values within MixinDecl
@@ -684,7 +683,10 @@ struct JadeParser {
 
 			if (str.length>0) str = "|"~ str ~"|";
 			if (!hasChildren) {
-				prolog ~= "<%s%s%s>%s%s</%s>".format(name, classString, attribs, str, inlineText, name);
+				if (bufferedCode) {
+					bufferedCode = "`~ escapeAttributeValue(var(%s).get!string) ~`".format(bufferedCode);
+				}
+				prolog ~= "<%s%s%s>%s%s%s</%s>".format(name, classString, attribs, str, inlineText, bufferedCode, name);
 				return;
 			}
 			prolog ~= "<%s%s%s>%s%s".format(name, classString, attribs, str, inlineText);
@@ -703,6 +705,8 @@ struct JadeParser {
 		string[] cssClasses;
 		TagArgs tagArgs;
 		string inlineText;
+		string bufferedCode;
+		string noEscapebufferedCode;
 		int indent;
 		AndAttributes andAttributes;
 
@@ -749,6 +753,13 @@ struct JadeParser {
 										s ~= "tagArgs:%s".format(tag.tagArgs);
 										break;
 								case "Jade.BufferedCode":
+										if (item.matches[0] == "=") {
+											tag.bufferedCode = item.matches[1];
+										} else if (item.matches[0] == "!=") {
+											tag.noEscapebufferedCode = item.matches[1];
+										} else {
+											throw new Exception("Unknown BufferedCode, options are = or !=.");
+										}
 										//s ~= "bufferedCode:%s".format(renderBufferedCode(item, indent));
 										break;
 								case `Jade.TextStop!(literal!("]"))`:

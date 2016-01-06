@@ -23,7 +23,7 @@ buf ~= `</ul1>`;
 JadeMixin_list!(null)(var.emptyObject());
 JadeMixin_list!(null)(var.emptyObject());
 void JadeMixin_pet(alias block, Attributes, Name)(Attributes attributes, Name name) {
-buf ~= `<li class="pet"></li>`;
+buf ~= `<li class="pet">`~ escapeAttributeValue(var(name).get!string) ~`</li>`;
 }
 buf ~= `<ul2>`;
 JadeMixin_pet!(null)(var.emptyObject(),"cat");
@@ -33,19 +33,19 @@ buf ~= `</ul2>`;
 void JadeMixin_list2(alias block, Attributes, Id, Items...)(Attributes attributes, Id id, Items items) {
 buf ~= `<ul3 id="`~ escapeAttributeValue(var(id).get!string) ~`">`;
 foreach (item; items) {
-buf ~= `<li></li>`;
+buf ~= `<li>`~ escapeAttributeValue(var(item).get!string) ~`</li>`;
 }
 buf ~= `</ul3>`;
 }
 JadeMixin_list2!(null)(var.emptyObject(),"my-list", 1, 2, 3, 4);
 void JadeMixin_link(alias block, Attributes, Href, Name)(Attributes attributes, Href href, Name name) {
-buf ~= `<a class="`~ var(attributes["class"]).get!string ~`" href="`~ escapeAttributeValue(var(href).get!string) ~`"></a>`;
+buf ~= `<a class="`~ var(attributes["class"]).get!string ~`" href="`~ escapeAttributeValue(var(href).get!string) ~`">`~ escapeAttributeValue(var(name).get!string) ~`</a>`;
 }
 JadeMixin_link!(null)(var("class", "btn"),"/foo", "foo");
 void JadeMixin_article(alias block, Attributes, Title)(Attributes attributes, Title title) {
 buf ~= `<div class="article">`;
 buf ~= `<div class="article-wrapper">`;
-buf ~= `<h1></h1>`;
+buf ~= `<h1>`~ escapeAttributeValue(var(title).get!string) ~`</h1>`;
 static if (isCallable!block) {
 buf ~= block();
 }

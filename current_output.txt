@@ -4,60 +4,141 @@ pegged 0.2.1: target for configuration "library" is up to date.
 jade ~master: target for configuration "application" is up to date.
 To force a rebuild of up-to-date targets, run again with --force.
 Running ./jade 
-templates count: 1
-compileTime render:
-<ul1><li>foo</li><li>bar</li><li>baz</li></ul1><ul1><li>foo</li><li>bar</li><li>baz</li></ul1><ul2><li class="pet"></li><li class="pet"></li><li class="pet"></li></ul2><ul3 id=id><!-- 2 Jade.Iteration depth:2 --><li></li></ul3><a class=attributes.class href=href></a><div class="article"><div class="article-wrapper"><h1><block></block></h1></div></div><div class="article"><div class="article-wrapper"><h1><block></block></h1></div></div>
 runtime:
+tag:Jade.Tag [28, 31]["ul1"]
+ +-Jade.Id [28, 31]["ul1"]
+
+tag:Jade.Tag [34, 40]["li", "foo"]
+ +-Jade.Id [34, 36]["li"]
+ +-Jade.InlineText [37, 40]["foo"]
+
+tag:Jade.Tag [43, 49]["li", "bar"]
+ +-Jade.Id [43, 45]["li"]
+ +-Jade.InlineText [46, 49]["bar"]
+
+tag:Jade.Tag [52, 58]["li", "baz"]
+ +-Jade.Id [52, 54]["li"]
+ +-Jade.InlineText [55, 58]["baz"]
+
+tag:Jade.Tag [96, 108]["li", ".", "pet", "=", "name"]
+ +-Jade.Id [96, 98]["li"]
+ +-Jade.CssClass [99, 102]["pet"]
+ +-Jade.BufferedCode [102, 108]["=", "name"]
+    +-keywords!("=", "!=") [102, 103]["="]
+    +-Jade.DLineExpression [104, 108]["name"]
+
+tag:Jade.Tag [109, 112]["ul2"]
+ +-Jade.Id [109, 112]["ul2"]
+
+tag:Jade.Tag [179, 189]["ul3", "(", "id", "=", "id", ")"]
+ +-Jade.Id [179, 182]["ul3"]
+ +-Jade.TagArgs [182, 189]["(", "id", "=", "id", ")"]
+    +-Jade.TagArg [183, 188]["id", "=", "id"]
+       +-Jade.TagParamKey [183, 185]["id"]
+       +-keywords!("=", "!=") [185, 186]["="]
+       +-Jade.TagParamValue [186, 188]["id"]
+          +-Jade.ParamDExpression [186, 188]["id"]
+
+tag:Jade.Tag [214, 222]["li", "=", "item"]
+ +-Jade.Id [214, 216]["li"]
+ +-Jade.BufferedCode [216, 222]["=", "item"]
+    +-keywords!("=", "!=") [216, 217]["="]
+    +-Jade.DLineExpression [218, 222]["item"]
+
+tag:Jade.Tag [311, 354]["a", "(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")", "=", "name"]
+ +-Jade.Id [311, 312]["a"]
+ +-Jade.TagArgs [312, 348]["(", "class", "!=", "attributes.class", ",", "href", "=", "href", ")"]
+ |  +-Jade.TagArg [313, 336]["class", "!=", "attributes.class"]
+ |  |  +-Jade.TagParamKey [313, 318]["class"]
+ |  |  +-keywords!("=", "!=") [318, 320]["!="]
+ |  |  +-Jade.TagParamValue [320, 336]["attributes.class"]
+ |  |     +-Jade.ParamDExpression [320, 336]["attributes.class"]
+ |  +-Jade.TagArg [338, 347]["href", "=", "href"]
+ |     +-Jade.TagParamKey [338, 342]["href"]
+ |     +-keywords!("=", "!=") [342, 343]["="]
+ |     +-Jade.TagParamValue [343, 347]["href"]
+ |        +-Jade.ParamDExpression [343, 347]["href"]
+ +-Jade.BufferedCode [348, 354]["=", "name"]
+    +-keywords!("=", "!=") [348, 349]["="]
+    +-Jade.DLineExpression [350, 354]["name"]
+
+tag:Jade.Tag [411, 419][".", "article"]
+ +-Jade.CssClass [412, 419]["article"]
+
+tag:Jade.Tag [422, 438][".", "article-wrapper"]
+ +-Jade.CssClass [423, 438]["article-wrapper"]
+
+tag:Jade.Tag [442, 451]["h1", "=", "title"]
+ +-Jade.Id [442, 444]["h1"]
+ +-Jade.BufferedCode [444, 451]["=", "title"]
+    +-keywords!("=", "!=") [444, 445]["="]
+    +-Jade.DLineExpression [446, 451]["title"]
+
+tag:Jade.Tag [468, 473]["block"]
+ +-Jade.Id [468, 473]["block"]
+
+tag:Jade.Tag [486, 507]["p", "No content provided"]
+ +-Jade.Id [486, 487]["p"]
+ +-Jade.InlineText [488, 507]["No content provided"]
+
+tag:Jade.Tag [557, 569]["p", "This is my"]
+ +-Jade.Id [557, 558]["p"]
+ +-Jade.InlineText [559, 569]["This is my"]
+
+tag:Jade.Tag [571, 588]["p", "Amazing article"]
+ +-Jade.Id [571, 572]["p"]
+ +-Jade.InlineText [573, 588]["Amazing article"]
+
 not extended
 
-/** jade template: mixins.jade 36 */
+/** jade template: views/mixins.jade 36 */
 import std.array : appender;
 auto buf = appender!string;
-void JadeMixin_list(Attributes, BlockT)(Attributes attributes, BlockT block) {
+void JadeMixin_list(alias block, Attributes)(Attributes attributes) {
 buf ~= `<ul1>`;
 buf ~= `<li>foo</li>`;
 buf ~= `<li>bar</li>`;
 buf ~= `<li>baz</li>`;
 buf ~= `</ul1>`;
 }
-JadeMixin_list(var.emptyObject(), () { auto buf = appender!string;return buf.data; });
-JadeMixin_list(var.emptyObject(), () { auto buf = appender!string;return buf.data; });
-void JadeMixin_pet(Attributes, BlockT, Name)(Attributes attributes, BlockT block, Name name) {
-buf ~= `<li class="pet"></li>`;
+JadeMixin_list!(null)(var.emptyObject());
+JadeMixin_list!(null)(var.emptyObject());
+void JadeMixin_pet(alias block, Attributes, Name)(Attributes attributes, Name name) {
+buf ~= `<li class="pet">`~ escapeAttributeValue(var(name).get!string) ~`</li>`;
 }
 buf ~= `<ul2>`;
-JadeMixin_pet(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"cat");
-JadeMixin_pet(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"dog");
-JadeMixin_pet(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"pig");
+JadeMixin_pet!(null)(var.emptyObject(),"cat");
+JadeMixin_pet!(null)(var.emptyObject(),"dog");
+JadeMixin_pet!(null)(var.emptyObject(),"pig");
 buf ~= `</ul2>`;
-void JadeMixin_list2(Attributes, BlockT, Id, Items...)(Attributes attributes, BlockT block, Id id, Items items) {
-buf ~= `<ul3 id=id>`;
-buf ~= `<!-- 2 Jade.Iteration depth:2 -->`;
-buf ~= `<li></li>`;
+void JadeMixin_list2(alias block, Attributes, Id, Items...)(Attributes attributes, Id id, Items items) {
+buf ~= `<ul3 id="`~ escapeAttributeValue(var(id).get!string) ~`">`;
+foreach (item; items) {
+buf ~= `<li>`~ escapeAttributeValue(var(item).get!string) ~`</li>`;
+}
 buf ~= `</ul3>`;
 }
-JadeMixin_list2(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"my-list", 1, 2, 3, 4);
-void JadeMixin_link(Attributes, BlockT, Href, Name)(Attributes attributes, BlockT block, Href href, Name name) {
-buf ~= `<a class=attributes.class href=href></a>`;
+JadeMixin_list2!(null)(var.emptyObject(),"my-list", 1, 2, 3, 4);
+void JadeMixin_link(alias block, Attributes, Href, Name)(Attributes attributes, Href href, Name name) {
+buf ~= `<a class="`~ var(attributes.class).get!string ~`" href="`~ escapeAttributeValue(var(href).get!string) ~`">`~ escapeAttributeValue(var(name).get!string) ~`</a>`;
 }
-JadeMixin_link(var("class", "btn"), () { auto buf = appender!string;return buf.data; },"/foo", "foo");
-void JadeMixin_article(Attributes, BlockT, Title)(Attributes attributes, BlockT block, Title title) {
+JadeMixin_link!(null)(var("class", "btn"),"/foo", "foo");
+void JadeMixin_article(alias block, Attributes, Title)(Attributes attributes, Title title) {
 buf ~= `<div class="article">`;
 buf ~= `<div class="article-wrapper">`;
-buf ~= `<h1>`;
-if (block) {
-buf ~= `<block></block>`;
+buf ~= `<h1>`~ escapeAttributeValue(var(title).get!string) ~`</h1>`;
+static if (isCallable!block) {
+buf ~= block();
 }
  else {
 buf ~= `<p>No content provided</p>`;
 }
-buf ~= `</h1>`;
 buf ~= `</div>`;
 buf ~= `</div>`;
 }
-JadeMixin_article(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"Hello world");
-JadeMixin_article(var.emptyObject(), () { auto buf = appender!string;
+JadeMixin_article!(null)(var.emptyObject(),"Hello world");
+JadeMixin_article!(() { auto buf = appender!string;
 buf ~= `<p>This is my</p>`;
 
 buf ~= `<p>Amazing article</p>`;
-return buf.data; },"Hello world");
+return buf.data; })(var.emptyObject(),"Hello world");
