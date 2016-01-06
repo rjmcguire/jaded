@@ -42,7 +42,7 @@ JadeParser.Item[] render(string filename) {
 	auto tmp = blockWrapJadeFile(templ);
 	//writeln("blockWrapJadeFile output:\n", tmp);
 	auto parse_tree = Jade(tmp);
-	writeln("tree\n", parse_tree);
+	//writeln("tree\n", parse_tree);
 	auto tree = renderParseTree(filename, parse_tree);
 	auto extend = tree[0].find("Jade.Extend");
 	JadeParser.Item[] ret;
@@ -118,28 +118,28 @@ struct JadeParser {
 				rootItem = this;
 			}
 			auto ret = appender!string;
-			if (p.name == "Jade.MixinDecl") {
+			/*if (p.name == "Jade.MixinDecl") {
 				/// I wonder if it would be interesting to output these mixin declarations as AngularJS templates so they are available in browser using <script id="mixinName">The MixinDecl's items</script>
-				//ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
+				ret ~= "%s CHILDCOUNT:%s".format(p, items.length);
 				// TODO: must render else block if there is no items for "if block"
-				//auto conditionalBlock = this.findByMatch("Jade.Conditional", 1, "block");
-				//if (conditionalBlock !is null) {
-				//	if (conditionalBlock.matches[0] == "if") {
-				//		if (conditionalBlock.items.length <= 0 || (conditionalBlock.items[0].name=="Jade.Tag" && conditionalBlock.items[0].matches[0]=="block")) {
-				//			//conditionalBlock.prolog ~= "";
-				//			//conditionalBlock.epilog ~= "";
-				//			//conditionalBlock.items = [];
-				//		} else {
-				//			auto elseBlock = this.findByMatch("Jade.Conditional", 0, "else");
-				//			//elseBlock.prolog ~= "";
-				//			//elseBlock.epilog ~= "";
-				//			//elseBlock.items = [];
-				//		}
-				//	}
-				//}
+				auto conditionalBlock = this.findByMatch("Jade.Conditional", 1, "block");
+				if (conditionalBlock !is null) {
+					if (conditionalBlock.matches[0] == "if") {
+						if (conditionalBlock.items.length <= 0 || (conditionalBlock.items[0].name=="Jade.Tag" && conditionalBlock.items[0].matches[0]=="block")) {
+							//conditionalBlock.prolog ~= "";
+							//conditionalBlock.epilog ~= "";
+							//conditionalBlock.items = [];
+						} else {
+							auto elseBlock = this.findByMatch("Jade.Conditional", 0, "else");
+							//elseBlock.prolog ~= "";
+							//elseBlock.epilog ~= "";
+							//elseBlock.items = [];
+						}
+					}
+				}
 				return "";
-			}
-			if (p.name == "Jade.Mixin") {
+			}*/
+			/*if (p.name == "Jade.Mixin") {
 				auto mixinDecl = rootItem.findByMatch("Jade.MixinDecl", 0, p.matches[0]);
 				if (mixinDecl is null) { throw new Exception("Mixin does not exist"); }
 
@@ -161,12 +161,14 @@ struct JadeParser {
 					throw new Exception("warning: block supplied to mixin that has no block");
 				}
 				if (blockToReplace !is null) {
-					//ret ~= "|||BTR:%s|||".format(blockToReplace.matches);
-					blockToReplace.items = this.items;
+					ret ~= "|||BTR:%s|||".format(blockToReplace.matches);
+					//blockToReplace.items = this.items;
+					ret ~= "mixin:call:"~matches[0];
 					ret ~= mixinDecl.getOutput(blockTemplates);
+					ret ~= "mixin:call:"~matches[0];
 				}
 				return ret.data;
-			}
+			}*/
 			//ret ~= "\n%s/+ <!-- %s:%s -->+/".format("\t".replicate(depth), p.name, p.matches.length > 3 ? p.matches[0..3] : p.matches[0..$]);
 			if (code_prolog) {
 				ret ~= "\n";
@@ -425,10 +427,10 @@ struct JadeParser {
 					argNames ~= name;
 				}
 
-				//token.prolog ~= "\nvoid JadeMixin_%s(Attributes, %s)(Attributes attributes, %s) {\n\t".format(token.matches[0], templateArgNames.join(", "), argNames.join(", "));
+				token.code_prolog ~= "void JadeMixin_%s(Attributes, BlockT%s)(Attributes attributes, BlockT block%s) {".format(token.matches[0], templateArgNames.length ? ", "~templateArgNames.join(", ") : "", argNames.length ? ", "~argNames.join(", ") : "");
 				range.popFront();
 				token.items ~= render(token.depth);
-				token.epilog ~= "\n}";
+				token.code_epilog ~= "\n}";
 				break;
 			case "Jade.Mixin":
 				auto mixinArgs = token.findParseTree("Jade.MixinArgs");
@@ -442,18 +444,21 @@ struct JadeParser {
 				string attributesString;
 				if (!attributestoken.isNull) {
 					auto tagargs = TagArgs.parse(attributestoken);
-					attributesString ~= tagargs.toJson;
+					attributesString ~= "var(";
+					attributesString ~= tagargs.toVarArgs;
+					attributesString ~= ")";
 				} else {
-					attributesString ~= "{}";
+					attributesString ~= "var.emptyObject()";
 				}
 				range.popFront();
 				token.items = render(token.depth);
-				//token.prolog ~= "string block;";
-				//foreach (item; token.items) {
-				//	token.prolog ~= "\nblock ~= `%s`;".format(item.getOutput([]));
-				//}
-				//token.items = []; // remove all children, we've processed them.
-				//token.prolog ~= "%s\nJadeMixin_%s(%s, %s, block);".format(token.p, token.matches[0], attributesString, args.join(", "));
+				auto block = "() { auto buf = appender!string;";
+				foreach (item; token.items) {
+					block ~= "%s\n".format(item.getOutput([]));
+				}
+				block ~= "return buf.data; }";
+				token.items = []; // remove all children, we've processed them.
+				token.code_prolog ~= "JadeMixin_%s(%s, %s%s);".format(token.matches[0], attributesString, block, args.length ? ","~args.join(", ") : "");
 				break;
 			case "Jade.Conditional":
 				switch (token.matches[0]) {
@@ -527,9 +532,7 @@ struct JadeParser {
 				ret.reserve = 1024;
 				switch (type) {
 				case "Jade.Str":
-						ret ~= '"';
 						ret ~= value.matches[0];
-						ret ~= '"';
 						return ret.data;
 				case "Jade.ParamDExpression":
 						return value.matches[0];
@@ -565,13 +568,13 @@ struct JadeParser {
 		}
 
 		string toString() {
-				return "%s%s%s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
+			return "%s%s%s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
 		}
 		string toHtml() {
-				return "%s%s%s".format(key.matches[0], assignType, getValue());
+			return `%s=%s`.format(key.matches[0], getValue());
 		}
-		string toJson() {
-			return toHtml();
+		string toVarArgs() {
+			return `"%s", %s`.format(key.matches[0], getValue());
 		}
 	}
 
@@ -599,14 +602,14 @@ struct JadeParser {
 			}
 			return ret.data;
 		}
-		string toJson() {
+		string toVarArgs() {
 			string[] ret;
 			if (args.length > 0) {
 				foreach (arg; args) {
-					ret ~= arg.toJson;
+					ret ~= arg.toVarArgs;
 				}
 			}
-			return "{"~ ret.join(",") ~"}";
+			return ret.join(",");
 		}
 	}
 

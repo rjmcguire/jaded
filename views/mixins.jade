@@ -1,6 +1,6 @@
 //- Declaration
 mixin list
-	ul
+	ul1
 		li foo
 		li bar
 		li baz
@@ -10,24 +10,24 @@ mixin list
 
 mixin pet(name)
 	li.pet= name
-ul
-	+pet('cat')
-	+pet('dog')
-	+pet('pig')
+ul2
+	+pet("cat")
+	+pet("dog")
+	+pet("pig")
 
-mixin list(id, ...items)
-	ul(id=id)
+mixin list2(id, ...items)
+	ul3(id=id)
 		each item in items
 			li= item
 
-+list('my-list', 1, 2, 3, 4)
++list2("my-list", 1, 2, 3, 4)
 
 
 mixin link(href, name)
 	//- attributes == {class: "btn"}
 	a(class!=attributes.class, href=href)= name
 
-+link('/foo', 'foo')(class="btn")
++link("/foo", "foo")(class="btn")
 
 mixin article(title)
 	.article
@@ -38,8 +38,8 @@ mixin article(title)
 				else
 					p No content provided
 
-+article('Hello world')
++article("Hello world")
 
-+article('Hello world')
++article("Hello world")
 	p This is my
 	p Amazing article

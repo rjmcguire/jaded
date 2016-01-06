@@ -1,58 +1,63 @@
-<!-- 2 Jade.DocType depth:0 -->
-<!--[if IE 8]><html lang="en" class="lt-ie9"></html><![endif]-->
-<html lang="en">
+Performing "debug" build using dmd for x86_64.
+jsvar ~master: target for configuration "library" is up to date.
+pegged 0.2.1: target for configuration "library" is up to date.
+jade ~master: target for configuration "application" is up to date.
+To force a rebuild of up-to-date targets, run again with --force.
+Running ./jade 
+templates count: 1
+compileTime render:
+<ul1><li>foo</li><li>bar</li><li>baz</li></ul1><ul1><li>foo</li><li>bar</li><li>baz</li></ul1><ul2><li class="pet"></li><li class="pet"></li><li class="pet"></li></ul2><ul3 id=id><!-- 2 Jade.Iteration depth:2 --><li></li></ul3><a class=attributes.class href=href></a><div class="article"><div class="article-wrapper"><h1><block></block></h1></div></div><div class="article"><div class="article-wrapper"><h1><block></block></h1></div></div>
+runtime:
+not extended
 
-<head>
-    <title>Index of Demo</title>
-    <style>
-    body {
-        margin: 0px;
-        background-color: #eee;
-    }
-    </style>
-</head>
+/** jade template: mixins.jade 36 */
+import std.array : appender;
+auto buf = appender!string;
+void JadeMixin_list(Attributes, BlockT)(Attributes attributes, BlockT block) {
+buf ~= `<ul1>`;
+buf ~= `<li>foo</li>`;
+buf ~= `<li>bar</li>`;
+buf ~= `<li>baz</li>`;
+buf ~= `</ul1>`;
+}
+JadeMixin_list(var.emptyObject(), () { auto buf = appender!string;return buf.data; });
+JadeMixin_list(var.emptyObject(), () { auto buf = appender!string;return buf.data; });
+void JadeMixin_pet(Attributes, BlockT, Name)(Attributes attributes, BlockT block, Name name) {
+buf ~= `<li class="pet"></li>`;
+}
+buf ~= `<ul2>`;
+JadeMixin_pet(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"cat");
+JadeMixin_pet(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"dog");
+JadeMixin_pet(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"pig");
+buf ~= `</ul2>`;
+void JadeMixin_list2(Attributes, BlockT, Id, Items...)(Attributes attributes, BlockT block, Id id, Items items) {
+buf ~= `<ul3 id=id>`;
+buf ~= `<!-- 2 Jade.Iteration depth:2 -->`;
+buf ~= `<li></li>`;
+buf ~= `</ul3>`;
+}
+JadeMixin_list2(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"my-list", 1, 2, 3, 4);
+void JadeMixin_link(Attributes, BlockT, Href, Name)(Attributes attributes, BlockT block, Href href, Name name) {
+buf ~= `<a class=attributes.class href=href></a>`;
+}
+JadeMixin_link(var("class", "btn"), () { auto buf = appender!string;return buf.data; },"/foo", "foo");
+void JadeMixin_article(Attributes, BlockT, Title)(Attributes attributes, BlockT block, Title title) {
+buf ~= `<div class="article">`;
+buf ~= `<div class="article-wrapper">`;
+buf ~= `<h1>`;
+if (block) {
+buf ~= `<block></block>`;
+}
+ else {
+buf ~= `<p>No content provided</p>`;
+}
+buf ~= `</h1>`;
+buf ~= `</div>`;
+buf ~= `</div>`;
+}
+JadeMixin_article(var.emptyObject(), () { auto buf = appender!string;return buf.data; },"Hello world");
+JadeMixin_article(var.emptyObject(), () { auto buf = appender!string;
+buf ~= `<p>This is my</p>`;
 
-<body class="base-css" ng-app="MyApp" ng-controller="CtrlII">
-    <!--  this is the actual displayed content -->
-    <p id=p -form-hook=some_d_var ? "yes" : "no" marked>This is the index.jade <i>paragraph</i> that<b>test</b> continues <i>on</i> multiplelines goto <a target="_blank" href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade">Jade Reference</a>
-        <!--  TODO: should allow empty lines in PipedText or at least show an error -->
-        <!-- | -->to see examples of interpolation</p>
-    <ul isit=some_other_d_var=="woot">
-        <li class="one-css two-css"></li>
-    </ul>
-    <div class="img-holder"><img class="image" src="logo2.gif" style=background=background,padding=padding></img>
-    </div>
-</body>
-<woot id="content1">as2df
-    <woot2 id="woot2" class=c1,c2>as3dfas3df</woot2>
-    <woot3 class=active=active></woot3>
-    <p>This is the text in footer block</p>
-</woot>
-
-</html>
-<div id="foo" data-bar="foo" goot-one></div>
-<You>are logged in</You>
-<ul>
-    <!-- 2 Jade.Iteration depth:1 -->
-    <li></li>
-</ul>
-<!-- 2 Jade.Iteration depth:0 -->
-<li></li>
-<!-- 2 Jade.Case depth:0 -->
-<!-- 2 Jade.Case depth:1 -->
-<!-- 2 Jade.Case depth:1 -->
-<p>you have very few friends</p>
-<!-- 2 Jade.Case depth:1 -->
-<ul></ul>
-<p>If you take a look at this page's source <a target="_blank" href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade">on GitHub</a>,youll see several places where the tag interpolation operator isused like so.
-    <div class="quote">// this is raw text so the .quote means nothing to jade
-        <p>Joel:
-            <unescaped-interpolation>riskyBusiness</unescaped-interpolation>
-        </p>
-    </div>
-</p>
-<p>This is supposed to just be text inside a p tag.</p>
-<p>This is escape:["msg.toUpperCase()"] // EscapedStringInterpolation
-    <- <a href="#">upper case</a> characters</p>
-<!--  Following is as4df, its the last tag -->
-<as4df></as4df>
+buf ~= `<p>Amazing article</p>`;
+return buf.data; },"Hello world");
