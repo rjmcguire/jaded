@@ -600,10 +600,13 @@ struct JadeParser {
 		}
 
 		string toString() {
-			return "%s%s%s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
+			return "%s %s %s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
 		}
 		string toHtml() {
-			return `%s=%s`.format(key.matches[0], getValue());
+			if (assignType == "!=") {
+				return "%s=\"`~ var(%s).get!string ~`\"".format(key.matches[0], getValue());
+			}
+			return "%s=\"`~ escapeAttributeValue(var(%s).get!string) ~`\"".format(key.matches[0], getValue());
 		}
 		string toVarArgs() {
 			return `"%s", %s`.format(key.matches[0], getValue());
