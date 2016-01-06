@@ -798,14 +798,14 @@ struct JadeParser {
 			string[] ret;
 			switch (p.matches[0]) {
 				case "#{":
-					ret ~= "escape:%s // EscapedStringInterpolation".format(p.matches[1..$]);
+					ret ~= "`~ escapeHtmlOutput(var(%s).get!string) ~`".format(p.matches[1]);
 					return ret;
 				case "#[":
 					auto tag = Tag.parse(new Item(indent, p.children[0]), false);
 					tag.appendProlog(ret);
 					return ret;
 				case "!{":
-					ret ~= "<unescaped-interpolation>%s</unescaped-interpolation>".format(p.matches[1]);
+					ret ~= "`~ var(%s).get!string ~`".format(p.matches[1]);
 					return ret;
 				default:
 						assert(0, "Unrecognized StringInterpolation");
