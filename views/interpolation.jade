@@ -16,6 +16,12 @@ p This is #{msg.toUpperCase()}
 
 p.
 	If you take a look at this page's source #[a(target="_blank", href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade") on GitHub],
-	you'll see several places where the tag interpolation operator is
+	you'll see several places !{riskyBusiness} where the tag interpolation operator #{author} is
 	used, like so.
 
+
+script.
+	if (title)
+		console.log(title)
+	else
+		console.log('no title');

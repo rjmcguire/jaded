@@ -15,7 +15,7 @@ unittest {
 		return to!string(arg).replace(`&`, `&amp`).replace(`<`, `&lt;`).replace(`>`, `&gt;`);
 	}
 
-/** jade template: views/interpolation.jade 12 */
+/** jade template: views/interpolation.jade 13 */
 import std.array : appender;
 auto buf = appender!string;
 var title = "On Dogs: Man's Best Friend";
@@ -30,7 +30,13 @@ var riskyBusiness = "<em>Some of the girls are wearing my mother's clothing.</em
 buf ~= `<div class="quote">`;
 buf ~= `<p>Joel: `~ var(riskyBusiness).get!string ~`</p>`;
 buf ~= `</div>`;
-buf ~= `<p>If you take a look at this page's source #[a(target="_blank", href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade") on GitHub],you'll see several places where the tag interpolation operator isused, like so.</p>`;
+buf ~= `<p>If you take a look at this page's source <a target="`~ escapeAttributeValue(var("_blank").get!string) ~`" href="`~ escapeAttributeValue(var("https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade").get!string) ~`">on GitHub</a>, you'll see several places `~ var(riskyBusiness).get!string ~` where the tag interpolation operator `~ escapeHtmlOutput(var(author).get!string) ~` is used, like so.</p>`;
+buf ~= `<script>
+if (title)
+ 	console.log(title)
+ else
+ 	console.log('no title');
+</script>`;
 
 	writeln(buf.data);
 }

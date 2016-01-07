@@ -40,9 +40,9 @@ JadeParser.Item[] render(alias filename)() {
 JadeParser.Item[] render(string filename) {
 	auto templ = readText(filename);
 	auto tmp = blockWrapJadeFile(templ);
-	//writeln("blockWrapJadeFile output:\n", tmp);
+	writeln("blockWrapJadeFile output:\n", tmp);
 	auto parse_tree = Jade(tmp);
-	//writeln("tree\n", parse_tree);
+	writeln("tree\n", parse_tree);
 	auto tree = renderParseTree(filename, parse_tree);
 	auto extend = tree[0].find("Jade.Extend");
 	JadeParser.Item[] ret;
@@ -507,6 +507,7 @@ struct JadeParser {
 			case "Jade.Iteration":
 				range.popFront();
 				import std.exception : enforce;
+				// TODO: bugfix: handle "each key,value in _expression_"
 				auto itemName = token.findParseTree("Jade.DVariableName");
 				enforce(!itemName.isNull, "Iteration expects an item name.");
 				auto expression = token.findParseTree("Jade.DLineExpression");
@@ -668,28 +669,34 @@ struct JadeParser {
 			}
 			attribs ~= tagArgs.toHtml;
 
+			KeepTerminator keep;
 			if (hasRawBlock) {
-				auto tmp = appender!string;
+				string[] tmp;
 				auto keepLines = this.name == "pre" || this.name == "script" || this.name == "style";
-				if (keepLines) tmp ~= "\n";
-				auto keep = keepLines ? KeepTerminator.yes : KeepTerminator.no;
-				foreach (line; blockInATag.matches[0].splitLines(keep)) { // should replace tabs first to be same as jade because jade seems to do that
+				keep = keepLines ? KeepTerminator.yes : KeepTerminator.no;
+				foreach (line; blockInATagText.splitLines(keep)) { // should replace tabs first to be same as jade because jade seems to do that
+					int stripIndent = indent + 1;
+					while (stripIndent > 0 && line.length > 0 && line[0] == '\t') {
+						line = line[1..$];
+						stripIndent--;
+					}
 					tmp ~= keep ? line : line.stripLeft;
 				}
-				if (keepLines) tmp ~= "\n";
-				inlineText = tmp.data;
-
+				inlineText = tmp.join(" ");
 			}
 
 			if (str.length>0) str = "|"~ str ~"|";
+			string tag_template;
 			if (!hasChildren) {
 				if (bufferedCode) {
 					bufferedCode = "`~ escapeAttributeValue(var(%s).get!string) ~`".format(bufferedCode);
 				}
-				prolog ~= "<%s%s%s>%s%s%s</%s>".format(name, classString, attribs, str, inlineText, bufferedCode, name);
+				tag_template = keep ? "<%s%s%s>%s\n%s\n%s</%s>" : "<%s%s%s>%s%s%s</%s>";
+				prolog ~= tag_template.format(name, classString, attribs, str, inlineText, bufferedCode, name);
 				return;
 			}
-			prolog ~= "<%s%s%s>%s%s".format(name, classString, attribs, str, inlineText);
+			tag_template = keep ? "<%s%s%s>%s\n%s\n" : "<%s%s%s>%s%s";
+			prolog ~= tag_template.format(name, classString, attribs, str, inlineText);
 		}
 		void appendEpilog(ref string[] epilog) {
 			if (hasChildren && name != "|") {
@@ -700,7 +707,7 @@ struct JadeParser {
 		bool hasChildren;
 
 		ParseTree cssId;
-		ParseTree blockInATag;
+		string blockInATagText;
 		bool hasRawBlock;
 		string[] cssClasses;
 		TagArgs tagArgs;
@@ -737,8 +744,13 @@ struct JadeParser {
 										//s ~= "id:"~ tag.id;
 										break;
 								case "Jade.BlockInATag":
-										tag.blockInATag = item;
-										s ~= "block:"~ tag.blockInATag.name;
+									foreach (child; item.children) {
+										if (child.name == "Jade.StringInterpolation") {
+											tag.blockInATagText ~= renderStringInterpolation(child, indent).join("");
+										} else {
+											tag.blockInATagText ~= child.matches[0];
+										}
+									}
 										break;
 								case "Jade.CssClass":
 										tag.cssClasses ~= item.matches[0];
