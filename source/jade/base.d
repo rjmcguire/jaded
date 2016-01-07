@@ -1,3 +1,25 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015-2016 rjmcguire
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 module jade.base;
 
 import std.stdio;
@@ -506,8 +528,6 @@ struct JadeParser {
 			case "Jade.Iteration":
 				range.popFront();
 				import std.exception : enforce;
-				// TODO: bugfix: handle "each key,value in _expression_"
-				writeln(token.p);
 				switch (token.matches[0]) {
 					case "each":
 						auto name = token.findParseTree("Jade.DVariableName");
@@ -534,6 +554,35 @@ struct JadeParser {
 
 				token.items = render(token.depth);
 				token.code_epilog ~= "\n}";
+				break;
+			case "Jade.DocType":
+				writeln(token.p);
+				switch (token.matches[0]) {
+					case "xml":
+						token.prolog ~= `<?xml version="1.0" encoding="utf-8" ?>`;
+						break;
+					case "transitional":
+						token.prolog ~= `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">`;
+						break;
+					case "strict":
+						token.prolog ~= `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">`;
+						break;
+					case "frameset":
+						token.prolog ~= `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">`;
+						break;
+					case "1.1":
+						token.prolog ~= `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">`;
+						break;
+					case "basic":
+						token.prolog ~= `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">`;
+						break;
+					case "mobile":
+						token.prolog ~= `<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">`;
+						break;
+					default:
+						token.prolog ~= "<!DOCTYPE "~ token.matches[0] ~">";
+				}
+				range.popFront();
 				break;
 			case "Jade.Line":
 			default:
@@ -575,45 +624,45 @@ struct JadeParser {
 				}
 				return ret;
 		}
+		string type() {
+			return value is null ? "<null>" : value.children[0].name;
+		}
 		string getValue() {
-				import std.array : appender;
-				auto ret = appender!string;
-				auto type = value is null ? "<null>" : value.children[0].name;
-				ret.reserve = 1024;
 				switch (type) {
 				case "Jade.Str":
-						ret ~= value.matches[0];
-						return ret.data;
+					return value.matches[0];
 				case "Jade.ParamDExpression":
-						return value.matches[0];
+					return value.matches[0];
 				case "Jade.AttributeJsonObject":
-						assert(key.matches[0] == "style" || key.matches[0] == "class", "AttributeJsonObject as parameter only supported for style tag parameter, not: "~ key.matches[0]);
-						if (value.children[0].children.length > 0) {
-								ret ~= value.children[0].children[0].children[0].matches[0];
-								ret ~= '=';
-								ret ~= value.children[0].children[0].children[0].matches[0];
-								foreach (keyvalue; value.children[0].children[1..$]) {
-										ret ~= ",";
-										ret ~= keyvalue.children[0].matches[0];
-										ret ~= '=';
-										ret ~= keyvalue.children[0].matches[0];
-								}
+					import std.array : appender;
+					auto ret = appender!string;
+					ret.reserve = 1024;
+					assert(key.matches[0] == "style" || key.matches[0] == "class", "AttributeJsonObject as parameter only supported for style/class tag parameter, not: "~ key.matches[0]);
+					if (value.children[0].children.length > 0) {
+						ret ~= `"%s": (%s)`.format(value.children[0].children[0].children[0].matches[0],
+								value.children[0].children[0].children[1].matches[0]);
+						foreach (keyvalue; value.children[0].children[1..$]) {
+							ret ~= `,"%s": (%s)`.format(keyvalue.children[0].matches[0],
+								keyvalue.children[1].matches[0]);
 						}
-						return ret.data;
+					}
+					return "["~ ret.data ~"]";
 				case "Jade.CssClassArray":
-						if (value.children[0].children.length > 0) {
-								ret ~= value.children[0].children[0].matches[0];
-								foreach (clazz; value.children[0].children[1..$]) {
-										ret ~= ",";
-										ret ~= clazz.matches[0];
-								}
-						}
-						return ret.data;
+					//string[] tmp;
+					//if (value.children[0].children.length > 0) {
+					//	writeln("CssClassArray:", *value);
+					//	tmp ~= value.children[0].children[0].matches[0];
+					//	foreach (clazz; value.children[0].children[1..$]) {
+					//		tmp ~= clazz.matches[0];
+					//	}
+					//}
+					//return "["~ tmp.join(",") ~"]";
+					return value.matches[0];
 				case "<null>":
-						//return `""`;
-						return ``;
+					//return `""`;
+					return ``;
 				default:
-						assert(0, "Unsupported value type: "~ type ~" for TagArg key:"~ key.matches[0]);
+					assert(0, "Unsupported value type: "~ type ~" for TagArg key:"~ key.matches[0]);
 				}
 		}
 
@@ -621,6 +670,12 @@ struct JadeParser {
 			return "%s %s %s".format(key.matches[0], assignType, value is null ? null : value.matches[0]);
 		}
 		string toHtml() {
+			if (key.matches[0] == "style") {
+				return "style=\"`~ outputStyle(%s) ~`\"".format(getValue());
+			}
+			if (type == "Jade.CssClassArray") {
+				return "class=\"`~ outputCssClassArray(%s) ~`\"".format(getValue());
+			}
 			if (assignType == "!=") {
 				return "%s=\"`~ var(%s).get!string ~`\"".format(key.matches[0], getValue());
 			}
