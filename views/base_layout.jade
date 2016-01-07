@@ -1,4 +1,6 @@
 doctype html
+- auto currentUrl = "/";
+- auto riskyBusiness = "<b>risky</b>";
 <!--[if IE 8]>
 html(lang="en", class="lt-ie9")
 <![endif]-->
@@ -10,6 +12,8 @@ html(lang="en")
 			include style.css
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
 		block content
+			- bool some_d_var = true;
+			- string some_other_d_var = "woot";
 			// this is the displayed content
 			p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
 				| That continues on
@@ -20,24 +24,26 @@ html(lang="en")
 				img.image(src="logo.gif", style={background: "red", padding: "0px"})/
 	woot#content1 as2df
 		#woot2(class=["c1", "c2"]) as3dfas3df
-		woot3(class={active: currentUrl === "/about"})
+		woot3(class={active: currentUrl == "/about"})
 		block footer
 			p Placeholder footer block
-- var localhost = "remotehost";
-- var user = {};
+- var host = "remotehost";
+- var user = var.emptyObject;
 if "localhost" == host
 	div#foo(data-bar="foo", goot-one)&attributes({"data-cew": "baer", "ng-show": 1234})
 		//- include:markdown ./includes/footer.jade
 else
 	merrrt
 unless user.isAnonymous
-	You are logged in
+	p You are logged in
 //- :markdown
 //- 	### Markdown Need dedent support to parse this
 //- 	I often like including markdown documents.
 ul
-	each val, index in {1:'one',2:'two',3:'three'}
-		li= index + ': ' + val
+	- import std.conv;
+	each index, val in [1:"one",2:"two",3:"three"]
+		li= to!string(index) ~": "~ val
+- int n=1;
 while n < 4
 	li= n++
 
@@ -71,36 +77,37 @@ mixin article(title)
 			else
 				p No content provided
 
-+article('Hello world')
++article("Hello world")
 
-+article('Hello world')
++article("Hello world")
 	p This is my
 	p Amazing article
 mixin link(href, name)
 	//- attributes == {class: "btn"}
-	a(class!=attributes.class, href=href)= name
-+link('/foo', 'foo')(class="btn")
-mixin link(href, name)
+	a(class!=attributes["class"], href=href)= name
++link("/foo", "foo")(class="btn")
+mixin link2(href, name)
 	a(href=href)&attributes(attributes)= name
 
-+link('/foo', 'foo')(class="btn")
-mixin list(id, ...items)
++link2("/foo", "foo")(class="btn")
+mixin list2(id, ...items)
 	ul(id=id)
 		each item in items
 			li= item
 
-+list('my-list', 1, 2, 3, 4)
++list2("my-list", 1, 2, 3, 4)
 
-p
-	|If you take a look at this page's source #[a(target="_blank", href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade") on GitHub],
-	|youll see several places where the tag interpolation operator is
-	|used like so.
-	.quote // this is raw text so the .quote means nothing to jade
+p.
+	If you take a look at this page's source #[a(target="_blank", href="https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade") on GitHub],
+	you'll see several places where the tag interpolation operator is
+	used like so.
+	.quote // this is raw text so the .quote means nothing to jade, only string and tag interpolation works here
 		p Joel: !{riskyBusiness}
 p.
 	This is supposed to just be text inside a p tag.
-- var msg = {toUpperCase: function () {}};
-p This is #{msg.toUpperCase()} <- #[a(href="#") upper case] characters
+- import std.uni : toUpper;
+- string msg = "not my inside voice";
+p This is #{msg.toUpper()} &lt;- #[a(href="#") upper case] characters
 
 // Following is as4df, its the last tag
 as4df
