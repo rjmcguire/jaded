@@ -339,7 +339,6 @@ struct JadeParser {
 				//token.epilog ~= "\nwriteln(`</block>`);";
 				break;
 			case "Jade.Tag":
-				writeln("tag:", token.p);
 				range.popFront();
 				auto hasChildren = !range.empty && range.front.depth > token.depth;
 				auto tag = Tag.parse(token, hasChildren);
@@ -508,12 +507,31 @@ struct JadeParser {
 				range.popFront();
 				import std.exception : enforce;
 				// TODO: bugfix: handle "each key,value in _expression_"
-				auto itemName = token.findParseTree("Jade.DVariableName");
-				enforce(!itemName.isNull, "Iteration expects an item name.");
-				auto expression = token.findParseTree("Jade.DLineExpression");
-				enforce(!expression.isNull, "Iteration expects an range to iterate");
+				writeln(token.p);
+				switch (token.matches[0]) {
+					case "each":
+						auto name = token.findParseTree("Jade.DVariableName");
+						enforce(!name.isNull, "Iteration \"each\" expects an item name.");
+						auto expression = token.findParseTree("Jade.DLineExpression");
+						enforce(!expression.isNull, "Iteration \"each\" expects a range expression.");
 
-				token.code_prolog ~= "foreach (%s; %s) {".format(itemName.matches[0], expression.matches[0]);
+						typeof(name) value;
+						if (token.children[1].name == "Jade.DVariableName") {
+							value = token.children[1];
+							token.code_prolog ~= "foreach (%s, %s; %s) {".format(name.matches[0], value.matches[0], expression.matches[0]);
+						} else {
+							token.code_prolog ~= "foreach (%s; %s) {".format(name.matches[0], expression.matches[0]);
+						}
+						break;
+					case "while":
+						auto expression = token.findParseTree("Jade.DLineExpression");
+						enforce(!expression.isNull, "Iteration \"while\" expects a range expression.");
+						token.code_prolog ~= "while (%s) {".format(expression.matches[0]);
+						break;
+					default:
+						assert(0, "Unknown Jade.Iteration symbol");
+				}
+
 				token.items = render(token.depth);
 				token.code_epilog ~= "\n}";
 				break;
