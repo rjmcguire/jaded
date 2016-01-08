@@ -4,6 +4,8 @@ doctype html
 <!--[if IE 8]>
 html(lang="en", class="lt-ie9")
 <![endif]-->
+- bool some_d_var = true;
+- string some_other_d_var = "woot";
 html(lang="en")
 	head
 		block title
@@ -12,8 +14,6 @@ html(lang="en")
 			include style.css
 	body.base-css(ng-app="MyApp", ng-controller="CtrlII")
 		block content
-			- bool some_d_var = true;
-			- string some_other_d_var = "woot";
 			// this is the displayed content
 			p(id="", p-form-hook=some_d_var ? "yes" :"no", marked) This is a paragraph
 				| That continues on
