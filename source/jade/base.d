@@ -585,7 +585,7 @@ struct JadeParser {
 				break;
 			case "Jade.Case":
 				range.popFront();
-				writeln(token.p);
+				//writeln(token.p);
 				Tag tag; bool hasTag;
 				auto tagTree = token.findParseTree("Jade.InlineTag");
 				if (!tagTree.isNull) {
@@ -611,7 +611,6 @@ struct JadeParser {
 					case "default":
 						token.code_prolog ~= `default:`;
 						if (hasTag) { tag.appendProlog(token.prolog); tag.appendEpilog(token.prolog); }
-						writeln("t: ", range.front.p);
 						token.items = render(token.depth);
 						break;
 				}
