@@ -90,12 +90,14 @@ int n=1;
 while ( n < 4) {
 buf ~= `<li>`~ escapeAttributeValue(var(n++).get!string) ~`</li>`;
 }
-var friends = 0;
-buf ~= `<!-- 2 Jade.Case depth:0 -->`;
-buf ~= `<!-- 2 Jade.Case depth:1 -->`;
-buf ~= `<!-- 2 Jade.Case depth:1 -->`;
-buf ~= `<p>you have very few friends</p>`;
-buf ~= `<!-- 2 Jade.Case depth:1 -->`;
+auto friends = 42;
+switch (friends) {
+case 0:break;
+case 1:
+buf ~= `<p>you have very few friends</p>`;break;
+default:
+buf ~= `<p>you have `~ escapeHtmlOutput(var(friends).get!string) ~` friends</p>`;
+}
 void JadeMixin_list(alias block, Attributes)(Attributes attributes) {
 buf ~= `<ul>`;
 buf ~= `<li>foo</li>`;
@@ -148,7 +150,7 @@ buf ~= `<li>`~ escapeAttributeValue(var(item).get!string) ~`</li>`;
 buf ~= `</ul>`;
 }
 JadeMixin_list2!(null)(var.emptyObject(),"my-list", 1, 2, 3, 4);
-buf ~= `<p>If you take a look at this page's source <a target="`~ escapeAttributeValue(var("_blank").get!string) ~`" href="`~ escapeAttributeValue(var("https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade").get!string) ~`">on GitHub</a>, youll see several places where the tag interpolation operator is used like so. .quote // this is raw text so the .quote means nothing to jade p Joel: `~ var(riskyBusiness).get!string ~`</p>`;
+buf ~= `<p>If you take a look at this page's source <a target="`~ escapeAttributeValue(var("_blank").get!string) ~`" href="`~ escapeAttributeValue(var("https://github.com/jadejs/jade/blob/master/docs/views/reference/interpolation.jade").get!string) ~`">on GitHub</a>, you'll see several places where the tag interpolation operator is used like so. .quote // this is raw text so the .quote means nothing to jade, only string and tag interpolation works here p Joel: `~ var(riskyBusiness).get!string ~`</p>`;
 buf ~= `<p>This is supposed to just be text inside a p tag.</p>`;
 import std.uni : toUpper;
 string msg = "not my inside voice";
@@ -156,7 +158,6 @@ buf ~= `<p>This is `~ escapeHtmlOutput(var(msg.toUpper()).get!string) ~` &lt;- <
 buf ~= `<!--  Following is as4df, its the last tag `;
 buf ~= `-->`;
 buf ~= `<as4df></as4df>`;
-
 	
 writeln(buf.data);
 }
