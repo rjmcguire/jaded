@@ -52,8 +52,8 @@ MixinVarArg <- (:',' :Spacing* :'...' DVariableName)
 Mixin <- :'+' DVariableName MixinArgs? TagArgs?
 MixinArgs <- ('(' :Spacing* (TagParamValue (',' :Spacing* TagParamValue)*)? ')')
 Case <-
-	/ ^'case' Spacing+ DLineExpression
-	/ ^'when' ~(! (':' / endOfLine / endOfInput) .)* InlineTag?
+	/ ^'case' :Spacing+ DLineExpression
+	/ ^'when' :Spacing+ ~(! (':' / endOfLine / endOfInput) .)* InlineTag?
 	/ ^'default' InlineTag?
 Iteration <-
 	/ ('each' / 'for') :Spacing+ DVariableName (',' :Spacing* DVariableName)? :Spacing+ ^'in' :Spacing+ DLineExpression
@@ -84,7 +84,7 @@ Comment <-
 	/ '//' InlineText?
 AndAttributes <- '&' 'attributes' '(' (AttributeJsonObject / ParamDExpression) ')'
 SelfCloser <- '/'
-InlineTag <- ':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText (StringInterpolation+ InlineText)*)?)
+InlineTag <- :':' :Spacing* Id (CssId / '.' CssClass)* TagArgs? AndAttributes? (BlockInATag / SelfCloser? (:Spacing+ InlineText (StringInterpolation+ InlineText)*)?)
 Id <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssClass <~ [A-Za-z\-][A-Za-z\-0-9]*
 CssId <~ :'#' Id

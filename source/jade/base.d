@@ -30,6 +30,7 @@ import jade.pegged;
 
 import std.conv : to;
 import std.uni : asCapitalized;
+import std.exception : enforce;
 
 string renderToString(alias filename)() {
 	return render!filename.toString;
@@ -527,7 +528,6 @@ struct JadeParser {
 				break;
 			case "Jade.Iteration":
 				range.popFront();
-				import std.exception : enforce;
 				switch (token.matches[0]) {
 					case "each":
 						auto name = token.findParseTree("Jade.DVariableName");
@@ -556,7 +556,6 @@ struct JadeParser {
 				token.code_epilog ~= "\n}";
 				break;
 			case "Jade.DocType":
-				writeln(token.p);
 				switch (token.matches[0]) {
 					case "xml":
 						token.prolog ~= `<?xml version="1.0" encoding="utf-8" ?>`;
@@ -583,6 +582,39 @@ struct JadeParser {
 						token.prolog ~= "<!DOCTYPE "~ token.matches[0] ~">";
 				}
 				range.popFront();
+				break;
+			case "Jade.Case":
+				range.popFront();
+				writeln(token.p);
+				Tag tag; bool hasTag;
+				auto tagTree = token.findParseTree("Jade.InlineTag");
+				if (!tagTree.isNull) {
+					tag = Tag.parse(new Item(token.depth, tagTree), false);
+					hasTag = true;
+				}
+				final switch (token.matches[0]) {
+					case "case":
+						token.code_prolog ~= `switch (%s) {`.format(token.matches[1]);
+						if (hasTag) { tag.appendProlog(token.prolog); tag.appendEpilog(token.prolog); }
+						token.items = render(token.depth);
+						foreach (item; token.items) {
+							enforce(item.name == "Jade.Case", "Only when allowed in case statement.");
+						}
+						token.code_epilog ~= "\n}";
+						break;
+					case "when":
+						token.code_prolog ~= `case %s:`.format(token.matches[1]);
+						if (hasTag) { tag.appendProlog(token.prolog); tag.appendEpilog(token.prolog); }
+						token.items = render(token.depth);
+						token.code_epilog ~= "break;";
+						break;
+					case "default":
+						token.code_prolog ~= `default:`;
+						if (hasTag) { tag.appendProlog(token.prolog); tag.appendEpilog(token.prolog); }
+						writeln("t: ", range.front.p);
+						token.items = render(token.depth);
+						break;
+				}
 				break;
 			case "Jade.Line":
 			default:
